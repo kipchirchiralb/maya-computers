@@ -22,6 +22,9 @@
                 Account
             </div>
         </a>
-        <div class="flex"><img src="/images/icons/cart.svg" alt=""> Cart</div>
+        <div class="flex"><img src="/images/icons/cart.svg" alt=""> </div>
+        <%if(locals.isLoggedIn){%>
+            <a class="logout-nav" href="/logout">Log Out</a>
+        <%}%>
     </div>
 </nav>

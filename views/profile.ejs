@@ -1,6 +1,27 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
-<div class="main-container">
-    user profile + address details + payment methods
+<div class="main-container profile-page">
+    <div class="profile-nav flex">
+        <div class="profile-nav-item" id="user-data">User data</div>
+        <div class="profile-nav-item" id="address-data">Address info</div>
+        <div class="profile-nav-item" id="find-product">Find Product</div>
+        <%if(locals.isAdmin){%>
+            <div class="profile-nav-item" id="add-product">+ Add Product</div>
+            <div class="profile-nav-item" id="find-user">Find User</div>
+        <%}%>
+    </div>
+    <div class=" flex">
+        <div class="user-data profile-flex-item">
+            <h4>Uname<%=user.firstName%></h4>
+            <p>email<%=user.email%></p>
+            <p>Address Details</p>
+            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, cum?</div>
+            <button>Update Adress data</button>
+        </div>
+
+        
+        
+    </div>
+ 
 </div>
 <%- include('./partials/footer')%>

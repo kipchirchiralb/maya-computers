@@ -101,6 +101,9 @@
 .main-nav .nav-group img{
   margin-right: 1rem;
 }
+.main-nav .nav-group .logout-nav{
+  font-size: 1rem;
+}
 
 
 /* ************SHOWCASE ******** */
@@ -235,16 +238,67 @@
   color: var(--secondary-color);
   font-size: .8rem;
 }
+
 .reg-page{
+  justify-content: space-evenly;
   gap: 2rem;
   min-height: 60vh;
 }
-.reg-page input,
-.reg-page select{
-  display: block;
+.reg-page .reg-form{
+  width: 40%;
+  text-align: center;
+}
+.reg-page .reg-form form{
+  width: 100%;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 10px 0;
+}
+.reg-page .reg-form .input-el{
+  width: 80%;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid var(--grayish-color);
+}
+.reg-page .reg-form .input-el:focus{
+  outline: none;
+}
+.reg-page .reg-form form .passwords{
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 7px;
+  justify-content: space-between;
+}
+.reg-page .reg-form form div input{
+  width: 45%;
+}
+.reg-page .reg-form input[type="submit"]{
+  background-color: var(--primary-color);
+  color: var(--pri-text-color);
+  font-size: 1.1rem;
 }
 
-
+/* *********PROFILE PAGE******** */
+.profile-page{
+  min-height: 70vh;
+}
+.profile-page .profile-nav{
+  width: 80vw;
+  margin: 0 auto;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+} 
+.profile-page .profile-nav .profile-nav-item{
+  border: 1px solid var(--grayish-color);
+  border-top: none;
+  flex: 1;
+  text-align: center;
+}
+.profile-page .profile-nav .profile-nav-item:hover{
+  background-color: var(--primary-color);
+  color: var(--pri-text-color);
+  cursor: pointer;
+}
 
 /* *********ERROR PAGE******** */
 

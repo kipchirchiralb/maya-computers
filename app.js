@@ -35,68 +35,82 @@ app.use((req, res, next) => {
   } else {
     res.locals.isLoggedIn = true;
     res.locals.userId = req.session.userId;
-    res.locals.profileImg = req.session.profileImage;
-    res.locals.username = req.session.username.split(" ")[0];
+    res.locals.username = req.session.username;
+    res.locals.isAdmin = req.session.isAdmin
   }
   next();
 });
 
+let cleanUserData = { 
+  firstName: '',
+  lastName: '',
+  email: '',
+  loginEmail: '',
+  password: '',
+  loginPassword: '',
+  confirmPassword: '',
+  phone: '',
+  errorMessage: '',
+  signupError: false,
+  loginError: false,
+  success: false,
+  isAdmin: false
+}
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
 // ***********getReg
+
+let route = ''
 app.get('/reg', (req,res)=>{
-    let userData = { 
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phone: 0,
-        errorMessage: '',
-        signupError: false,
-        loginError: false,
-        success: false,
-        isAdmin: false
-    }
-    res.render('reg.ejs', {userData})
+  if(res.locals.isLoggedIn){
+    res.redirect("/profile")
+  }else{
+    let userData=cleanUserData
+    res.render('reg.ejs', {userData: userData})
+  }
+   
 })
 
 // ********* postLogin
+
 app.post("/reg/login", (req, res) => {
     let userData = { 
-        email: req.body.email,
-        password: req.body.password,
+        loginEmail: req.body.email,
+        loginPassword: req.body.password,
+        lastName: '',
+        phone: '',
         errorMessage: '',
         loginError: false,
+        signupError: false,
         success: false,
         isAdmin: false
     }
-    if(userData.email==='maya@mayacomputers.co.ke'){
+    if(userData.loginEmail==='maya@mayacomputers.co.ke'){
         userData.isAdmin=true;
     }
     connection.query(
         "SELECT * FROM  users WHERE  email = ?",
-        [userData.email],
+        [userData.loginEmail],
         (error, results) => {
             if (results.length > 0) {
-                bcrypt.compare(userData.password, results[0].password, (err, isEqual) => {
+                bcrypt.compare(userData.loginPassword, results[0].password, (err, isEqual) => {
                     if (isEqual) {
                         req.session.userId = results[0].id;
                         req.session.username = results[0].firstName;
-                        req.session.profileImg = results[0].profileImg;
-                        res.redirect("/");
+                        req.session.isAdmin = userData.isAdmin
+                        res.redirect('/')
                     } else {
                         userData.errorMessage = "Email and password do not match";
-                        userData.loginError = true
-                        res.render("reg.ejs", {userData});
+                        userData.loginError = true;
+                        res.render("reg.ejs", {userData: userData});
                     }
                 });
             } else {
                 userData.errorMessage = "Email not registered";
                 userData.loginError = true;
-                res.render("reg.ejs", {userData:userData});
+                res.render("reg.ejs", {userData: userData});
             }
         }
     );
@@ -133,6 +147,7 @@ app.post("/reg/signup", (req, res) => {
                             userData.signupError = true
                             res.render("reg.ejs", {userData: userData});
                         } else {
+                            userData = cleanUserData;
                             userData.success = true
                             res.render('reg.ejs', {userData: userData})
                         }
@@ -151,6 +166,20 @@ app.post("/reg/signup", (req, res) => {
         res.render("reg.ejs", {userData: userData});
     }
 });
+
+// ******** profile
+app.get('/profile', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    connection.query(
+      `SELECT * FROM users WHERE id = ${req.session.userId}`,
+      (error, user)=>{
+        res.render('profile.ejs', {user:user[0]})
+      }
+    ) 
+  }else{
+    res.redirect('/reg')
+  }
+})
 
 
 app.get("/about", (req, res) => {
