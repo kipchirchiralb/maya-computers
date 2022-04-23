@@ -1,0 +1,26 @@
+<%- include('./partials/header')%>
+<%- include('./partials/nav')%>
+<div class="main-container">
+    <div class="new-product-page flex">
+        <form class="new-product-form" action="/products/add">
+            <select name="category" id="category">
+                <option value="laptop">Laptop Computer</option>
+                <option value="desktop">Desktop Computer</option>
+                <option value="accessories">Computer accesories</option>
+                <option value="supplies">Office Supplies</option>
+            </select>
+            <input type="text" placeholder="Product Name" name="name" required>
+            <input type="text" placeholder="Product Specifications" name="description" required>
+            <input type="text" placeholder="email" name="email" required>
+            <input type="file" name="images" id="images">
+            <input type="number" placeholder="Price" name="price">
+            <input type="number" placeholder="Quantity" name="quantity">
+            <input type="tel" name="phone" id="phone" placeholder="Phone Number (optional)">
+            <input type="submit" value="Post Product">
+        </form>
+      
+    </div>
+</div>
+
+
+<%- include('./partials/footer')%>

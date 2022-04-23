@@ -1,0 +1,31 @@
+<%- include('./partials/header')%>
+<%- include('./partials/nav')%>
+<div class="main-container">
+    <div class="reg-page flex">
+        <div>
+            <%if(userData.signupError){%> <p class="error-message"><%=userData.errorMessage%></p><%}%>
+            <form class="signup-user" action="/reg/signup" method="post">
+                <input type="text"name="firstName" placeholder="First Name *" >
+                <input type="text"name="lastName" placeholder="Last Name (optional)" >
+                <input type="email" name="email" id="" placeholder="Email *" >
+                <input type="password" name="password" id="" placeholder="Password *">
+                <input type="password" name="confirmPassword" id="" placeholder="Confirm Password *" >
+                <input type="tel" name="phone" id="" placeholder="Phone Number (optional)">
+                <input type="submit" value="Create Account">
+            </form>
+        </div>
+        <div>
+            <%if(userData.success){%> <p class="success-message">Registration Sucessful. You can now Login</p> <%}%>
+            <%if(userData.loginError){%> <p class="error-message"><%=userData.errorMessage%></p><%}%>
+            <form class="login-user" action="/reg/login" method="post">
+                <input type="email" name="email" id="" >
+                <input type="password" name="password" id="" >
+                <input type="submit" value="Log In">
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+
+<%- include('./partials/footer')%>

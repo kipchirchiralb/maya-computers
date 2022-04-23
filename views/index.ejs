@@ -1,0 +1,174 @@
+<%- include('./partials/header')%>
+<%- include('./partials/nav')%>
+<div class="main-container">
+    <div class="show-case">
+        <nav class="show-item show-case-nav flex">
+            <li id="nav-item1" class="nav-item">Laptops</li>
+            <li id="nav-item2" class="nav-item">Desktop Computers</li>
+            <li id="nav-item3" class="nav-item">Printers</li>
+            <li id="nav-item4" class="nav-item">Computer Accessories</li>
+            <li id="nav-item5" class="nav-item">Office supplies</li>
+        </nav>
+        <div class="show-item show-case-content">
+            <div class="slide">
+                <img src="/images/add1.png" alt="">
+                <img src="/images/add2.png" alt="">
+                <img src="/images/bag.png" alt="">
+            </div>
+            <div class="slide">
+                <img src="/images/comp1.png" alt="">
+                <img src="/images/add2.png" alt="">
+                <img src="/images/comp2.png" alt="">
+            </div>
+            <div class="slide">
+                <img src="/images/bag2.png" alt="">
+                <img src="/images/add1.png" alt="">
+                <img src="/images/bag.png" alt="">
+            </div>
+        </div>
+        <div class="flex show-item show-case-cta">
+            <a href="">
+                <img src="/images/icons/call.svg" alt="">
+                Call&nbsp;to order
+            </a>
+            <a href="">
+                <img src="/images/icons/mail.svg" alt="">
+                Email&nbsp;us 
+            </a>
+            <a href="">
+                <img src="/images/icons/whatsapp.svg" alt="">
+                Let's&nbsp;Chat 
+            </a>
+        </div>
+    </div>
+</div>
+<!-- top sales -->
+<section class="top-selling-items main-container">
+    <h3>Top selling items</h3>
+    <div class="products">
+        <div class="product flex">
+            <div class="product-img">
+                <img src="/images/comp2.png" alt="">
+            </div>
+            <p class="name">Hp 840p 4th gen</p>
+            <p class="description">Lorem ipsum dolor sit amet.</p>
+            <p class="price">KSH. 99,000</p>
+            <div class="ratings flex">
+                <p>4.5</p>
+                <p>3 reviews</p>
+            </div>
+            <div class="add-to-cart">
+                +&nbsp;ADD&nbsp;TO&nbsp;CART
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- laptops -->
+<section class="laptops main-container">
+    <h3>Laptops</h3>
+    <div class="products">
+        <div class="product flex">
+            <div class="product-img">
+                <img src="/images/comp2.png" alt="">
+            </div>
+            <p class="name">Hp 840p 4th gen</p>
+            <p class="description">Lorem ipsum dolor sit amet.</p>
+            <p class="price">KSH. 99,000</p>
+            <div class="ratings flex">
+                <p>4.5</p>
+                <p>3 reviews</p>
+            </div>
+            <div class="add-to-cart">
+                +&nbsp;ADD&nbsp;TO&nbsp;CART
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- printers -->
+<section class="printers main-container">
+    <h3>Printers</h3>
+    <div class="products">
+        <div class="product flex">
+            <div class="product-img">
+                <img src="/images/comp2.png" alt="">
+            </div>
+            <p class="name">Hp 840p 4th gen</p>
+            <p class="description">Lorem ipsum dolor sit amet.</p>
+            <p class="price">KSH. 99,000</p>
+            <div class="ratings flex">
+                <p>4.5</p>
+                <p>3 reviews</p>
+            </div>
+            <div class="add-to-cart">
+                +&nbsp;ADD&nbsp;TO&nbsp;CART
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- desktop computers -->
+<section class="desktops main-container">
+    <h3>Desktop Computers</h3>
+    <div class="products">
+        <div class="product flex">
+            <div class="product-img">
+                <img src="/images/comp2.png" alt="">
+            </div>
+            <p class="name">Hp 840p 4th gen</p>
+            <p class="description">Lorem ipsum dolor sit amet.</p>
+            <p class="price">KSH. 99,000</p>
+            <div class="ratings flex">
+                <p>4.5</p>
+                <p>3 reviews</p>
+            </div>
+            <div class="add-to-cart">
+                +&nbsp;ADD&nbsp;TO&nbsp;CART
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- computer accesories -->
+<section class="computer-accessories main-container">
+    <h3>Computer Accessories</h3>
+    <div class="products">
+        <div class="product flex">
+            <div class="product-img">
+                <img src="/images/comp2.png" alt="">
+            </div>
+            <p class="name">Hp 840p 4th gen</p>
+            <p class="description">Lorem ipsum dolor sit amet.</p>
+            <p class="price">KSH. 99,000</p>
+            <div class="ratings flex">
+                <p>4.5</p>
+                <p>3 reviews</p>
+            </div>
+            <div class="add-to-cart">
+                +&nbsp;ADD&nbsp;TO&nbsp;CART
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const first = document.querySelector('.slide');
+    const slide = () => {
+        const before = document.querySelector('.showing');
+        if (before) {
+            before.classList.remove('showing');
+            const next = before.nextElementSibling;
+            if (next) {
+                next.classList.add('showing')
+            } else {
+                first.classList.add('showing');
+            }
+        } else {
+            first.classList.add('showing');
+        }
+    }
+    slide();
+    setInterval(slide, 8000);
+</script>
+<%- include('./partials/footer')%>
