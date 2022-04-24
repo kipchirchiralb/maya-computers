@@ -3,20 +3,23 @@
 <div class="main-container">
     <div class="new-product-page flex">
         <div class="reg-form">
-        <form class="new-product-form" action="/products/new-product" enctype="multipart/form-data" method="post">
-            <select class="input-el" name="category" id="category">
+        <%if(successMessage){%>
+            <p class="success-message">Product successfully added</p>
+        <%}%>
+        <form class="new-product-form" action="/products/new-product" enctype="multipart/form-data" method="post" >
+            <select class="input-el" name="category" id="category" required>
                 <option value="">---Choose Category---</option>
                 <option value="laptop">Laptop Computer</option>
                 <option value="desktop">Desktop Computer</option>
                 <option value="accessories">Computer accesories</option>
                 <option value="supplies">Office Supplies</option>
             </select>
-            <input class="input-el" type="text" placeholder="Product Name" name="name" >
-            <input class="input-el" type="text" placeholder="Product Specifications" name="specifications" >
+            <input class="input-el" type="text" placeholder="Product Name" name="name" required>
+            <input class="input-el" type="text" placeholder="Product Specifications" name="specifications" required>
             <label for="images" style="display: block; color: grey; font-size: .8rem;">Images - Max 6 - Preferebly squared png images</label>
-            <input class="input-el" type="file" name="images" id="images" multiple>
-            <input class="input-el" type="number" placeholder="Price" name="price">
-            <input class="input-el" type="number" placeholder="Quantity" name="quantity">
+            <input class="input-el" type="file" name="images" id="images" multiple required>
+            <input class="input-el" type="number" placeholder="Price" name="price" required>
+            <input class="input-el" type="number" placeholder="Quantity" name="quantity" required>
             <input class="input-el" type="submit" value="Post Product">
         </form>
         </div>

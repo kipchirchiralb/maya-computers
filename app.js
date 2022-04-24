@@ -199,26 +199,41 @@ app.get('/profile', (req,res)=>{
 })
 
 // ******** PRODUCTS ROUTES
-// *********products/new-product
+// *********products/new-product - get and post
 app.get('/products/new-product', (req,res)=>{
-  if(!req.session.isAdmin){
-    res.render('new-product.ejs')
+  // CORECT THIS WHEN DONE TESTING- REMOVE !
+  if(!req.session.isAdmin && !res.locals.isLoggedIn){
+    res.render('new-product.ejs', {successMessage: false})
   }else{
     let errorMessage = "Only Administrators can acess this page"
     res.render('404.ejs', {errorMessage: errorMessage})
   }
 })
 app.post('/products/new-product',upload.array('images',6),(req,res)=>{
-  let product = {
-    category: req.body.category,
-    name: req.body.name,
-    specifications: req.body.specifications,
-    price: req.body.price,
-    quantity: req.body.quantity,
-    // images= req.files.map---proceed here
+  // CORECT THIS WHEN DONE TESTING- REMOVE !
+  if(!req.session.isAdmin && !res.locals.isLoggedIn){
+    let product = {
+      category: req.body.category,
+      name: req.body.name,
+      specifications: req.body.specifications,
+      price: parseInt(req.body.price),
+      quantity: parseInt(req.body.quantity),
+      images: req.files.map(file=>file.filename).join(',')
+    }
+    console.log(req.files.map(file=>file.mimetype.split('/')[1]))
+    connection.query(
+      `INSERT INTO products (category, name, images, specifications, price, quantity) VALUES ('${product.category}','${product.name}','${product.images}','${product.specifications}',${product.price},${product.quantity})`,
+      (error, results)=>{
+        if(error){
+          console.log(error)
+        }else{
+          res.render('new-product.ejs', {successMessage: true})
+        }
+      }
+    )
+
+  
   }
-  console.log(product)
-  console.log(req.files)
 })
 
 
