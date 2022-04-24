@@ -17,7 +17,7 @@ connection.query(
 )
 
 connection.query(
-    'CREATE TABLE if not exists products(id INT NOT NULL AUTO_INCREMENT, category VARCHAR(20), images TEXT, price INT(10), rating FLOAT, reviews INT DEFAULT 0, quantity INT DEFAULT 1, datePosted DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id))', 
+    'CREATE TABLE if not exists products(id INT NOT NULL AUTO_INCREMENT, category VARCHAR(20),specifications TEXT, images TEXT, price INT(10), rating INT DEFAULT 0, reviews INT DEFAULT 0, quantity INT DEFAULT 1, datePosted DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id))', 
     (error,result)=>{
         if(error){
             console.log(error)
@@ -26,7 +26,7 @@ connection.query(
 )
 
 connection.query(
-    'CREATE TABLE if not exists cart(id INT NOT NULL AUTO_INCREMENT, userId INT , productId INT, PRIMARY KEY (id), FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (productId) REFERENCES products(id))',
+    'CREATE TABLE if not exists cart(id INT NOT NULL AUTO_INCREMENT, userId INT,dateAdded DATETIME DEFAULT CURRENT_TIMESTAMP, productId INT, PRIMARY KEY (id), FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (productId) REFERENCES products(id))',
     (error,result)=>{
         if(error){
             console.log(error)

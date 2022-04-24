@@ -2,8 +2,8 @@ const express = require("express");
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
+const path = require('path')
 const app = express();
-
 
 
 const PORT = process.env.PORT || 3000;
@@ -41,6 +41,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// *******multer setup
+
+const multer = require('multer')
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname,'/public/images/productImages'))
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  }
+})
+const upload = multer({ storage: storage })
+// ******multer ready for use
+
+
+
 let cleanUserData = { 
   firstName: '',
   lastName: '',
@@ -62,7 +79,6 @@ app.get("/", (req, res) => {
 
 // ***********getReg
 
-let route = ''
 app.get('/reg', (req,res)=>{
   if(res.locals.isLoggedIn){
     res.redirect("/profile")
@@ -100,6 +116,7 @@ app.post("/reg/login", (req, res) => {
                         req.session.userId = results[0].id;
                         req.session.username = results[0].firstName;
                         req.session.isAdmin = userData.isAdmin
+                        // if USER isAdmin-provide more data
                         res.redirect('/')
                     } else {
                         userData.errorMessage = "Email and password do not match";
@@ -181,6 +198,37 @@ app.get('/profile', (req,res)=>{
   }
 })
 
+// ******** PRODUCTS ROUTES
+// *********products/new-product
+app.get('/products/new-product', (req,res)=>{
+  if(!req.session.isAdmin){
+    res.render('new-product.ejs')
+  }else{
+    let errorMessage = "Only Administrators can acess this page"
+    res.render('404.ejs', {errorMessage: errorMessage})
+  }
+})
+app.post('/products/new-product',upload.array('images',6),(req,res)=>{
+  let product = {
+    category: req.body.category,
+    name: req.body.name,
+    specifications: req.body.specifications,
+    price: req.body.price,
+    quantity: req.body.quantity,
+    // images= req.files.map---proceed here
+  }
+  console.log(product)
+  console.log(req.files)
+})
+
+
+
+// *********products/laptops
+// *********products/printers
+// *********products/desktops
+// *********products/accessories
+// *********products/supplies
+
 
 app.get("/about", (req, res) => {
     res.render("about-us.ejs");
@@ -193,7 +241,8 @@ app.get("/logout", (req, res) => {
 });
 
 app.all("*", (req, res) => {
-  res.render("404.ejs", { error: true });
+  let errorMessage = "Page Not Found"
+  res.render("404.ejs", { errorMessage: errorMessage });
 });
 
 app.listen(PORT, () => {

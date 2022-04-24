@@ -123,7 +123,6 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
-  border: \\;
 }
 .show-case .show-case-nav li{
   list-style: none;
@@ -229,7 +228,7 @@
   color: var(--pri-text-color);
 }
 
-/* ********REG PAGE - login and signup****** */
+/* ********REG PAGE - login and signup & new product form****** */
 .success-message{
   font-size: .8rem;
   color: #23cc23;
@@ -244,40 +243,45 @@
   gap: 2rem;
   min-height: 60vh;
 }
-.reg-page .reg-form{
+.new-product-page{
+  min-height: 70vh;
+}
+ .reg-form{
   width: 40%;
   text-align: center;
 }
-.reg-page .reg-form form{
+ .reg-form form{
   width: 100%;
   flex-direction: column;
   gap: .5rem;
   padding: 10px 0;
 }
-.reg-page .reg-form .input-el{
+ .reg-form .input-el{
   width: 80%;
   padding: 10px;
   background-color: transparent;
   border: 1px solid var(--grayish-color);
 }
-.reg-page .reg-form .input-el:focus{
+ .reg-form .input-el:focus{
   outline: none;
 }
-.reg-page .reg-form form .passwords{
+ .reg-form form .passwords{
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 7px;
   justify-content: space-between;
 }
-.reg-page .reg-form form div input{
+ .reg-form form div input{
   width: 45%;
 }
-.reg-page .reg-form input[type="submit"]{
+ .reg-form input[type="submit"]{
   background-color: var(--primary-color);
   color: var(--pri-text-color);
   font-size: 1.1rem;
 }
-
+.new-product-page .reg-form .input-el{
+  margin-bottom: 5px;
+}
 /* *********PROFILE PAGE******** */
 .profile-page{
   min-height: 70vh;
@@ -293,12 +297,25 @@
   border-top: none;
   flex: 1;
   text-align: center;
+  cursor: pointer;
 }
-.profile-page .profile-nav .profile-nav-item:hover{
+.profile-page .profile-nav .active{
   background-color: var(--primary-color);
   color: var(--pri-text-color);
   cursor: pointer;
 }
+.profile-body{
+  margin-top: 30px;
+}
+.profile-body .new-product-btn{
+  margin: 7px;
+  padding: 10px 5px;
+  background-color: #23cc23;
+  color: var(--pri-text-color);
+}
+
+
+
 
 /* *********ERROR PAGE******** */
 
@@ -309,7 +326,7 @@
 .error-page .error-message{
   position: absolute;
   top: 30%;
-  left: 35%;
+  left: 30%;
   font-size: 30px;
   
 }
