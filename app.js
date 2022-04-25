@@ -73,8 +73,14 @@ let cleanUserData = {
   success: false,
   isAdmin: false
 }
-app.get("/", (req, res) => {
-  res.render("index.ejs");
+app.get("/", (req, res)=> {
+  connection.query(
+    "SELECT * FROM products",
+    (error,products)=>{
+      console.log(products[0].category)
+      res.render("index.ejs", {products: products});
+    }
+  )
 });
 
 // ***********getReg
@@ -202,7 +208,7 @@ app.get('/profile', (req,res)=>{
 // *********products/new-product - get and post
 app.get('/products/new-product', (req,res)=>{
   // CORECT THIS WHEN DONE TESTING- REMOVE !
-  if(!req.session.isAdmin && !res.locals.isLoggedIn){
+  if(req.session.isAdmin){
     res.render('new-product.ejs', {successMessage: false})
   }else{
     let errorMessage = "Only Administrators can acess this page"
@@ -211,7 +217,7 @@ app.get('/products/new-product', (req,res)=>{
 })
 app.post('/products/new-product',upload.array('images',6),(req,res)=>{
   // CORECT THIS WHEN DONE TESTING- REMOVE !
-  if(!req.session.isAdmin && !res.locals.isLoggedIn){
+  if(req.session.isAdmin){
     let product = {
       category: req.body.category,
       name: req.body.name,
@@ -220,19 +226,20 @@ app.post('/products/new-product',upload.array('images',6),(req,res)=>{
       quantity: parseInt(req.body.quantity),
       images: req.files.map(file=>file.filename).join(',')
     }
-    console.log(req.files.map(file=>file.mimetype.split('/')[1]))
+    // console.log(req.files.map(file=>file.mimetype.split('/')[1]))
     connection.query(
       `INSERT INTO products (category, name, images, specifications, price, quantity) VALUES ('${product.category}','${product.name}','${product.images}','${product.specifications}',${product.price},${product.quantity})`,
       (error, results)=>{
         if(error){
           console.log(error)
         }else{
-          res.render('new-product.ejs', {successMessage: true})
+          res.render('new-product.ejs', {successMessage: true,})
         }
       }
     )
-
-  
+  }else{
+    let errorMessage = "Only Administrators can acess this page"
+    res.render('404.ejs', {errorMessage: errorMessage})
   }
 })
 

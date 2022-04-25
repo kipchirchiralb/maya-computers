@@ -177,6 +177,7 @@
 .products{
   padding: .7rem;
   gap: 1.3rem;
+  flex-direction: row !important; 
   justify-content: space-between;
 }
 .products .product{

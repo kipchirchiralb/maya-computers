@@ -45,51 +45,68 @@
 <!-- top sales -->
 <section class="top-selling-items main-container">
     <h3>Top selling items</h3>
-    <div class="products">
+    <div class="products flex">
+        <%if(true){%>
+        <%let count = 0 %>
+        <% for(let i=0; i< products.length; i++){ %>
+        <%if(count===5){break;} %>
+        <%count++%>
         <div class="product flex">
             <div class="product-img">
-                <img src="/images/comp2.png" alt="">
+                <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
-            <p class="name">Hp 840p 4th gen</p>
-            <p class="description">Lorem ipsum dolor sit amet.</p>
-            <p class="price">KSH. 99,000</p>
+            <p class="name"><%=products[i].name%></p>
+            <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+            <p class="price">KSH. <%products[i].price%></p>
             <div class="ratings flex">
-                <p>4.5</p>
-                <p>3 reviews</p>
+                <p>rated: 0</p>
+                <p>0 reviews</p>
             </div>
             <div class="add-to-cart">
                 +&nbsp;ADD&nbsp;TO&nbsp;CART
             </div>
-        </div>
+        </div> 
+        <%}%>
+        <%}%>
     </div>
 </section>
 
 <!-- laptops -->
 <section class="laptops main-container">
     <h3>Laptops</h3>
-    <div class="products">
-        <div class="product flex">
-            <div class="product-img">
-                <img src="/images/comp2.png" alt="">
-            </div>
-            <p class="name">Hp 840p 4th gen</p>
-            <p class="description">Lorem ipsum dolor sit amet.</p>
-            <p class="price">KSH. 99,000</p>
-            <div class="ratings flex">
-                <p>4.5</p>
-                <p>3 reviews</p>
-            </div>
-            <div class="add-to-cart">
-                +&nbsp;ADD&nbsp;TO&nbsp;CART
-            </div>
+
+        <div class="products flex">
+            <%if(true){%>
+            <%let count = 0 %>
+            <% for(let i=0; i< products.length; i++){ %>
+            <%if(count===5){break;} %>
+            <%count++%>
+            <%if(products[i].category === 'laptop'){%>
+            <div class="product flex">
+                <div class="product-img">
+                    <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
+                </div>
+                <p class="name"><%=products[i].name%></p>
+                <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+                <p class="price">KSH. <%products[i].price%></p>
+                <div class="ratings flex">
+                    <p>rated: 0</p>
+                    <p>0 reviews</p>
+                </div>
+                <div class="add-to-cart">
+                    +&nbsp;ADD&nbsp;TO&nbsp;CART
+                </div>
+            </div> 
+            <%}else{count--}%>
+            <%}%>
+            <%}%>
         </div>
-    </div>
 </section>
 
 <!-- printers -->
 <section class="printers main-container">
     <h3>Printers</h3>
-    <div class="products">
+    <div class="products flex">
         <div class="product flex">
             <div class="product-img">
                 <img src="/images/comp2.png" alt="">
