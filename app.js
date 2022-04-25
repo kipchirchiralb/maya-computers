@@ -28,7 +28,7 @@ app.use(
   })
 );
 
-
+//session manager
 app.use((req, res, next) => {
   if (req.session.userId === undefined) {
     res.locals.isLoggedIn = false;
@@ -75,13 +75,13 @@ let cleanUserData = {
 }
 app.get("/", (req, res)=> {
   connection.query(
-    "SELECT * FROM products",
+    "SELECT * FROM products ORDER BY price DESC",
     (error,products)=>{
-      console.log(products[0].category)
       res.render("index.ejs", {products: products});
     }
   )
 });
+
 
 // ***********getReg
 
@@ -242,15 +242,51 @@ app.post('/products/new-product',upload.array('images',6),(req,res)=>{
     res.render('404.ejs', {errorMessage: errorMessage})
   }
 })
+// ***********PRODUCT CATEGORIES
+app.get('/products', (req,res)=>{
 
+  if(req.query.category!=='topsales'){
+    connection.query(
+      `SELECT * FROM products WHERE category = '${req.query.category}' `,
+      (error, products)=>{
+        res.render('products.ejs', {category: req.query.category, products: products})
+      }
+    )
+  }else if(req.query.category==='topsales'){
+    connection.query(
+      `SELECT * FROM products ORDER BY price DESC `,
+      (error, products)=>{
+        res.render('products.ejs', {category: req.query.category, products: products})
+      }
+    )
+  }else{
+    let errorMessage = "Page Not Found - contact admin"
+    res.render("404.ejs", { errorMessage: errorMessage });
+  }
+})
 
+//********* SEARCH PRODUCT */
+app.post('/search', (req,res)=>{
+  connection.query(
+    `SELECT * FROM products WHERE name LIKE %${req.body.searchterm}% OR specifications LIKE %${req.body.searchterm}%`,
+    (error, products)=>{
+      res.render('search.ejs', {products: products})
+    }
+  )
+})
 
-// *********products/laptops
-// *********products/printers
-// *********products/desktops
-// *********products/accessories
-// *********products/supplies
-
+// ****************ADD PRODUCT TO CART
+app.post('/add-to-cart', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    `INSERT INTO cart(userId, productId, productName) VALUES (${req.session.userId}, ${parseInt(req.query.pId)}, ${req.query.pName})`,
+    (error,results)=>{
+      // find ways to redirect user to original location / or /products
+      res.redirect('/products')
+    }
+  }else{
+    res.redirect('/reg')
+  }
+})
 
 app.get("/about", (req, res) => {
     res.render("about-us.ejs");

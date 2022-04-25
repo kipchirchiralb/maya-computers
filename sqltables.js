@@ -26,7 +26,7 @@ connection.query(
 )
 
 connection.query(
-    'CREATE TABLE if not exists cart(id INT NOT NULL AUTO_INCREMENT, userId INT,dateAdded DATETIME DEFAULT CURRENT_TIMESTAMP, productId INT, PRIMARY KEY (id), FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (productId) REFERENCES products(id))',
+    'CREATE TABLE if not exists cart(id INT NOT NULL AUTO_INCREMENT, userId INT,dateAdded DATETIME DEFAULT CURRENT_TIMESTAMP, productId INT, productName VARCHAR(115), PRIMARY KEY (id), FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (productId) REFERENCES products(id))',
     (error,result)=>{
         if(error){
             console.log(error)

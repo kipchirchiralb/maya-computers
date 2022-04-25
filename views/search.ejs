@@ -1,0 +1,38 @@
+<%- include('./partials/header')%>
+<%- include('./partials/nav')%>
+<div class="products-category main-container">
+    <h2>Search results</h2>
+    <div class="products flex">
+        <%if(products.length>0){%>
+        <% for(let i=0; i< products.length; i++){ %>
+        <div class="product flex">
+            <div class="product-img">
+                <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
+            </div>
+            <p class="name"><%=products[i].name%></p>
+            <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+            <%let n =products[i].price.toString().length%>
+            <%if(n>3){%>
+            <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
+            <%}else{%>
+                <p class="price">KSH. <%=products[i].price%></p>
+            <%}%>
+            <div class="ratings flex">
+                <p>rated: 0</p>
+                <p>0 reviews</p>
+            </div>
+            <div class="add-to-cart">
+                +&nbsp;ADD&nbsp;TO&nbsp;CART
+            </div>
+        </div> 
+       
+        <%}%>
+        <%}else{%>
+            <p class="error-message">Sorry, no item matches your search term.</p>
+        <%}%>
+        
+    </div>
+    
+
+</div>
+<%- include('./partials/footer')%>
