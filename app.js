@@ -48,6 +48,7 @@ app.use((req, res, next) => {
 
 const multer = require('multer');
 const { query } = require("express");
+const { error } = require("console");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname,'/public/images/productImages'))
@@ -297,8 +298,13 @@ app.post('/search', (req,res)=>{
 app.get('/product/:id', (req,res)=>{
   connection.query(
     `SELECT * FROM products WHERE id = ${req.params.id}`,
-    (error, results)=>{
-      res.render('product.ejs', {cart:cart} )
+    (error, product)=>{
+      if(product.length>0){
+        res.render('product.ejs', {cart:cart, product:product[0]} )
+      }else{
+        let errorMessage = "product Not Found"
+        res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+      }
     }
   )
 })
@@ -326,6 +332,24 @@ app.post('/add-to-cart', (req,res)=>{
   }else{
     res.redirect('/reg')
   }
+})
+//*********** REMOVE FROM CART
+app.post('/remove-from-cart/:id', (req,res)=>{
+  connection.query(
+    `DELETE FROM cart WHERE id= ${parseInt(req.params.id)}`,
+    (error,results)=>{
+      res.redirect('/')
+    }
+  )
+})
+// ********** CLEAR CART
+app.post('/clear-cart', (req,res)=>{
+  connection.query(
+    `DELETE FROM cart WHERE userId= ${req.session.userId}`,
+    (error,result)=>{
+      res.redirect('/')
+    }
+  )
 })
 
 

@@ -1,6 +1,46 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
 <div class="main-container">
-    <h2>This specific  product</h2>
+    <div class="product-container flex">
+        <h2 class="product-title"><%=product.name%></h2>
+        <div class="product-gallery flex">
+            <%let images = product.images.split(',')%>
+            <%images.forEach(image=>{%>
+                <img src="/images/productImages/<%=image%>" alt="">
+            <%})%>
+        </div>
+        <p class="product-specs"><%=product.specifications%></p>
+        <%if(!locals.isLoggedIn){%>
+            <div class="add-to-cart add-to-cart-btn">
+                +&nbsp;ADD&nbsp;TO&nbsp;CART
+            </div>
+        <%}else{%>
+            <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=product.id%>&pName=<%=product.name%>&location=," method="post">
+                <input type="submit" value="+ ADD TO CART">
+            </form>
+        <%}%>
+    </div>
+</div>
+<div class="login-modal" id="login-modal">
+    <div class="login-modal-content">
+        <p>Login to use cart</p>
+        <button class="close-modal-btn">CLOSE</button>
+        <a href="/reg"><button class="login-link-btn">LOGIN</button></a>
+    </div>
 </div>
 <%- include('./partials/footer')%>
+<script>
+     document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{
+        closeModalBtn.addEventListener('click', (e)=>{
+            e.target.parentElement.parentElement.style.display='none'
+        })   
+    })
+    document.querySelectorAll('.add-to-cart-btn').forEach(addToCartBtn=>{
+        addToCartBtn.addEventListener('click', ()=>{
+            document.getElementById('login-modal').style.display='block'
+        })   
+    })
+    document.getElementById('login-modal').addEventListener('click',()=>{
+        document.getElementById('login-modal').style.display='none'
+    })
+</script>

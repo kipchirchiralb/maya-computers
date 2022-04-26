@@ -52,9 +52,11 @@
         <%if(count===4){break;} %>
         <%count++%>
         <div class="product flex">
+            <a href="/product/<%=products[i].id%>">
             <div class="product-img">
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
+            </a>
             <p class="name"><%=products[i].name%></p>
             <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
@@ -100,9 +102,11 @@
             <%count++%>
             <%if(products[i].category === 'laptop'){%>
             <div class="product flex">
+                <a href="/product/<%=products[i].id%>">
                 <div class="product-img">
                     <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
                 </div>
+                </a>
                 <p class="name"><%=products[i].name%></p>
                 <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
                 <%let n =products[i].price.toString().length%>
@@ -148,9 +152,11 @@
         <%count++%>
         <%if(products[i].category === 'printer'){%>
         <div class="product flex">
+            <a href="/product/<%=products[i].id%>">
             <div class="product-img">
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
+            </a>
             <p class="name"><%=products[i].name%></p>
             <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
@@ -196,9 +202,11 @@
         <%count++%>
         <%if(products[i].category === 'desktop'){%>
         <div class="product flex">
+            <a href="/product/<%=products[i].id%>">
             <div class="product-img">
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
+            </a>
             <p class="name"><%=products[i].name%></p>
             <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
@@ -244,9 +252,11 @@
         <%count++%>
         <%if(products[i].category === 'accessories'){%>
         <div class="product flex">
+            <a href="/product/<%=products[i].id%>">
             <div class="product-img">
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
+            </a>
             <p class="name"><%=products[i].name%></p>
             <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
@@ -292,9 +302,11 @@
         <%count++%>
         <%if(products[i].category === 'supplies'){%>
         <div class="product flex">
+            <a href="/product/<%=products[i].id%>">
             <div class="product-img">
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
+            </a>
             <p class="name"><%=products[i].name%></p>
             <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>

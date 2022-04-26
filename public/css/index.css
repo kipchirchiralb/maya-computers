@@ -112,11 +112,13 @@
 .main-nav .cart-container .cart-count{
   position: absolute;
   top: -6px;
-  right: 3px;
+  right: -2px;
   background-color: var(--green-color);
   color: var(--pri-text-color);
   font-size: .8rem;
-  width: .8rem;
+  /* width: .8rem; */
+  padding: 3px;
+  z-index: -1000;
   border-radius: 50%;
   text-align: center;
 }
@@ -149,14 +151,35 @@
   text-align: center;
   background-color: var(--primary-color);
 }
+.main-nav .cart-container .checkout-btn:hover{
+  background-color: var(--green-color);
+}
 .main-nav .cart-container .remove-from-cart{
+  all: unset;
   padding: 0 10px;
   transition: all .5s ease-in-out;
+  background: none;
+
 }
 .main-nav .cart-container .remove-from-cart:hover{
   transform:  scale(1.2);
   color: var(--secondary-color);
   
+}
+.cart-container .clear-cart{
+  color: var(--secondary-color);
+  
+}
+.cart-container .clear-cart input{
+  margin-left: auto;
+  border: 1px solid var(--secondary-color);
+  color: var(--pri-text-color);
+  padding: 3px 6px;
+  background-color: transparent;
+  transition: all .3s ease-in-out;
+}
+.cart-container .clear-cart input:hover{
+  background-color: var(--secondary-color);
 }
 
 
@@ -319,6 +342,48 @@
   /* background-color: var(--secondary-color); */
 }
 
+
+/* ********SINGLE PRODUCT PAGE */
+.product-container{
+  width: 80%;
+  margin: 10px auto;
+  min-height: 400px;
+  border: 1px solid #adadad;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+.product-container .product-title{
+  text-align: center;
+}
+.product-container .product-gallery{
+  gap: 1rem; 
+  width: 80%; 
+}
+.product-container .product-gallery img{
+  width: 200px;
+  /* height: 200px;   */
+}
+.product-container .product-specs{
+  width: 70%;
+  text-align: center;
+  line-height: 1.2rem;
+}
+.product-container .add-to-cart{
+  border: none;
+  color: var(--pri-text-color);
+  padding: 5px 10px;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+.product-container .add-to-cart input{
+  all: unset;
+}
+.product-container .add-to-cart:hover{
+  background-color: var(--green-color);
+}
 
 
 /* ********LOgIN MODAL */

@@ -30,14 +30,15 @@
                 <p class="cart-count"><%=userCart.length%></p>
                 <div class="cart hide" id="cart">
                     <h3 style="text-align: center;">Your cart</h3> 
+                    <form class="clear-cart" action="/clear-cart" method="post">
+                        <input type="submit" value="REMOVE ALL">
+                    </form>
                     <%userCart.forEach(cartItem=>{%>
-                    <form action="">
-                        <a href="" class="cart-item-name">
+                    <form action="/remove-from-cart/<%=cartItem.id%>" method="post">
+                        <a href="/product/<%=cartItem.productId%>" class="cart-item-name">
                             <%=cartItem.productName%>
                         </a>
-                        <div class="remove-from-cart">
-                            <a href="/cart/<%=cartItem.id%>">X</a>
-                        </div>
+                        <input class="remove-from-cart" type="submit" value="X">
                     </form>
                     <%})%>
 
