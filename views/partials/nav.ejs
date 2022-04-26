@@ -23,17 +23,40 @@
             </div>
         </a>
         <div class="flex cart-container">
-            <img src="/images/icons/cart.svg" alt=""> 
-            <p class="cart-count">5</p>
-            <div class="cart hide">
-                <form action="">
-                    <input type="text" name="" id="">
-                </form>
-            </div>
+            <img src="/images/icons/cart.svg" alt="" id="cart-icon"> 
+            <%if(locals.isLoggedIn){%>
+        
+                <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
+                <p class="cart-count"><%=userCart.length%></p>
+                <div class="cart hide" id="cart">
+                    <h3 style="text-align: center;">Your cart</h3> 
+                    <%userCart.forEach(cartItem=>{%>
+                    <form action="">
+                        <a href="" class="cart-item-name">
+                            <%=cartItem.productName%>
+                        </a>
+                        <div class="remove-from-cart">
+                            <a href="/cart/<%=cartItem.id%>">X</a>
+                        </div>
+                    </form>
+                    <%})%>
+
+                    <a href="/profile"> <div class="checkout-btn">CHECKOUT</div> </a>
+                    
+                </div>
+               
+            <%}%>
+            
         </div>
         <%if(locals.isLoggedIn){%>
             <a class="logout-nav" href="/logout">Log Out</a>
         <%}%>
     </div>
 </nav>
+
+<script>
+    document.getElementById('cart-icon').addEventListener('click',()=>{
+        document.getElementById('cart').classList.toggle('hide')
+    })
+</script>
 

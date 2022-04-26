@@ -30,20 +30,24 @@ app.use(
 
 //session manager
 app.use((req, res, next) => {
+  
   if (req.session.userId === undefined) {
     res.locals.isLoggedIn = false;
   } else {
     res.locals.isLoggedIn = true;
     res.locals.userId = req.session.userId;
     res.locals.username = req.session.username;
-    res.locals.isAdmin = req.session.isAdmin
+    res.locals.isAdmin = req.session.isAdmin;
   }
   next();
 });
 
+
+
 // *******multer setup
 
-const multer = require('multer')
+const multer = require('multer');
+const { query } = require("express");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname,'/public/images/productImages'))
@@ -73,11 +77,20 @@ let cleanUserData = {
   success: false,
   isAdmin: false
 }
+let cart = []
+let cartItemId = 0
 app.get("/", (req, res)=> {
   connection.query(
     "SELECT * FROM products ORDER BY price DESC",
     (error,products)=>{
-      res.render("index.ejs", {products: products});
+      connection.query(
+        'SELECT * FROM cart',
+        (err, result)=>{
+          cart = result
+          res.render("index.ejs", {products: products, cart: cart});
+        }
+      )
+      
     }
   )
 });
@@ -90,7 +103,7 @@ app.get('/reg', (req,res)=>{
     res.redirect("/profile")
   }else{
     let userData=cleanUserData
-    res.render('reg.ejs', {userData: userData})
+    res.render('reg.ejs', {userData: userData, cart:cart})
   }
    
 })
@@ -127,13 +140,13 @@ app.post("/reg/login", (req, res) => {
                     } else {
                         userData.errorMessage = "Email and password do not match";
                         userData.loginError = true;
-                        res.render("reg.ejs", {userData: userData});
+                        res.render("reg.ejs", {userData: userData, cart:cart});
                     }
                 });
             } else {
                 userData.errorMessage = "Email not registered";
                 userData.loginError = true;
-                res.render("reg.ejs", {userData: userData});
+                res.render("reg.ejs", {userData: userData, cart:cart});
             }
         }
     );
@@ -172,21 +185,21 @@ app.post("/reg/signup", (req, res) => {
                         } else {
                             userData = cleanUserData;
                             userData.success = true
-                            res.render('reg.ejs', {userData: userData})
+                            res.render('reg.ejs', {userData: userData, cart:cart})
                         }
                     }
                 );
                 } else {
                     userData.errorMessage = "Email already registered.";
                     userData.signupError = true
-                    res.render("reg.ejs", {userData: userData});
+                    res.render("reg.ejs", {userData: userData, cart:cart});
                  }
         });
     });
     } else {
         userData.errorMessage = "Password & Confirm Password  must match.";
         userData.signupError= true
-        res.render("reg.ejs", {userData: userData});
+        res.render("reg.ejs", {userData: userData, cart:cart});
     }
 });
 
@@ -196,7 +209,7 @@ app.get('/profile', (req,res)=>{
     connection.query(
       `SELECT * FROM users WHERE id = ${req.session.userId}`,
       (error, user)=>{
-        res.render('profile.ejs', {user:user[0]})
+        res.render('profile.ejs', {user:user[0], cart:cart})
       }
     ) 
   }else{
@@ -209,10 +222,10 @@ app.get('/profile', (req,res)=>{
 app.get('/products/new-product', (req,res)=>{
   // CORECT THIS WHEN DONE TESTING- REMOVE !
   if(req.session.isAdmin){
-    res.render('new-product.ejs', {successMessage: false})
+    res.render('new-product.ejs', {successMessage: false, cart:cart})
   }else{
     let errorMessage = "Only Administrators can acess this page"
-    res.render('404.ejs', {errorMessage: errorMessage})
+    res.render('404.ejs', {errorMessage: errorMessage, cart:cart})
   }
 })
 app.post('/products/new-product',upload.array('images',6),(req,res)=>{
@@ -233,13 +246,13 @@ app.post('/products/new-product',upload.array('images',6),(req,res)=>{
         if(error){
           console.log(error)
         }else{
-          res.render('new-product.ejs', {successMessage: true,})
+          res.render('new-product.ejs', {successMessage: true, cart:cart})
         }
       }
     )
   }else{
     let errorMessage = "Only Administrators can acess this page"
-    res.render('404.ejs', {errorMessage: errorMessage})
+    res.render('404.ejs', {errorMessage: errorMessage, cart:cart})
   }
 })
 // ***********PRODUCT CATEGORIES
@@ -249,47 +262,75 @@ app.get('/products', (req,res)=>{
     connection.query(
       `SELECT * FROM products WHERE category = '${req.query.category}' `,
       (error, products)=>{
-        res.render('products.ejs', {category: req.query.category, products: products})
+        res.render('products.ejs', {category: req.query.category, products: products, cart:cart})
       }
     )
   }else if(req.query.category==='topsales'){
     connection.query(
       `SELECT * FROM products ORDER BY price DESC `,
       (error, products)=>{
-        res.render('products.ejs', {category: req.query.category, products: products})
+        res.render('products.ejs', {category: req.query.category, products: products, cart:cart})
       }
     )
   }else{
     let errorMessage = "Page Not Found - contact admin"
-    res.render("404.ejs", { errorMessage: errorMessage });
+    res.render("404.ejs", { errorMessage: errorMessage, cart:cart});
   }
 })
 
 //********* SEARCH PRODUCT */
 app.post('/search', (req,res)=>{
+
   connection.query(
     `SELECT * FROM products WHERE name LIKE %${req.body.searchterm}% OR specifications LIKE %${req.body.searchterm}%`,
     (error, products)=>{
-      res.render('search.ejs', {products: products})
+      if(error){
+        console.log(error)
+      }else{
+        res.render('search.ejs', {products: products, cart:cart})
+      }
+    }
+  )
+})
+
+// ********** SINGLE PRODUCT 
+app.get('/product/:id', (req,res)=>{
+  connection.query(
+    `SELECT * FROM products WHERE id = ${req.params.id}`,
+    (error, results)=>{
+      res.render('product.ejs', {cart:cart} )
     }
   )
 })
 
 // ****************ADD PRODUCT TO CART
 app.post('/add-to-cart', (req,res)=>{
+ 
   if(res.locals.isLoggedIn){
-    `INSERT INTO cart(userId, productId, productName) VALUES (${req.session.userId}, ${parseInt(req.query.pId)}, ${req.query.pName})`,
+    connection.query(
+    `INSERT INTO cart(userId, productId, productName) VALUES (${req.session.userId}, ${parseInt(req.query.pId)}, '${req.query.pName}')`,
     (error,results)=>{
+      if(error){
+        console.log(error)
+      }
+      let cartItem = {
+        id: cartItemId++,
+        userId: req.session.userId,
+        pId: parseInt(req.query.pId),
+        pName: req.query.pName
+      }
+      cart.push(cartItem)
       // find ways to redirect user to original location / or /products
-      res.redirect('/products')
-    }
+      res.redirect(`${req.query.location.replace(',','/')}`)
+    })
   }else{
     res.redirect('/reg')
   }
 })
 
+
 app.get("/about", (req, res) => {
-    res.render("about-us.ejs");
+    res.render("about-us.ejs",  {cart:cart});
   });
 
 app.get("/logout", (req, res) => {
@@ -300,7 +341,7 @@ app.get("/logout", (req, res) => {
 
 app.all("*", (req, res) => {
   let errorMessage = "Page Not Found"
-  res.render("404.ejs", { errorMessage: errorMessage });
+  res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
 });
 
 app.listen(PORT, () => {

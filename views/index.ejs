@@ -56,7 +56,7 @@
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
             <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,30)%>...</p>
+            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
             <%if(n>3){%>
                 <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
@@ -72,7 +72,7 @@
                     +&nbsp;ADD&nbsp;TO&nbsp;CART
                 </div>
             <%}else{%>
-                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>" method="post">
+                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
                     <input type="submit" value="+ ADD TO CART">
                 </form>
             <%}%>
@@ -104,7 +104,7 @@
                     <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
                 </div>
                 <p class="name"><%=products[i].name%></p>
-                <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+                <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
                 <%let n =products[i].price.toString().length%>
                 <%if(n>3){%>
                     <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
@@ -115,9 +115,15 @@
                     <p>rated: 0</p>
                     <p>0 reviews</p>
                 </div>
-                <div class="add-to-cart">
-                    +&nbsp;ADD&nbsp;TO&nbsp;CART
-                </div>
+                <%if(!locals.isLoggedIn){%>
+                    <div class="add-to-cart add-to-cart-btn">
+                        +&nbsp;ADD&nbsp;TO&nbsp;CART
+                    </div>
+                <%}else{%>
+                    <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
+                        <input type="submit" value="+ ADD TO CART">
+                    </form>
+                <%}%>
             </div> 
             <%}else{count--}%>
             <%}%>
@@ -146,7 +152,7 @@
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
             <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
             <%if(n>3){%>
                 <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
@@ -157,9 +163,15 @@
                 <p>rated: 0</p>
                 <p>0 reviews</p>
             </div>
-            <div class="add-to-cart">
-                +&nbsp;ADD&nbsp;TO&nbsp;CART
-            </div>
+            <%if(!locals.isLoggedIn){%>
+                <div class="add-to-cart add-to-cart-btn">
+                    +&nbsp;ADD&nbsp;TO&nbsp;CART
+                </div>
+            <%}else{%>
+                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
+            <%}%>
         </div> 
         <%}else{count--}%>
         <%}%>
@@ -188,7 +200,7 @@
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
             <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
             <%if(n>3){%>
                 <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
@@ -199,9 +211,15 @@
                 <p>rated: 0</p>
                 <p>0 reviews</p>
             </div>
-            <div class="add-to-cart">
-                +&nbsp;ADD&nbsp;TO&nbsp;CART
-            </div>
+            <%if(!locals.isLoggedIn){%>
+                <div class="add-to-cart add-to-cart-btn">
+                    +&nbsp;ADD&nbsp;TO&nbsp;CART
+                </div>
+            <%}else{%>
+                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
+            <%}%>
         </div> 
         <%}else{count--}%>
         <%}%>
@@ -230,7 +248,7 @@
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
             <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
             <%if(n>3){%>
                 <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
@@ -241,9 +259,15 @@
                 <p>rated: 0</p>
                 <p>0 reviews</p>
             </div>
-            <div class="add-to-cart">
-                +&nbsp;ADD&nbsp;TO&nbsp;CART
-            </div>
+            <%if(!locals.isLoggedIn){%>
+                <div class="add-to-cart add-to-cart-btn">
+                    +&nbsp;ADD&nbsp;TO&nbsp;CART
+                </div>
+            <%}else{%>
+                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
+            <%}%>
         </div> 
         <%}else{count--}%>
         <%}%>
@@ -272,7 +296,7 @@
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
             <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
             <%let n =products[i].price.toString().length%>
             <%if(n>3){%>
                 <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
@@ -283,9 +307,15 @@
                 <p>rated: 0</p>
                 <p>0 reviews</p>
             </div>
-            <div class="add-to-cart">
-                +&nbsp;ADD&nbsp;TO&nbsp;CART
-            </div>
+            <%if(!locals.isLoggedIn){%>
+                <div class="add-to-cart add-to-cart-btn">
+                    +&nbsp;ADD&nbsp;TO&nbsp;CART
+                </div>
+            <%}else{%>
+                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
+            <%}%>
         </div> 
         <%}else{count--}%>
         <%}%>
