@@ -30,7 +30,6 @@ app.use(
 
 //session manager
 app.use((req, res, next) => {
-  
   if (req.session.userId === undefined) {
     res.locals.isLoggedIn = false;
   } else {
@@ -47,8 +46,7 @@ app.use((req, res, next) => {
 // *******multer setup
 
 const multer = require('multer');
-const { query } = require("express");
-const { error } = require("console");
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname,'/public/images/productImages'))
@@ -210,7 +208,21 @@ app.get('/profile', (req,res)=>{
     connection.query(
       `SELECT * FROM users WHERE id = ${req.session.userId}`,
       (error, user)=>{
-        res.render('profile.ejs', {user:user[0], cart:cart})
+       connection.query(
+         `SELECT * FROM cart WHERE userId=${req.session.userId}`,
+         (error, cart)=>{
+           connection.query(
+             `SELECT * FROM products`,
+              (error,products)=>{
+                res.render('profile.ejs', {user:user[0], cart:cart, products: products})
+              }
+
+           )
+          
+         }
+         
+       )
+        
       }
     ) 
   }else{
@@ -283,12 +295,12 @@ app.get('/products', (req,res)=>{
 app.post('/search', (req,res)=>{
 
   connection.query(
-    `SELECT * FROM products WHERE name LIKE %${req.body.searchterm}% OR specifications LIKE %${req.body.searchterm}%`,
+    `SELECT * FROM products WHERE name LIKE '%${req.body.searchterm}%' OR specifications LIKE '%${req.body.searchterm}%'`,
     (error, products)=>{
       if(error){
         console.log(error)
       }else{
-        res.render('search.ejs', {products: products, cart:cart})
+        res.render('search.ejs', {category: req.body.searchterm ,products: products, cart:cart})
       }
     }
   )
@@ -311,24 +323,33 @@ app.get('/product/:id', (req,res)=>{
 
 // ****************ADD PRODUCT TO CART
 app.post('/add-to-cart', (req,res)=>{
- 
   if(res.locals.isLoggedIn){
-    connection.query(
-    `INSERT INTO cart(userId, productId, productName) VALUES (${req.session.userId}, ${parseInt(req.query.pId)}, '${req.query.pName}')`,
-    (error,results)=>{
-      if(error){
-        console.log(error)
-      }
-      let cartItem = {
-        id: cartItemId++,
-        userId: req.session.userId,
-        pId: parseInt(req.query.pId),
-        pName: req.query.pName
-      }
-      cart.push(cartItem)
-      // find ways to redirect user to original location / or /products
-      res.redirect(`${req.query.location.replace(',','/')}`)
-    })
+    if(cart.length>0 && cart.some(cartItem=>cartItem.productId==req.query.pId && cartItem.userId==req.session.userId)){ 
+      connection.query(
+        `UPDATE cart SET quantity = quantity+1 WHERE productId = ${parseInt(req.query.pId)}`,
+        (error,result)=>{
+          res.redirect(`${req.query.location.replace(',','/')}`)
+        }
+      )
+    }else{
+      connection.query(
+      `INSERT INTO cart(userId, productId, productName) VALUES (${req.session.userId}, ${parseInt(req.query.pId)}, '${req.query.pName}')`,
+      (error,results)=>{
+        if(error){
+          console.log(error)
+        }
+        let cartItem = {
+          id: cartItemId++,
+          userId: req.session.userId,
+          pId: parseInt(req.query.pId),
+          pName: req.query.pName
+        }
+        cart.push(cartItem)
+        // find ways to redirect user to original location / or /products
+        res.redirect(`${req.query.location.replace(',','/')}`)
+      })
+    }
+    
   }else{
     res.redirect('/reg')
   }
@@ -342,6 +363,36 @@ app.post('/remove-from-cart/:id', (req,res)=>{
     }
   )
 })
+app.post('/remove-cart-item/:id', (req,res)=>{
+  connection.query(
+    `DELETE FROM cart WHERE id= ${parseInt(req.params.id)}`,
+    (error,results)=>{
+      connection.query(
+      'SELECT * FROM cart',
+        (err, result)=>{
+          cart = result
+          res.redirect('/profile')
+        }
+      )
+      
+    }
+  )
+})
+app.post('/update-cart-item/:id', (req,res)=>{
+  connection.query(
+    `UPDATE cart SET quantity= ${parseInt(req.body.quantity)} WHERE id= ${parseInt(req.params.id)}`,
+    (error,results)=>{
+      connection.query(
+      'SELECT * FROM cart',
+        (err, result)=>{
+          cart = result
+          res.redirect('/profile')
+        }
+      )
+      
+    }
+  )
+})
 // ********** CLEAR CART
 app.post('/clear-cart', (req,res)=>{
   connection.query(
@@ -351,6 +402,8 @@ app.post('/clear-cart', (req,res)=>{
     }
   )
 })
+
+
 
 
 app.get("/about", (req, res) => {

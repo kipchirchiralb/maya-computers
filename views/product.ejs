@@ -10,6 +10,12 @@
             <%})%>
         </div>
         <p class="product-specs"><%=product.specifications%></p>
+        <%let n =product.price.toString().length%>
+        <%if(n>3){%>
+            <p class="price">KSH. <%=product.price.toString().slice(0,n-3) + ',' + product.price.toString().slice(n-3)%></p>
+        <%}else{%>
+            <p class="price">KSH. <%=product.price%></p>
+        <%}%>
         <%if(!locals.isLoggedIn){%>
             <div class="add-to-cart add-to-cart-btn">
                 +&nbsp;ADD&nbsp;TO&nbsp;CART

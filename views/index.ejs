@@ -3,11 +3,21 @@
 <div class="main-container">
     <div class="show-case">
         <nav class="show-item show-case-nav flex">
-            <li id="nav-item1" class="nav-item">Laptops</li>
-            <li id="nav-item2" class="nav-item">Desktop Computers</li>
-            <li id="nav-item3" class="nav-item">Printers</li>
-            <li id="nav-item4" class="nav-item">Computer Accessories</li>
-            <li id="nav-item5" class="nav-item">Office supplies</li>
+            <a href="/products?category=laptop">
+                <li id="nav-item1" class="nav-item">Laptops</li>
+            </a>
+            <a href="/products?category=desktop">
+                <li id="nav-item2" class="nav-item">Desktop Computers</li>
+            </a>
+            <a href="/products?category=printer">
+                <li id="nav-item3" class="nav-item">Printers</li>
+            </a>
+            <a href="/products?category=accessories">
+                <li id="nav-item4" class="nav-item">Computer Accessories</li>
+            </a>
+            <a href="/products?category=supplies">
+                <li id="nav-item5" class="nav-item">Office supplies</li>
+            </a>
         </nav>
         <div class="show-item show-case-content">
             <div class="slide">
@@ -27,15 +37,15 @@
             </div>
         </div>
         <div class="flex show-item show-case-cta">
-            <a href="">
+            <a href="tel:+254717481718">
                 <img src="/images/icons/call.svg" alt="">
                 Call&nbsp;to order
             </a>
-            <a href="">
+            <a href="mailto:maya@mayacomputers.co.ke">
                 <img src="/images/icons/mail.svg" alt="">
                 Email&nbsp;us 
             </a>
-            <a href="">
+            <a href="https://wa.me/+254717481718" target="_blank">
                 <img src="/images/icons/whatsapp.svg" alt="">
                 Let's&nbsp;Chat 
             </a>
@@ -383,5 +393,16 @@
     }
     slide();
     setInterval(slide, 8000);
+
+    // scroll to prev position
+    document.addEventListener("DOMContentLoaded", function (event) {
+        let scrollpos = localStorage.getItem("scrollposIndex");
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
+
+    window.onscroll = function (e) {
+        localStorage.setItem("scrollposIndex", window.scrollY);
+        
+    };
 </script>
 <%- include('./partials/footer')%>

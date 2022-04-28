@@ -1,42 +1,47 @@
 
 <div class="cta-running-add">
-    <p>Get the latest offers</p>
-    <p>Call us today</p>
-    <p>Send us mail</p>
+    <p>Get our latest offers today</p>
+    <p>Call: &nbsp;<a href="tel:+254717481718">+254717481718</a> </p>
+    <p>Email: &nbsp;<a href="mailto:maya@mayacomputers.co.ke">maya@mayacomputers.co.ke</a> </p>
 
 </div>
 <nav class="main-nav">
+    <button class="prev-page-btn" onclick="history.back()"> &lt;&lt; Previous Page</button>
+
     <div class="main-logo">
         <a href="/"><img src="/images/logo.svg" alt=""></a>
     </div> 
-    <div>
-        <form action="/search" method="post">
+    <div class="search-product">
+        <form class="flex" action="/search" method="post">
             <input type="text" placeholder="Search" name="searchterm" id="search-term" class="search-term"/>
-            <input type="submit" value="Search"> 
+            <button type="submit"><img src="/images/icons/search.svg" alt=""></button> 
         </form>   
     </div>
     <div class="flex nav-group">
+        <a href="/" class="nav-item">Home</a>
         <a href="/reg">
             <div class="flex"> 
                 <img src="/images/icons/account.svg" alt="">
-                Account
+                <span class="nav-item"> Account</span>
             </div>
         </a>
         <div class="flex cart-container">
-            <img src="/images/icons/cart.svg" alt="" id="cart-icon"> 
+            <img src="/images/icons/cart.svg" alt="" id="cart-icon">
+            <%if(cart.length>0){%> 
             <%if(locals.isLoggedIn){%>
-        
+                
                 <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
                 <p class="cart-count"><%=userCart.length%></p>
                 <div class="cart hide" id="cart">
                     <h3 style="text-align: center;">Your cart</h3> 
-                    <form class="clear-cart" action="/clear-cart" method="post">
+                    <form class="clear-cart flex" action="/clear-cart" method="post">
+                        <input id="close-cart-btn" type="button" value="CLOSE">
                         <input type="submit" value="REMOVE ALL">
                     </form>
                     <%userCart.forEach(cartItem=>{%>
                     <form action="/remove-from-cart/<%=cartItem.id%>" method="post">
                         <a href="/product/<%=cartItem.productId%>" class="cart-item-name">
-                            <%=cartItem.productName%>
+                           <%=cartItem.quantity%>&nbsp; <%=cartItem.productName%>
                         </a>
                         <input class="remove-from-cart" type="submit" value="X">
                     </form>
@@ -45,12 +50,16 @@
                     <a href="/profile"> <div class="checkout-btn">CHECKOUT</div> </a>
                     
                 </div>
+                
                
+            <%}%>
+            <%}else{%>
+                <p class="cart hide" id="cart">Your cart is empty. Go shopping!!</p>
             <%}%>
             
         </div>
         <%if(locals.isLoggedIn){%>
-            <a class="logout-nav" href="/logout">Log Out</a>
+            <a class="logout-nav nav-item" href="/logout">Log Out</a>
         <%}%>
     </div>
 </nav>
@@ -59,5 +68,9 @@
     document.getElementById('cart-icon').addEventListener('click',()=>{
         document.getElementById('cart').classList.toggle('hide')
     })
+    document.getElementById('close-cart-btn').addEventListener('click',()=>{
+        document.getElementById('cart').classList.toggle('hide')
+    })
+
 </script>
 

@@ -2,26 +2,115 @@
 <%- include('./partials/nav')%>
 <div class="main-container profile-page">
     <div class="profile-nav flex">
-        <div class="profile-nav-item active" id="user-data">User data</div>
-        <div class="profile-nav-item" id="address-data">Address info</div> 
+        <div class="profile-nav-item active" id="user-data">User Info</div>
+        <div class="profile-nav-item" id="address-data">Address Info</div> 
+        <div class="profile-nav-item" id="purchase-history">Purchase History</div> 
         <%if(locals.isAdmin){%>
             <div class="profile-nav-item"id="find-product">Find/add Product</div>
             <div class="profile-nav-item" id="find-user">Find User</div>
         <%}%>
     </div>
     <div class=" flex profile-body">
-        <div class="user-data profile-body-item ">
-            <h5>Name: <%=user.firstName%></h5>
-            <p>Email: <%=user.email%></p>
-            <button>Update contact details</button>
+        <div class="user-data profile-body-item flex ">
+            <div class="personal-info">
+                <h2>Peronal Information</h2>
+                <h5>Name: <%=user.firstName%></h5>
+                <p>Email: <%=user.email%></p>
+
+                <button>Update contact details</button>
+            </div>
+            <div class="cart-info">
+                <h2>Cart</h2>
+                <%if(locals.isLoggedIn){%>
+                    <%if(cart.length>0){%>
+                    <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
+                    <%let total = 0%>
+                    
+                    <%userCart.forEach(cartItem=>{%>
+                    <%let itemPrice = products.find(product=>product.id===cartItem.productId).price %>
+                    <%total = total + itemPrice*cartItem.quantity%>
+                    
+                    <div class="profile-cart-item flex">
+                        <a href="/product/<%=cartItem.productId%>" class="cart-item-name"><%=cartItem.productName%></a>
+                        <div class="p-buttons">
+                        <form class="price-form"  action="/update-cart-item/<%=cartItem.id%>" method="post">
+                            <input class="quantity-input" type="text" name="quantity" value="<%=cartItem.quantity%>">
+                            
+                            <%let updatedPrice =itemPrice*cartItem.quantity %>
+                            <%let n =updatedPrice.toString().length%>
+                            <%if(n>3){%>
+                                <p class="price">KSH. <%=updatedPrice.toString().slice(0,n-3) + ',' + updatedPrice.toString().slice(n-3)%></p>
+                            <%}else{%>
+                                <p class="price">KSH. <%=updatedPrice%></p>
+                            <%}%>
+                            <input class="update-quantity" type="submit" value="UPDATE">
+                        </form>
+                        <form action="/remove-cart-item/<%=cartItem.id%>" method="post"><input class="remove-item" type="submit" value="X">
+                        </form>
+                        </div>
+                    </div>
+                    <%})%>
+                    
+                    <div class="total-payable flex">
+                        <%let n =total.toString().length%>
+                        <%if(n>6){%>
+                            <p class="price">TOTAL KSH. <%=total.toString().slice(0,n-6)+','+ total.toString().slice(n-6,n-3) + ',' + total.toString().slice(n-3)%></p>
+                            
+                        <%}else if(n>3){%>
+                            <p class="price">TOTAL KSH. <%=total.toString().slice(0,n-3) + ',' + total.toString().slice(n-3)%></p>
+                        <%}else{%>
+                            <p class="price">TOTAL KSH. <%=total%></p>
+                        <%}%>
+                        
+                        <button class="pay-btn">PAY</button> 
+                    </div>
+                    <%}else{%>
+                        <p>Your cart is empty. Go shopping!!</p>
+                    <%}%>
+                    
+                   
+                <%}%>
+            </div>
+            <div class="payment-methods">
+                <h2>Payment Methods</h2>
+                <select name="payment-methods" id="">
+                    <option value="">--Select Payment Option</option>
+                    <option value="">M-pesa</option>
+                    <option value="">PayPal</option>
+                    <option value="">Master Card</option>
+                </select>
+            </div>
+            
         </div>
-        <div class="address-data profile-body-item hide">
-            <p>Address Details</p>
-            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, cum?</div>
-            <div>list of country wide pick points</div>
-            <button>Update Adress data</button>
+        <div class="address-data profile-body-item flex hide">
+            <div class="address-details">
+                <h2>Address Information</h2>
+                <form action="/update-address">
+                    <label for="country">Country: </label>
+                    <input type="text" name="country" id="" value="Kenya"><br>
+                    <label for="county">County: </label>
+                    <input type="text" name="county" id="" value="Uasin Gishu"><br>
+                    <label for="town">Town: </label>
+                    <input type="text" name="town" id="" value="Eldoret"><br>
+                    <input type="submit" value="Update Address Info">
+                </form>
+            </div>
+            <div class="pickup-stations">
+                <h2>Pickup Stations</h2>
+                <p>Choose a pickup station near you</p>
+                <select name="station" id="">
+                    <option value="">--Choose Pickup Station--</option>
+                    <option value="">Eldoret</option>
+                    <option value="">Kapsabet</option>
+                    <option value="">Nakuru</option>
+                </select>
+                <div class="default-station">
+                    <p>Our shop in eldoret - Oloo Street </p>
+                </div>
+            </div>
+            
         </div>
-        <div class="find-product profile-body-item hide">
+        <div class="find-product profile-body-item flex hide">
             <div class="find-product-nav flex">
                 sort by name, price, category.
                 search imp.

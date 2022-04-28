@@ -9,8 +9,10 @@
     font-family: NetflixFont;
   }
   :root{
-      --primary-color: #d66c27;
-      --secondary-color: #ea2129;
+      /* --primary-color: #d66c27; */
+      /* --primary-color: #3824e9; */
+      --primary-color: #e92424;
+      --secondary-color: #e00810;
       --pri-text-color: #f7f7f7;
       --sec-text-color: #000;
       --grayish-color: #adadad;
@@ -52,12 +54,12 @@
 
 /* *************MAIN-NAV*********** */
 .cta-running-add{
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     text-align: center;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-wrap: nowrap;
     height: 30px;
     color: var(--pri-text-color);
@@ -68,6 +70,9 @@
     left: 0;
     right: 0;
     z-index: 1000;
+}
+.cta-running-add a{
+  text-decoration: underline;
 }
 
 
@@ -89,6 +94,18 @@
   z-index: 1001;
   background-color: var(--pri-text-color);
 }
+.main-nav .prev-page-btn{
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  background-color: rgba(0,0,0,0.5);
+  border: none;
+  padding: 5px;
+  color: var(--pri-text-color);
+}
+.main-nav .prev-page-btn:hover{
+  background-color: rgba(0,0,0,0.9);
+}
 .main-nav .main-logo{
   height: 100%;
 }
@@ -96,14 +113,45 @@
   height: 100%;
   background-color: var(--primary-color);
 }
+.main-nav .search-product{
+  height: 100%;
+  
+ 
+}
+.main-nav .search-product form{
+  height: 100%;
+  flex-wrap: nowrap;
+  /* align-items: center; */
+
+}
+.main-nav .search-product input{
+  height: 1.3rem;
+  min-width: 200px;
+  padding-left:10px;
+  border: 1px solid #adadad;
+}
+.main-nav .search-product input:focus{
+  outline: none;
+}
+.main-nav .search-product button{
+  margin-left: 10px;
+ background: none;
+ border: none;
+ height: 80%;
+ transition: all .3s ease-in-out;
+}
+.main-nav .search-product button:hover{
+  transform: scale(1.2);
+}
 .main-nav .nav-group{
   gap: 2rem;
 }
 .main-nav .nav-group img{
   margin-right: 1rem;
 }
-.main-nav .nav-group .logout-nav{
-  font-size: 1rem;
+.main-nav .nav-group .nav-item:hover{
+  color: #077507;
+  /* font-size: 1rem; */
 }
 .main-nav .cart-container{
   position: relative;
@@ -125,7 +173,7 @@
 .main-nav .cart-container .cart{
   position: absolute;
   /* height: 300px; */
-  background-color: rgba(9, 165, 9, .9);
+  background-color: var(--green-color);
   color: var(--pri-text-color);
   top: 100%;
   right: 100%;
@@ -152,7 +200,7 @@
   background-color: var(--primary-color);
 }
 .main-nav .cart-container .checkout-btn:hover{
-  background-color: var(--green-color);
+  background-color: #077507;
 }
 .main-nav .cart-container .remove-from-cart{
   all: unset;
@@ -168,10 +216,9 @@
 }
 .cart-container .clear-cart{
   color: var(--secondary-color);
-  
 }
 .cart-container .clear-cart input{
-  margin-left: auto;
+  justify-content: space-between;
   border: 1px solid var(--secondary-color);
   color: var(--pri-text-color);
   padding: 3px 6px;
@@ -204,6 +251,9 @@
 .show-case .show-case-nav li{
   list-style: none;
   padding-left: 2rem;
+}
+.show-case .show-case-nav li:hover{
+  color: var(--primary-color);
 }
 .show-case-content{
   position: relative;
@@ -241,6 +291,10 @@
   text-decoration: none;
   display: flex;
   padding: 7px;
+  transition: all .3s ease-in-out;
+}
+.show-case-cta a:hover{
+  background-color: var(--green-color);
 }
 .show-case-cta a img{
   margin-right: .6rem;
@@ -332,13 +386,13 @@
 .products .load-more-btn a{
   text-decoration: none;
   text-align: center;
-  color: var(--secondary-color);
+  color: var(--primary-color);
   transition: all .4s ease-in-out;
 }
 .products .view-more-btn a:hover,
 .products .load-more-btn a:hover{
   transform: scale(1.15);
-  color: var(--primary-color);
+  color: var(--green-color);
   /* background-color: var(--secondary-color); */
 }
 
@@ -472,6 +526,9 @@
   color: var(--pri-text-color);
   font-size: 1.1rem;
 }
+.reg-form input[type="submit"]:hover{
+  background-color: var(--green-color);
+}
 .new-product-page .reg-form .input-el{
   margin-bottom: 5px;
 }
@@ -492,20 +549,95 @@
   text-align: center;
   cursor: pointer;
 }
+.profile-page .profile-nav .profile-nav-item:hover{
+  background-color: #edb188;
+}
 .profile-page .profile-nav .active{
   background-color: var(--primary-color);
   color: var(--pri-text-color);
   cursor: pointer;
 }
 .profile-body{
-  margin-top: 30px;
+  padding: 20px;
 }
+.profile-body .profile-body-item{
+  min-width: 90%;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+
+}
+.profile-cart-item{
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: nowrap;
+  min-width: 50%;
+  padding: 3px;
+  margin: 3px;
+  border-bottom: 1px solid var(--green-color);
+}
+.profile-cart-item .p-buttons{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  /* align-items: flex-end; */
+}
+.profile-cart-item .p-buttons .price-form{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+.profile-cart-item .quantity-input{
+  width: 2rem;
+  border: none;
+}
+.profile-cart-item .quantity-input:focus{
+  outline: none;
+}
+.profile-cart-item .update-quantity{
+  border: none;
+  padding: 3px 6px;
+  color: var(--pri-text-color);
+  background-color: var(--primary-color);
+  transition: all .3s ease-in-out;
+}
+.profile-cart-item .update-quantity:hover{
+  background-color: var(--green-color);
+}
+.profile-cart-item .remove-item{
+  border: none;
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+  background: none;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+.profile-cart-item .remove-item:hover{
+  color: var(--pri-text-color);
+  background: var(--secondary-color);
+}
+.cart-info .total-payable{
+  justify-content: space-between;
+  font-size: 1.2rem;
+}
+.cart-info .pay-btn{
+  padding: 3px 6px;
+  color: var(--pri-text-color);
+  background-color: var(--green-color);
+  border: none;
+}
+
+
+
 .profile-body .new-product-btn{
   margin: 7px;
   padding: 10px 5px;
   background-color: var(--green-color);
   color: var(--pri-text-color);
 }
+
 
 
 
@@ -567,7 +699,7 @@ footer .copyright{
   cursor: unset;
 }
 footer .copyright a{
-  color: #d66c27;
+  color: var(--primary-color);
 }
 
 

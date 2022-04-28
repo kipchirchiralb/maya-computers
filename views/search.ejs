@@ -1,16 +1,23 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
 <div class="products-category main-container">
-    <h2>Search results</h2>
+    <%if(products.length==0){%>
+        <h2 style="color:#ea2129 ;">We could not find any product that matches your search term "<%=category.toUpperCase()%>". Please try another term.</h2>
+    <%}else{%>
+        <h2 style="color: #09a609;">Showing results for "<%=category.toUpperCase()%>"</h2>
+    <%}%>
     <div class="products flex">
-        <%if(products.length>0){%>
+        
         <% for(let i=0; i< products.length; i++){ %>
+     
         <div class="product flex">
+            <a href="/product/<%=products[i].id%>">
             <div class="product-img">
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
+            </a>
             <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,15)%>...</p>
+            <p class="description"><%=products[i].specifications.slice(0,40)%>...</p>
             <%let n =products[i].price.toString().length%>
             <%if(n>3){%>
             <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
@@ -21,18 +28,59 @@
                 <p>rated: 0</p>
                 <p>0 reviews</p>
             </div>
-            <div class="add-to-cart">
-                +&nbsp;ADD&nbsp;TO&nbsp;CART
-            </div>
+            <%if(!locals.isLoggedIn){%>
+                <div class="add-to-cart add-to-cart-btn">
+                    +&nbsp;ADD&nbsp;TO&nbsp;CART
+                </div>
+            <%}else{%>
+                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=,products?category=<%=category%>" method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
+            <%}%>
         </div> 
        
         <%}%>
-        <%}else{%>
-            <p class="error-message">Sorry, no item matches your search term.</p>
-        <%}%>
-        
+        <div class="load-more-btn flex">
+            <a href="/products?category=<%=category%>">
+                << &nbsp;&nbsp; < 1 2 3 4 5 6 7 > &nbsp;&nbsp; >>
+            </a>
+        </div>
     </div>
     
 
 </div>
+<div class="login-modal" id="login-modal">
+    <div class="login-modal-content">
+        <p>Login to use cart</p>
+        <button class="close-modal-btn">CLOSE</button>
+        <a href="/reg"><button class="login-link-btn">LOGIN</button></a>
+    </div>
+</div>
+
+<script>
+     document.addEventListener("DOMContentLoaded", function (event) {
+        let scrollpos = localStorage.getItem("scrollposProducts");
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
+
+    window.onscroll = function (e) {
+        localStorage.setItem("scrollposProducts", window.scrollY);
+        console.log(scrollpos)
+    };
+</script>
+<script>
+    document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{
+       closeModalBtn.addEventListener('click', (e)=>{
+           e.target.parentElement.parentElement.style.display='none'
+       })   
+   })
+   document.querySelectorAll('.add-to-cart-btn').forEach(addToCartBtn=>{
+       addToCartBtn.addEventListener('click', ()=>{
+           document.getElementById('login-modal').style.display='block'
+       })   
+   })
+   document.getElementById('login-modal').addEventListener('click',()=>{
+       document.getElementById('login-modal').style.display='none'
+   })
+</script>
 <%- include('./partials/footer')%>

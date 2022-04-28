@@ -41,7 +41,7 @@
             <%}%>
         </div>
         <div class="reg-form">
-            <%if(userData.success){%> <p class="success-message">Registration Sucessful. You can now Login</p> <%}%>
+            <%if(userData.success){%> <h3 class="success-message">Registration Sucessful. You can now Login</h3> <%}%>
             <%if(userData.loginError){%> <p class="error-message"><%=userData.errorMessage%></p><%}%>
             <%if(userData.loginError){%>
                 <form class="login-user flex" action="/reg/login" method="post">
