@@ -2,6 +2,14 @@
 <%- include('./partials/nav')%>
 <div class="main-container">
     <div class="product-container flex">
+        <%if(locals.isAdmin){%>
+        <button class="edit-product">
+            <img src="/images/icons/edit.svg" alt="">
+        </button>
+        <button class="delete-product">
+            <img src="/images/icons/delete.svg" alt="">
+        </button>
+        <%}%>
         <h2 class="product-title"><%=product.name%></h2>
         <div class="product-gallery flex">
             <%let images = product.images.split(',')%>

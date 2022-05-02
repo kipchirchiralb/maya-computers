@@ -8,6 +8,7 @@
         <%if(locals.isAdmin){%>
             <div class="profile-nav-item"id="find-product">Find/add Product</div>
             <div class="profile-nav-item" id="find-user">Find User</div>
+            <div class="profile-nav-item" id="all-purchases">All Purchases</div>
         <%}%>
     </div>
     <div class=" flex profile-body">
@@ -16,7 +17,7 @@
                 <h2>Peronal Information</h2>
                 <h5>Name: <%=user.firstName%></h5>
                 <p>Email: <%=user.email%></p>
-
+                
                 <button>Update contact details</button>
             </div>
             <div class="cart-info">
@@ -34,7 +35,7 @@
                         <a href="/product/<%=cartItem.productId%>" class="cart-item-name"><%=cartItem.productName%></a>
                         <div class="p-buttons">
                         <form class="price-form"  action="/update-cart-item/<%=cartItem.id%>" method="post">
-                            <input class="quantity-input" type="text" name="quantity" value="<%=cartItem.quantity%>">
+                            <input class="quantity-input" type="number" min="1" name="quantity" value="<%=cartItem.quantity%>">
                             
                             <%let updatedPrice =itemPrice*cartItem.quantity %>
                             <%let n =updatedPrice.toString().length%>
@@ -62,7 +63,20 @@
                             <p class="price">TOTAL KSH. <%=total%></p>
                         <%}%>
                         
-                        <button class="pay-btn">PAY</button> 
+                         
+                    </div>
+                    <div class="payment-methods">
+                        <h4>Payment Methods</h4>
+                        <select name="payment-methods" id="">
+                            <option value="">--Select Payment Option</option>
+                            <option value="">M-pesa</option>
+                            <option value="">PayPal</option>
+                            <option value="">Master Card</option>
+                        </select>
+                        <div>
+                            
+                        </div>
+                        <button class="pay-btn">PAY</button>
                     </div>
                     <%}else{%>
                         <p>Your cart is empty. Go shopping!!</p>
@@ -71,15 +85,7 @@
                    
                 <%}%>
             </div>
-            <div class="payment-methods">
-                <h2>Payment Methods</h2>
-                <select name="payment-methods" id="">
-                    <option value="">--Select Payment Option</option>
-                    <option value="">M-pesa</option>
-                    <option value="">PayPal</option>
-                    <option value="">Master Card</option>
-                </select>
-            </div>
+            
             
         </div>
         <div class="address-data profile-body-item flex hide">
@@ -123,7 +129,26 @@
         <div class="find-user profile-body-item hide">
             table of all users
             search user fucntionality
-        </div>  
+        </div> 
+        <div class="profile-body-item  all-purchases hide">
+            <table>
+                <thead>
+                    <tr>
+                        <td>Category</td>
+                        <td>Product Id</td>
+                        <td>Product Name</td>
+                        <td>Customer</td>
+                        <td>Quantity</td>
+                        <td>Amount</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div> 
 </div>
 <script>
