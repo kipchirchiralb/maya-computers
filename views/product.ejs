@@ -2,20 +2,19 @@
 <%- include('./partials/nav')%>
 <div class="main-container">
     <div class="product-container flex">
-        <%if(locals.isAdmin){%>
-        <button class="edit-product">
-            <img src="/images/icons/edit.svg" alt="">
-        </button>
-        <button class="delete-product">
-            <img src="/images/icons/delete.svg" alt="">
-        </button>
-        <%}%>
         <h2 class="product-title"><%=product.name%></h2>
-        <div class="product-gallery flex">
+        <div class="product-gallery flex slideshow-container">
             <%let images = product.images.split(',')%>
             <%images.forEach(image=>{%>
-                <img src="/images/productImages/<%=image%>" alt="">
+                <div class="mySlides fade">
+                    <img class="product-image"  src="/images/productImages/<%=image%>" alt="">
+                </div>
             <%})%>
+            
+            <a class="prev " onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+            <p class="image-count"><span class="slide-index"></span>/<%=images.length%></p>
+           
         </div>
         <p class="product-specs"><%=product.specifications%></p>
         <%let n =product.price.toString().length%>
@@ -57,4 +56,29 @@
     document.getElementById('login-modal').addEventListener('click',()=>{
         document.getElementById('login-modal').style.display='none'
     })
+</script>
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  document.querySelector('.slide-index').textContent=slideIndex
+
+  slides[slideIndex-1].style.display = "block";  
+}
 </script>

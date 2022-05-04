@@ -2,26 +2,19 @@
 <%- include('./partials/nav')%>
 <div class="main-container profile-page">
     <div class="profile-nav flex">
-        <div class="profile-nav-item active" id="user-data">User Info</div>
+        <div class="profile-nav-item active" id="user-data">User Profile</div>
         <div class="profile-nav-item" id="address-data">Address Info</div> 
         <div class="profile-nav-item" id="purchase-history">Purchase History</div> 
-        <%if(locals.isAdmin){%>
-            <div class="profile-nav-item"id="find-product">Find/add Product</div>
-            <div class="profile-nav-item" id="find-user">Find User</div>
-            <div class="profile-nav-item" id="all-purchases">All Purchases</div>
-        <%}%>
     </div>
     <div class=" flex profile-body">
         <div class="user-data profile-body-item flex ">
             <div class="personal-info">
-                <h2>Peronal Information</h2>
                 <h5>Name: <%=user.firstName%></h5>
                 <p>Email: <%=user.email%></p>
-                
                 <button>Update contact details</button>
             </div>
             <div class="cart-info">
-                <h2>Cart</h2>
+                <h2>Your Cart</h2>
                 <%if(locals.isLoggedIn){%>
                     <%if(cart.length>0){%>
                     <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
@@ -66,7 +59,7 @@
                          
                     </div>
                     <div class="payment-methods">
-                        <h4>Payment Methods</h4>
+                        <h2>Payment Methods</h2>
                         <select name="payment-methods" id="">
                             <option value="">--Select Payment Option</option>
                             <option value="">M-pesa</option>
@@ -85,8 +78,6 @@
                    
                 <%}%>
             </div>
-            
-            
         </div>
         <div class="address-data profile-body-item flex hide">
             <div class="address-details">
@@ -113,33 +104,18 @@
                 <div class="default-station">
                     <p>Our shop in eldoret - Oloo Street </p>
                 </div>
-            </div>
-            
-        </div>
-        <div class="find-product profile-body-item flex hide">
-            <div class="find-product-nav flex">
-                sort by name, price, category.
-                search imp.
-                <a href="/products/new-product" class="new-product-btn">+ New Product</a>  
-            </div>
-            <div>
-                products table here
-            </div>
-        </div>
-        <div class="find-user profile-body-item hide">
-            table of all users
-            search user fucntionality
+            </div> 
         </div> 
-        <div class="profile-body-item  all-purchases hide">
+        <div class="profile-body-item  purchase-history hide">
             <table>
                 <thead>
                     <tr>
                         <td>Category</td>
                         <td>Product Id</td>
                         <td>Product Name</td>
-                        <td>Customer</td>
                         <td>Quantity</td>
                         <td>Amount</td>
+                        <td>Status</td>
                     </tr>
                 </thead>
                 <tbody>

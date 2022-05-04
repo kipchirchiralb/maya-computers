@@ -6,7 +6,6 @@
 
 </div>
 <nav class="main-nav">
-    <button class="prev-page-btn" onclick="history.back()"> &lt;&lt; Previous Page</button>
 
     <div class="main-logo">
         <a href="/"><img src="/images/logo.svg" alt=""></a>
@@ -19,12 +18,32 @@
     </div>
     <div class="flex nav-group">
         <a href="/" class="nav-item">Home</a>
-        <a href="/reg">
-            <div class="flex"> 
+        <div class="account">
+           
+            <div class="flex" id="account-btn" style="cursor: pointer;"> 
                 <img src="/images/icons/account.svg" alt="">
                 <span class="nav-item"> Account</span>
             </div>
-        </a>
+          
+            <div class="account-dropdown hide-a-d">
+                <%if(!locals.isLoggedIn){%>
+                <a href="/signin" class="signin-link pri-btn">
+                    SIGN&nbsp;IN
+                </a>
+                <%}%>
+                <a href="/profile">
+                    My Account
+                </a>
+                <a href="/profile/orders/<%=locals.userId%>" class="track-orders">
+                    My Orders
+                </a>
+                <%if(locals.isLoggedIn){%>
+                <a href="/logout" class="signin-link pri-btn">
+                    SIGN&nbsp;OUT
+                </a>
+                <%}%>   
+            </div>
+        </div>
         <div class="flex cart-container">
             <img src="/images/icons/cart.svg" alt="" id="cart-icon">
             <%if(cart.length>0){%> 
@@ -58,9 +77,6 @@
             <%}%>
             
         </div>
-        <%if(locals.isLoggedIn){%>
-            <a class="logout-nav nav-item" href="/logout">Log Out</a>
-        <%}%>
     </div>
 </nav>
 
@@ -68,9 +84,15 @@
     document.getElementById('cart-icon').addEventListener('click',()=>{
         document.getElementById('cart').classList.toggle('hide')
     })
-    document.getElementById('close-cart-btn').addEventListener('click',()=>{
-        document.getElementById('cart').classList.toggle('hide')
-    })
+    // document.getElementById('close-cart-btn').addEventListener('click',()=>{
+    //     document.getElementById('cart').classList.toggle('hide')
+    // })
 
+    // account dropdown
+    document.querySelector('#account-btn').addEventListener('click', ()=>{
+        document.querySelector('.account-dropdown').classList.toggle('hide-a-d')
+   
+    })
+    
 </script>
 

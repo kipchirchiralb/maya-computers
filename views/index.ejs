@@ -20,17 +20,17 @@
             </a>
         </nav>
         <div class="show-item show-case-content">
-            <div class="slide">
+            <div class="slide fade">
                 <img src="/images/add1.png" alt="">
                 <img src="/images/add2.png" alt="">
                 <img src="/images/addmain.jpg" alt="">
             </div>
-            <div class="slide">
+            <div class="slide fade">
                 <img src="/images/add4.png" alt="">
                 <img src="/images/add5.png" alt="">
                 <img src="/images/addmain.jpg" alt="">
             </div>
-            <div class="slide">
+            <div class="slide fade">
                 <img src="/images/add6.png" alt="">
                 <img src="/images/add7.png" alt="">
                 <img src="/images/addmain.jpg" alt="">
@@ -59,7 +59,7 @@
         <%if(true){%>
         <%let count = 0 %>
         <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===4){break;} %>
+        <%if(count===5){break;} %>
         <%count++%>
         <div class="product flex">
             <a href="/product/<%=products[i].id%>">
@@ -109,7 +109,7 @@
             <%if(true){%>
             <%let count = 0 %>
             <% for(let i=0; i< products.length; i++){ %>
-            <%if(count===4){break;} %>
+            <%if(count===5){break;} %>
             <%count++%>
             <%if(products[i].category === 'laptop'){%>
             <div class="product flex">
@@ -159,7 +159,7 @@
         <%if(true){%>
         <%let count = 0 %>
         <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===4){break;} %>
+        <%if(count===5){break;} %>
         <%count++%>
         <%if(products[i].category === 'printer'){%>
         <div class="product flex">
@@ -209,7 +209,7 @@
         <%if(true){%>
         <%let count = 0 %>
         <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===4){break;} %>
+        <%if(count===5){break;} %>
         <%count++%>
         <%if(products[i].category === 'desktop'){%>
         <div class="product flex">
@@ -259,7 +259,7 @@
         <%if(true){%>
         <%let count = 0 %>
         <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===4){break;} %>
+        <%if(count===5){break;} %>
         <%count++%>
         <%if(products[i].category === 'accessories'){%>
         <div class="product flex">
@@ -309,7 +309,7 @@
         <%if(true){%>
         <%let count = 0 %>
         <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===4){break;} %>
+        <%if(count===5){break;} %>
         <%count++%>
         <%if(products[i].category === 'supplies'){%>
         <div class="product flex">

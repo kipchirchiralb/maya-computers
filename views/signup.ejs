@@ -3,9 +3,10 @@
 <div class="main-container">
     <div class="reg-page flex">
         <div class="reg-form">
+            <h2 style="text-align: center;">Sign Up</h2>
             <%if(userData.signupError){%> <p class="error-message"><%=userData.errorMessage%></p><%}%>
             <%if(!userData.signupError){%>
-            <form class="signup-user flex" action="/reg/signup" method="post">
+            <form class="signup-user flex" action="signup" method="post">
                 <input class="input-el" type="text"name="firstName" placeholder="First Name *" required>
                 <input class="input-el" type="text"name="lastName" placeholder="Last Name (optional)" >
                 <input class="input-el" type="email" name="email" id="" placeholder="Email *" required>
@@ -18,7 +19,7 @@
             </form>
             <%}else{%>
                
-                <form class="signup-user flex" action="/reg/signup" method="post">
+                <form class="signup-user flex" action="/signup" method="post">
                     <input class="input-el" type="text"name="firstName" value="<%=userData.firstName%>" required>
                     <%if(userData.lastName.length>0){%>
                         <input class="input-el" type="text"name="lastName" value="<%=userData.lastName%>">
@@ -39,24 +40,9 @@
                 </form>
                 
             <%}%>
+            <p>Already have an account? <a href="/signin" style="color: red;">Sign in</a></p>
         </div>
-        <div class="reg-form">
-            <%if(userData.success){%> <h3 class="success-message">Registration Sucessful. You can now Login</h3> <%}%>
-            <%if(userData.loginError){%> <p class="error-message"><%=userData.errorMessage%></p><%}%>
-            <%if(userData.loginError){%>
-                <form class="login-user flex" action="/reg/login" method="post">
-                    <input class="input-el" type="email" name="email" id="" value="<%=userData.loginEmail%>" required>
-                    <input class="input-el" type="password" name="password" id="" value="<%=userData.loginPassword%>" required>
-                    <input class="input-el" type="submit" value="Log In">
-                </form>
-            <%}else{%>
-                <form class="login-user flex" action="/reg/login" method="post">
-                    <input class="input-el" type="email" name="email" id="" placeholder="Your Email *" required>
-                    <input class="input-el" type="password" name="password" id="" placeholder="Password *" required>
-                    <input class="input-el" type="submit" value="Log In">
-                </form>
-            <%}%>
-        </div>
+       
     </div>
 </div>
 

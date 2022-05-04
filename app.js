@@ -97,19 +97,26 @@ app.get("/", (req, res)=> {
 
 // ***********getReg
 
-app.get('/reg', (req,res)=>{
+app.get('/signin', (req,res)=>{
   if(res.locals.isLoggedIn){
     res.redirect("/profile")
   }else{
     let userData=cleanUserData
-    res.render('reg.ejs', {userData: userData, cart:cart})
-  }
-   
+    res.render('signin.ejs', {userData: userData, cart:cart})
+  }  
+})
+app.get('/signup', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    res.redirect("/profile")
+  }else{
+    let userData=cleanUserData
+    res.render('signup.ejs', {userData: userData, cart:cart})
+  }  
 })
 
 // ********* postLogin
 
-app.post("/reg/login", (req, res) => {
+app.post("/signin", (req, res) => {
     let userData = { 
         loginEmail: req.body.email,
         loginPassword: req.body.password,
@@ -135,24 +142,28 @@ app.post("/reg/login", (req, res) => {
                         req.session.username = results[0].firstName;
                         req.session.isAdmin = userData.isAdmin
                         // if USER isAdmin-provide more data
-                        res.redirect('/')
+                        if(!userData.isAdmin){
+                          res.redirect('/')
+                        }else{
+                          res.redirect('/admin-panel')
+                        }
                     } else {
                         userData.errorMessage = "Email and password do not match";
                         userData.loginError = true;
-                        res.render("reg.ejs", {userData: userData, cart:cart});
+                        res.render("signin.ejs", {userData: userData, cart:cart});
                     }
                 });
             } else {
                 userData.errorMessage = "Email not registered";
                 userData.loginError = true;
-                res.render("reg.ejs", {userData: userData, cart:cart});
+                res.render("signin.ejs", {userData: userData, cart:cart});
             }
         }
     );
 });
 
 // ********* postSignup
-app.post("/reg/signup", (req, res) => {
+app.post("/signup", (req, res) => {
   let userData = { 
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -180,29 +191,29 @@ app.post("/reg/signup", (req, res) => {
                             console.log(error);
                             userData.errorMessage ="Problems encountered when saving your data, Please contact admin";
                             userData.signupError = true
-                            res.render("reg.ejs", {userData: userData});
+                            res.render("signin.ejs", {userData: userData});
                         } else {
                             userData = cleanUserData;
                             userData.success = true
-                            res.render('reg.ejs', {userData: userData, cart:cart})
+                            res.render('signin.ejs', {userData: userData, cart:cart})
                         }
                     }
                 );
                 } else {
                     userData.errorMessage = "Email already registered.";
                     userData.signupError = true
-                    res.render("reg.ejs", {userData: userData, cart:cart});
+                    res.render("signup.ejs", {userData: userData, cart:cart});
                  }
         });
     });
     } else {
         userData.errorMessage = "Password & Confirm Password  must match.";
         userData.signupError= true
-        res.render("reg.ejs", {userData: userData, cart:cart});
+        res.render("signup.ejs", {userData: userData, cart:cart});
     }
 });
 
-// ******** profile
+// ******** User profile
 app.get('/profile', (req,res)=>{
   if(res.locals.isLoggedIn){
     connection.query(
@@ -226,7 +237,16 @@ app.get('/profile', (req,res)=>{
       }
     ) 
   }else{
-    res.redirect('/reg')
+    res.redirect('/signin')
+  }
+})
+
+// ********* Admin Panel
+app.get('/admin-panel', (req,res)=>{
+  if(req.session.isAdmin){
+    res.render('admin-panel.ejs')
+  }else{
+    res.redirect('/signin')
   }
 })
 
@@ -351,7 +371,7 @@ app.post('/add-to-cart', (req,res)=>{
     }
     
   }else{
-    res.redirect('/reg')
+    res.redirect('/signin')
   }
 })
 //*********** REMOVE FROM CART
