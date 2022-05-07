@@ -244,7 +244,12 @@ app.get('/profile', (req,res)=>{
 // ********* Admin Panel
 app.get('/admin-panel', (req,res)=>{
   if(req.session.isAdmin){
-    res.render('admin-panel.ejs')
+    connection.query(
+      'SELECT * FROM products',
+      (error, products)=>{
+        res.render('admin-panel.ejs', {products: products})
+      }
+    )
   }else{
     res.redirect('/signin')
   }
@@ -253,7 +258,6 @@ app.get('/admin-panel', (req,res)=>{
 // ******** PRODUCTS ROUTES
 // *********products/new-product - get and post
 app.get('/products/new-product', (req,res)=>{
-  // CORECT THIS WHEN DONE TESTING- REMOVE !
   if(req.session.isAdmin){
     res.render('new-product.ejs', {successMessage: false, cart:cart})
   }else{
@@ -262,7 +266,7 @@ app.get('/products/new-product', (req,res)=>{
   }
 })
 app.post('/products/new-product',upload.array('images',6),(req,res)=>{
-  // CORECT THIS WHEN DONE TESTING- REMOVE !
+
   if(req.session.isAdmin){
     let product = {
       category: req.body.category,
@@ -422,7 +426,6 @@ app.post('/clear-cart', (req,res)=>{
     }
   )
 })
-
 
 
 

@@ -19,11 +19,17 @@
     <div class="flex nav-group">
         <a href="/" class="nav-item">Home</a>
         <div class="account">
-           
-            <div class="flex" id="account-btn" style="cursor: pointer;"> 
-                <img src="/images/icons/account.svg" alt="">
-                <span class="nav-item"> Account</span>
-            </div>
+            <%if(!locals.isAdmin){%>
+                <div class="flex" id="account-btn" style="cursor: pointer;"> 
+                    <img src="/images/icons/account.svg" alt="">
+                    <span class="nav-item"> Account</span>
+                </div>
+            <%}else{%>
+                <div class="flex" style="cursor: pointer;"> 
+                    <img src="/images/icons/account.svg" alt="">
+                    <a href="/admin-panel" class="nav-item"> Account</a>
+                </div>
+            <%}%>
           
             <div class="account-dropdown hide-a-d">
                 <%if(!locals.isLoggedIn){%>

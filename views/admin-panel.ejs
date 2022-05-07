@@ -1,10 +1,201 @@
 <%- include('./partials/header')%>
-<nav class="admin-nav">
-    <h1>
-        Maya Computers Administrator Panel
-    </h1>
+<style>
+    body{
+        padding: 0;
+    }
+</style>
+<nav class="admin-nav flex">
+    <a href="/">App</a>
+    <p>Maya Computers Administrator Panel</p>
+    <a href="/logout">Sign Out</a>
 </nav>
 <div class="main-container admin-main">
-    
+    <div class="admin-main-nav">
+        <button class="stock-manager admin-nav-btn active">Stock Manager</button>
+        <button class="orders-manager admin-nav-btn">Orders Manager</button>
+        
+    </div>
+    <div class="admin-search-bar flex">
+        <div class="search-product-admin">
+            <input type="text" id="admin-search" onkeyup="adminSearch()" placeholder="Search for product by name..">
+        </div>
+        <div>
+            Click header to sort by column
+        </div>
+        <div>
+            <a class="pri-btn" href="/products/new-product">+New Product</a>
+        </div>    
+    </div>
+    <table id="stock-manager">
+        <thead class="stock-man-head">
+            <th onclick="numericallySortTable(0)">Product Id</th>
+            <th onclick="sortTable(1)">Product Name</th>
+            <th onclick="sortTable(2)">Category</th>
+            <th onclick="numericallySortTable(3)">Quantity</th>
+            <th onclick="sortTable(4)">Stock Status</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+          <%products.forEach(product=>{%>
+            <tr>
+                <td><%=product.id%></td>
+                <td><%=product.name%></td>
+                <td><%=product.category%></td>
+                <td><%=product.quantity%></td>
+                <td style="color:green;"><%=product.status%></td>
+                <td>
+                    <button>Edit</button>
+                    <button>Sell</button>
+                    <button>Delete</button>
+                </td>
+            </tr>
+          <%})%>
+        </tbody>
+          
+    </table>
+    <table id="orders-manager" class="hide-table">
+        <tr>
+            <th>Order Id</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Order Status</th>
+            <th>Action</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Hp 840</td>
+            <td>1</td>
+            <td>On-Transit</td>
+            <td>Update</td>
+          </tr>   
+    </table>
+
 </div>
+<div class="modals">
+    <div class="modal">
+        <div class="modal-skin"></div>
+        <div class="delete-product-modal modal-content-container">
+            <button class="close-modal-button">X</button>
+        </div>
+    </div>
+    <div class="modal hide">
+        <!-- put reg new product form here -->
+    </div>
+</div>
+
+<script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.querySelector("#stock-manager");
+  switching = true;
+  dir = "asc";
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("td")[n];
+      y = rows[i + 1].getElementsByTagName("td")[n];
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        console.log(Number(x.innerHTML)===NaN)
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+function numericallySortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.querySelector("#stock-manager");
+  switching = true;
+  dir = "asc";
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("td")[n];
+      y = rows[i + 1].getElementsByTagName("td")[n];
+      if (dir == "asc") {
+        if (Number(x.innerHTML) > Number(y.innerHTML)) {
+            shouldSwitch = true;
+            break;
+            }
+      } else if (dir == "desc") {
+        if (Number(x.innerHTML) < Number(y.innerHTML)) {
+            shouldSwitch = true;
+            break;
+            }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        console.log(Number(x.innerHTML)===NaN)
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+
+<script>
+    const adminSearch = ()=>{
+        let input, filter, table, tr, td, i, txtValue;
+        input = document.querySelector('#admin-search');
+        filter = input.value.toUpperCase();
+        table = document.querySelector('#stock-manager');
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+    }
+</script>
+
+<script>
+    // toggle tables 
+    document.querySelector('.orders-manager').addEventListener('click', ()=>{
+        document.querySelector('#orders-manager').classList.remove('hide-table')
+        document.querySelector('#stock-manager').classList.add('hide-table')
+        document.querySelector('.stock-manager').classList.remove('active')
+        document.querySelector('.orders-manager').classList.add('active')
+    })
+    document.querySelector('.stock-manager').addEventListener('click', ()=>{
+        document.querySelector('#stock-manager').classList.remove('hide-table')
+        document.querySelector('#orders-manager').classList.add('hide-table')
+        document.querySelector('.stock-manager').classList.add('active')
+        document.querySelector('.orders-manager').classList.remove('active')
+    })
+</script>
 <%- include('./partials/footer')%>

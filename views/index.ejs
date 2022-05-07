@@ -352,17 +352,19 @@
     </div>
 </section>
 
-<div class="login-modal" id="login-modal">
+<div class="login-modal tm" id="login-modal">
     <div class="login-modal-content">
-        <p>Login to use cart</p>
+        <p>Sign in/ Sign up to access your cart</p>
         <button class="close-modal-btn">CLOSE</button>
-        <a href="/reg"><button class="login-link-btn">LOGIN</button></a>
+        <a href="/signin"><button class="login-link-btn">SIGN IN</button></a>
+        <a href="/signup"><button class="login-link-btn">SIGN UP</button></a>
     </div>
 </div>
 
 <script>
     document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{
         closeModalBtn.addEventListener('click', (e)=>{
+            console.log('ls')
             e.target.parentElement.parentElement.style.display='none'
         })   
     })
@@ -371,8 +373,14 @@
             document.getElementById('login-modal').style.display='block'
         })   
     })
-    document.getElementById('login-modal').addEventListener('click',()=>{
-        document.getElementById('login-modal').style.display='none'
+    
+    document.getElementById('login-modal').addEventListener('click',(e)=>{
+        // if(e.target.classList.contains('tm')){
+            document.getElementById('login-modal').style.display='none'
+        // }
+    })
+    document.querySelector('.login-modal-content').addEventListener('click',()=>{
+        document.getElementById('login-modal').style.display='block'
     })
     // window.addEventListener('click',()=>{
     //     document.getElementById('login-modal').style.display='none'

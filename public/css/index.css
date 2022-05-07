@@ -475,7 +475,7 @@
 }
 .product-container .product-gallery .image-count {
   position: absolute;
-  background-color: rgba(53, 48, 48, 0.3);
+  background-color: transparent;
   left: 10px;
   top: 10px;
   width: 2rem;
@@ -567,7 +567,7 @@
   min-height: 70vh;
 }
  .reg-form{
-  width: 40%;
+  width: 50%;
   text-align: center;
 }
  .reg-form form{
@@ -722,18 +722,86 @@
 
 /* **********ADMIN PANEL********* */
 .admin-nav{
-  width: 100%;
-  display: block;
+  justify-content: space-between;
   border-bottom: 1px solid var(--grayish-color);
   text-align: center;
   font-weight: 300;
-  top: 0;
-  border: 3px solid green;
+  font-size: 20px;
+  padding: 20px;
+}
+.admin-nav a{
+  font-weight: 300;
+  font-size: 20px;
 }
 .admin-main{
   min-height: 70vh;
+  margin: 0 100px;
+}
+.admin-main-nav{
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+.admin-nav-btn{
+  width: 40%;
+  background-color: transparent;
+  font-size: 25px;
+  border: 1px solid var(--grayish-color);
+  border-top: none;
+  margin-bottom: 10px;
+}
+.admin-nav-btn:hover,
+.admin-nav-btn.active{
+  background-color: var(--green-color);
+  color: var(--pri-text-color);
 }
 
+.admin-search-bar{
+  justify-content: space-between;
+  margin: 10px ;
+}
+.admin-search-bar input{
+  padding: 5px;
+  font-size: 1rem;
+  min-width:300px ;
+  border: 1px solid var(--grayish-color);
+  background: transparent;
+} 
+.admin-search-bar input:focus{
+  outline: none;
+ 
+  border: 1px solid var(--green-color);
+}
+.admin-search-bar .pri-btn:hover{
+  background-color: var(--green-color);
+}
+
+.hide-table{
+  display: none;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.stock-man-head th{
+  cursor: pointer;
+}
+
+td, th {
+  border: 1px solid var(--grayish-color);
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #fff;
+}
+
+/* admin modals */
+.modal{
+  position: fixed;
+}
 
 /* *********ERROR PAGE******** */
 
