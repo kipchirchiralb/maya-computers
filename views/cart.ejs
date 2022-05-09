@@ -1,0 +1,136 @@
+<%- include('./partials/header')%>
+<%- include('./partials/nav')%>
+<div class="main-container customer-page">
+    
+    <div class="customer-nav customer-grid-item">
+        <a href="/customer/account/<%=locals.userId%>">
+            Account
+        </a>
+        <a class="active" href="/customer/cart/<%=locals.userId%>">
+            Cart
+        </a>
+        <a href="/customer/orders/<%=locals.userId%>">
+            Orders
+        </a>
+        <a href="/customer/history/<%=locals.userId%>">
+            Purchase History
+        </a>
+        <a href="/customer/messages/<%=locals.userId%>">
+            Messages
+        </a>
+        <a href="/customer/reviews/<%=locals.userId%>">
+            Reviews
+        </a>
+
+    </div>
+    <div class="customer-cart customer-grid-item">
+        <div class="heading">Account Details</div>
+        <div class="content-grid">
+            <%if(cart.length>0){%>
+                <%let total = 0%>
+                <%cart.forEach(cartItem=>{%>
+                <%let product= products.find(product=>product.id===cartItem.productId)%>
+                <%let itemPrice = product.price %>
+                <%total = total + itemPrice*cartItem.quantity%>
+                <div class="content-card">
+                    <div class="heading"><span><%=cartItem.productName%></span> <span>
+                        <form action="/customer/cart/remove-item/<%=cartItem.id%>" method="post">
+                            <button type="submit"> <img src="/images/icons/delete.svg" alt=""></button>
+                        </form>
+                    </span> </div>
+                    <div class="card-body">
+                       
+                        <div class="cart-img">
+                            <img src="/images/productImages/<%=product.images.split(',')[0]%>" alt="">
+                        </div>
+                    
+                        <p>Available units : <%=product.quantity%></p>
+                        <div class="flex">
+                            <p>Quantity:</p>
+                            <%if(cartItem.quantity>=2){%>
+                            <form action="/customer/cart/remove-one/<%=cartItem.id%>" method="post"> 
+                                <button class="pri-btn">-</button>
+                            </form>
+                            <%}%>
+                            <input type="text" value="<%=cartItem.quantity%>" readonly>
+                            <%if(cartItem.quantity < product.quantity){%>
+                            <form action="/customer/cart/add-one/<%=cartItem.id%>" method="post">
+                                <button class="pri-btn">+</button>
+                            </form>
+                            <%}%>
+                            
+                        </div>
+
+                        <%let n= itemPrice.toString().length%>
+                        <%total = total+ itemPrice%>
+                        <%if(n>3){%>
+                            <p >KSH. <%=itemPrice.toString().slice(0,n-3) + ',' + itemPrice.toString().slice(n-3)%></p>
+                        <%}else{%>
+                            <p>KSH. <%=itemPrice%></p>
+                        <%}%>
+                    </div>
+                </div>
+
+                <%})%>
+          
+            <div class="content-card">
+                <div class="heading" style="color: white;background-color: green;" >
+                    <span>CART SUMMARY</span> 
+                    <span>
+                        <form action="/customer/cart/remove-all" method="post">
+                            <button class="custom-clear-cart-btn" type="submit">CLEAR CART</button>
+                        </form>
+                    </span> 
+                </div>
+                <div class="card-body">
+                    <p>You have <%=Object.keys(cart).length%> items in your cart</p>
+                    <%let n =total.toString().length%>
+                    <%if(n>6){%>
+                        <p >TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-6)+','+ total.toString().slice(n-6,n-3) + ',' + total.toString().slice(n-3)%></span></p>
+                        
+                    <%}else if(n>3){%>
+                        <p >TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-3) + ',' + total.toString().slice(n-3)%></span></p>
+                    <%}else{%>
+                        <p>TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=total%></span></p>
+                    <%}%>
+                    <p><input type="text" class="coupon-input"><button class="pri-btn">APPLY COUPON</button></p>
+                    <!-- apply coupon here -->
+                    <%total = total - 1000%>
+                    <%n =total.toString().length%>
+                    <%if(n>6){%>
+                        <p class="price">TOTAL AMOUNT TO PAY ON CHECKOUT <br><span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-6)+','+ total.toString().slice(n-6,n-3) + ',' + total.toString().slice(n-3)%></span></p>
+                        
+                    <%}else if(n>3){%>
+                        <p>TOTAL AMOUNT TO PAY ON CHECKOUT <br> <span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-3) + ',' + total.toString().slice(n-3)%></span></p>
+                    <%}else{%>
+                        <p >TOTAL AMOUNT TO PAY ON CHECKOUT <br> <span class="checkout-amount" > KSH. <%=total%></span></p>
+                    <%}%>
+                    <div class="proceed-to-chekout" >
+                        <a href="/customer/checkout/<%=locals.userId%>/<%=total%>" class="pri-btn">PROCEED TO CHECKOUT</a>
+                    </div>
+                </div>
+            </div>
+            <%}else{%>
+            <div class="content-card">
+                <div class="heading">
+                    Your Cart is Empty
+                </div>
+                <p style="font-size:1.2rem; padding: 30px;">Go <a href="/" style="color:green ;">Shopping</a></p>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+       let scrollpos = localStorage.getItem("scrollposCart");
+       if (scrollpos) window.scrollTo(0, scrollpos);
+   });
+
+   window.onscroll = function (e) {
+       localStorage.setItem("scrollposCart", window.scrollY);
+   };
+</script>
+
+<%- include('./partials/footer')%>

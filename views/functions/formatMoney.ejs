@@ -1,0 +1,14 @@
+<%
+formartMoney = function(amount){
+    let n =amount.toString().length
+    if(n>6){
+        amount=amount.toString().slice(0,n-6)+','+ amount.toString().slice(n-6,n-3) + ',' + amount.toString().slice(n-3)
+        
+    }else if(n>3){
+        amount=amount.toString().slice(0,n-3) + ',' + amount.toString().slice(n-3)
+    }else{
+        amount = amount
+    }
+    return amount
+}
+%>

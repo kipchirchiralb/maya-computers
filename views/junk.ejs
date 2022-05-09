@@ -1,26 +1,15 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
 <div class="main-container profile-page">
-    <div class="profile-nav flex">
-        <div class="profile-nav-item active" id="user-data">User Profile</div>
-        <div class="profile-nav-item" id="address-data">Address Info</div> 
-        <div class="profile-nav-item" id="purchase-history">Purchase History</div> 
-    </div>
-    <div class=" flex profile-body">
+    
+    <div class=" flex profile-body hide">
         <div class="user-data profile-body-item flex ">
-            <div class="personal-info">
-                <h5>Name: <%=user.firstName%></h5>
-                <p>Email: <%=user.email%></p>
-                <button>Update contact details</button>
-            </div>
             <div class="cart-info">
                 <h2>Your Cart</h2>
                 <%if(locals.isLoggedIn){%>
                     <%if(cart.length>0){%>
-                    <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
                     <%let total = 0%>
-                    
-                    <%userCart.forEach(cartItem=>{%>
+                    <%cart.forEach(cartItem=>{%>
                     <%let itemPrice = products.find(product=>product.id===cartItem.productId).price %>
                     <%total = total + itemPrice*cartItem.quantity%>
                     
@@ -79,68 +68,8 @@
                 <%}%>
             </div>
         </div>
-        <div class="address-data profile-body-item flex hide">
-            <div class="address-details">
-                <h2>Address Information</h2>
-                <form action="/update-address">
-                    <label for="country">Country: </label>
-                    <input type="text" name="country" id="" value="Kenya"><br>
-                    <label for="county">County: </label>
-                    <input type="text" name="county" id="" value="Uasin Gishu"><br>
-                    <label for="town">Town: </label>
-                    <input type="text" name="town" id="" value="Eldoret"><br>
-                    <input type="submit" value="Update Address Info">
-                </form>
-            </div>
-            <div class="pickup-stations">
-                <h2>Pickup Stations</h2>
-                <p>Choose a pickup station near you</p>
-                <select name="station" id="">
-                    <option value="">--Choose Pickup Station--</option>
-                    <option value="">Eldoret</option>
-                    <option value="">Kapsabet</option>
-                    <option value="">Nakuru</option>
-                </select>
-                <div class="default-station">
-                    <p>Our shop in eldoret - Oloo Street </p>
-                </div>
-            </div> 
-        </div> 
-        <div class="profile-body-item  purchase-history hide">
-            <table>
-                <thead>
-                    <tr>
-                        <td>Category</td>
-                        <td>Product Id</td>
-                        <td>Product Name</td>
-                        <td>Quantity</td>
-                        <td>Amount</td>
-                        <td>Status</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+       
     </div> 
 </div>
-<script>
-    document.querySelectorAll('.profile-nav-item').forEach(navItem=>{
-        navItem.addEventListener('click', (e)=>{
-            document.querySelectorAll('.profile-nav-item').forEach(navItem=>navItem.classList.remove('active'))
-            e.target.classList.add('active')
-            let targetEl = document.querySelector(`.${e.target.getAttribute('id')}`)
-            // console.log(targetEl)
-            document.querySelectorAll('.profile-body-item').forEach(bodyItem=>{
-                if(!bodyItem.classList.contains('hide')){
-                    bodyItem.classList.add('hide')
-                }
-            })
-            targetEl.classList.remove('hide')
-        })
-    })
-</script>
+
 <%- include('./partials/footer')%>

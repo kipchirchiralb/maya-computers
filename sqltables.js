@@ -33,4 +33,8 @@ connection.query(
         }
     }
 )
+const truth = 'hello truth'
+const lie = 'hello lie'
+const hell = 'hello hell'
 
+module.exports = {truth, lie, hell}

@@ -20,14 +20,20 @@
         <a href="/" class="nav-item">Home</a>
         <div class="account">
             <%if(!locals.isAdmin){%>
-                <div class="flex" id="account-btn" style="cursor: pointer;"> 
-                    <img src="/images/icons/account.svg" alt="">
-                    <span class="nav-item"> Account</span>
-                </div>
+                <%if(locals.isLoggedIn){%>
+                    <div class="flex" id="account-btn" style="cursor: pointer;"> 
+                        <img src="/images/icons/account.svg" alt="">
+                        <span class="nav-item"><%=locals.username%></span>
+                    </div>
+                <%}else{%>
+                    <div class="flex" style="cursor: pointer;">
+                        <img src="/images/icons/account.svg" alt=""> 
+                        <a href="/signin" class="nav-item">Account</a>
+                    </div>
+                <%}%>
             <%}else{%>
                 <div class="flex" style="cursor: pointer;"> 
-                    <img src="/images/icons/account.svg" alt="">
-                    <a href="/admin-panel" class="nav-item"> Account</a>
+                    <a href="/admin-panel" class="nav-item">Admin Panel</a>
                 </div>
             <%}%>
           
@@ -37,11 +43,14 @@
                     SIGN&nbsp;IN
                 </a>
                 <%}%>
-                <a href="/profile">
-                    My Account
+                <a href="/customer/account/<%=locals.userId%>">
+                    Your Account
                 </a>
-                <a href="/profile/orders/<%=locals.userId%>" class="track-orders">
-                    My Orders
+                <a href="/customer/cart/<%=locals.userId%>">
+                    Your Cart
+                </a>
+                <a href="/customer/orders/<%=locals.userId%>" class="track-orders">
+                    Your Orders
                 </a>
                 <%if(locals.isLoggedIn){%>
                 <a href="/logout" class="signin-link pri-btn">
@@ -51,35 +60,25 @@
             </div>
         </div>
         <div class="flex cart-container">
+            <%if(!locals.isAdmin){%>
             <img src="/images/icons/cart.svg" alt="" id="cart-icon">
-            <%if(cart.length>0){%> 
-            <%if(locals.isLoggedIn){%>
-                
-                <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
-                <p class="cart-count"><%=userCart.length%></p>
-                <div class="cart hide" id="cart">
-                    <h3 style="text-align: center;">Your cart</h3> 
-                    <form class="clear-cart flex" action="/clear-cart" method="post">
-                        <input id="close-cart-btn" type="button" value="CLOSE">
-                        <input type="submit" value="REMOVE ALL">
-                    </form>
-                    <%userCart.forEach(cartItem=>{%>
-                    <form action="/remove-from-cart/<%=cartItem.id%>" method="post">
-                        <a href="/product/<%=cartItem.productId%>" class="cart-item-name">
-                           <%=cartItem.quantity%>&nbsp; <%=cartItem.productName%>
-                        </a>
-                        <input class="remove-from-cart" type="submit" value="X">
-                    </form>
-                    <%})%>
-
-                    <a href="/profile"> <div class="checkout-btn">CHECKOUT</div> </a>
-                    
-                </div>
-                
-               
             <%}%>
-            <%}else{%>
-                <p class="cart hide" id="cart">Your cart is empty. Go shopping!!</p>
+            
+            <%if(locals.isLoggedIn){%>
+                <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
+                <%if(!locals.isAdmin){%>
+                <p class="cart-count"><%=userCart.length%></p>
+                <%}%>
+                <div class="cart hide" id="cart">
+                    <p style="text-align: center;">YOUR CART PREVIEW</p> 
+                    <%userCart.forEach(cartItem=>{%>
+                        <a href="/product/<%=cartItem.productId%>" class="cart-item-name">
+                           <%=cartItem.quantity%>&nbsp;<%=cartItem.productName%>
+                        </a>
+                        <br>
+                    <%})%>
+                    <a href="/customer/cart/<%=locals.userId%>"> <div class="checkout-btn">VIEW CART</div> </a>
+                </div>
             <%}%>
             
         </div>
@@ -90,10 +89,7 @@
     document.getElementById('cart-icon').addEventListener('click',()=>{
         document.getElementById('cart').classList.toggle('hide')
     })
-    // document.getElementById('close-cart-btn').addEventListener('click',()=>{
-    //     document.getElementById('cart').classList.toggle('hide')
-    // })
-
+    
     // account dropdown
     document.querySelector('#account-btn').addEventListener('click', ()=>{
         document.querySelector('.account-dropdown').classList.toggle('hide-a-d')

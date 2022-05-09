@@ -5,7 +5,6 @@ const session = require("express-session");
 const path = require('path')
 const app = express();
 
-
 const PORT = process.env.PORT || 3000;
 const connection = mysql.createConnection({
   host: "localhost",
@@ -15,6 +14,12 @@ const connection = mysql.createConnection({
 });
 
 require('./sqltables')
+// process.env.NEW_ENV_VAR= 'new env var'
+
+// console.log(process.env.NEW_ENV_VAR)
+// const env = require('./sqltables')
+// console.log(env.truth)
+// console.log(env.lie)
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -43,6 +48,7 @@ app.use((req, res, next) => {
 
 
 
+
 // *******multer setup
 
 const multer = require('multer');
@@ -61,6 +67,7 @@ const upload = multer({ storage: storage })
 
 
 
+let user = []
 let cleanUserData = { 
   firstName: '',
   lastName: '',
@@ -77,26 +84,36 @@ let cleanUserData = {
   isAdmin: false
 }
 let cart = []
+app.use((req,res, next)=>{
+  if(res.locals.isLoggedIn){
+  connection.query(
+    `SELECT * FROM cart WHERE userId= ${req.session.userId}`,
+    (error, cartRes)=>{
+      connection.query(
+        `SELECT * FROM users WHERE id = ${res.locals.userId}`,
+        (error, userRes)=>{
+          user = userRes
+          cart = cartRes
+        }
+      )
+    }
+  )
+  }else{
+    cart=[]
+    
+  }
+  next();
+
+})
 let cartItemId = 0
 app.get("/", (req, res)=> {
   connection.query(
     "SELECT * FROM products ORDER BY price DESC",
     (error,products)=>{
-      connection.query(
-        'SELECT * FROM cart',
-        (err, result)=>{
-          cart = result
           res.render("index.ejs", {products: products, cart: cart});
         }
-      )
-      
-    }
   )
 });
-
-
-// ***********getReg
-
 app.get('/signin', (req,res)=>{
   if(res.locals.isLoggedIn){
     res.redirect("/profile")
@@ -113,9 +130,6 @@ app.get('/signup', (req,res)=>{
     res.render('signup.ejs', {userData: userData, cart:cart})
   }  
 })
-
-// ********* postLogin
-
 app.post("/signin", (req, res) => {
     let userData = { 
         loginEmail: req.body.email,
@@ -142,27 +156,26 @@ app.post("/signin", (req, res) => {
                         req.session.username = results[0].firstName;
                         req.session.isAdmin = userData.isAdmin
                         // if USER isAdmin-provide more data
+                        user = results[0]
                         if(!userData.isAdmin){
                           res.redirect('/')
                         }else{
                           res.redirect('/admin-panel')
                         }
                     } else {
-                        userData.errorMessage = "Email and password do not match";
+                        userData.errorMessage = "Incorrect Password";
                         userData.loginError = true;
                         res.render("signin.ejs", {userData: userData, cart:cart});
                     }
                 });
             } else {
-                userData.errorMessage = "Email not registered";
+                userData.errorMessage = "This email is not registered";
                 userData.loginError = true;
                 res.render("signin.ejs", {userData: userData, cart:cart});
             }
         }
     );
 });
-
-// ********* postSignup
 app.post("/signup", (req, res) => {
   let userData = { 
       firstName: req.body.firstName,
@@ -200,7 +213,7 @@ app.post("/signup", (req, res) => {
                     }
                 );
                 } else {
-                    userData.errorMessage = "Email already registered.";
+                    userData.errorMessage = "This email is already registered.";
                     userData.signupError = true
                     res.render("signup.ejs", {userData: userData, cart:cart});
                  }
@@ -213,29 +226,145 @@ app.post("/signup", (req, res) => {
     }
 });
 
-// ******** User profile
-app.get('/profile', (req,res)=>{
+// ******** CUSTOMER ROUTEs
+app.get('/customer/account/:userId', (req,res)=>{
   if(res.locals.isLoggedIn){
-    connection.query(
-      `SELECT * FROM users WHERE id = ${req.session.userId}`,
-      (error, user)=>{
-       connection.query(
-         `SELECT * FROM cart WHERE userId=${req.session.userId}`,
-         (error, cart)=>{
-           connection.query(
-             `SELECT * FROM products`,
-              (error,products)=>{
-                res.render('profile.ejs', {user:user[0], cart:cart, products: products})
-              }
-
-           )
-          
-         }
-         
-       )
-        
-      }
-    ) 
+    if(req.session.userId==req.params.userId){
+      connection.query(
+        `SELECT * FROM users WHERE id = ${Number(req.params.userId)}`,
+        (error,userD)=>{
+          user = userD
+          res.render('account.ejs', {cart:cart, user: userD[0]})
+        }
+      )
+    }else{
+      let errorMessage = "You can not access someone else's account"
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+    } 
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.get('/customer/cart/:userId', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    if(req.session.userId==req.params.userId){
+      connection.query(
+        `SELECT * FROM products`,
+        (error,products)=>{
+          res.render('cart.ejs', {cart:cart, products: products})
+        }
+      )
+    }else{
+      let errorMessage = "You can not access someone else's cart"
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+    } 
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.post('/customer/cart/remove-one/:id', (req,res)=>{
+  connection.query(
+    `UPDATE cart SET quantity= quantity-1 WHERE id= ${parseInt(req.params.id)}`,
+    (error,results)=>{
+          res.redirect(`/customer/cart/${req.session.userId}`)
+    }
+  )
+})
+app.post('/customer/cart/add-one/:id', (req,res)=>{
+  connection.query(
+    `UPDATE cart SET quantity= quantity+1 WHERE id= ${parseInt(req.params.id)}`,
+    (error,results)=>{
+          res.redirect(`/customer/cart/${req.session.userId}`)
+    }
+  )
+})
+app.post('/customer/cart/remove-item/:id', (req,res)=>{
+  connection.query(
+    `DELETE FROM cart WHERE id= ${parseInt(req.params.id)}`,
+    (error,results)=>{
+      res.redirect(`/customer/cart/${req.session.userId}`)
+    }
+  )
+})
+app.post('/customer/cart/remove-all', (req,res)=>{
+  connection.query(
+    `DELETE FROM cart WHERE userId= ${req.session.userId}`,
+    (error,result)=>{
+      res.redirect(`/customer/cart/${req.session.userId}`)
+    }
+  )
+})
+app.get('/customer/checkout/:id/:amount', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    res.render('checkout.ejs', {cart: cart, user: user, amount: req.params.amount})
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.get('/customer/orders/:userId', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    if(req.session.userId==req.params.userId){
+      connection.query(
+        `SELECT * FROM products`,
+        (error,products)=>{
+          res.render('orders.ejs', {cart:cart, products: products})
+        }
+      )
+    }else{
+      let errorMessage = "You can not access someone else's orders"
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+    } 
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.get('/customer/history/:userId', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    if(req.session.userId==req.params.userId){
+      connection.query(
+        `SELECT * FROM products`,
+        (error,products)=>{
+          res.render('history.ejs', {cart:cart, products: products})
+        }
+      )
+    }else{
+      let errorMessage = "You can not access someone else's purchase history"
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+    } 
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.get('/customer/messages/:userId', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    if(req.session.userId==req.params.userId){
+      connection.query(
+        `SELECT * FROM products`,
+        (error,products)=>{
+          res.render('messages.ejs', {cart:cart, products: products})
+        }
+      )
+    }else{
+      let errorMessage = "You can not access someone else's messages"
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+    } 
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.get('/customer/reviews/:userId', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    if(req.session.userId==req.params.userId){
+      connection.query(
+        `SELECT * FROM products`,
+        (error,products)=>{
+          res.render('reviews.ejs', {cart:cart, products: products})
+        }
+      )
+    }else{
+      let errorMessage = "You can not access someone else's reviews"
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+    } 
   }else{
     res.redirect('/signin')
   }
@@ -378,54 +507,9 @@ app.post('/add-to-cart', (req,res)=>{
     res.redirect('/signin')
   }
 })
-//*********** REMOVE FROM CART
-app.post('/remove-from-cart/:id', (req,res)=>{
-  connection.query(
-    `DELETE FROM cart WHERE id= ${parseInt(req.params.id)}`,
-    (error,results)=>{
-      res.redirect('/')
-    }
-  )
-})
-app.post('/remove-cart-item/:id', (req,res)=>{
-  connection.query(
-    `DELETE FROM cart WHERE id= ${parseInt(req.params.id)}`,
-    (error,results)=>{
-      connection.query(
-      'SELECT * FROM cart',
-        (err, result)=>{
-          cart = result
-          res.redirect('/profile')
-        }
-      )
-      
-    }
-  )
-})
-app.post('/update-cart-item/:id', (req,res)=>{
-  connection.query(
-    `UPDATE cart SET quantity= ${parseInt(req.body.quantity)} WHERE id= ${parseInt(req.params.id)}`,
-    (error,results)=>{
-      connection.query(
-      'SELECT * FROM cart',
-        (err, result)=>{
-          cart = result
-          res.redirect('/profile')
-        }
-      )
-      
-    }
-  )
-})
-// ********** CLEAR CART
-app.post('/clear-cart', (req,res)=>{
-  connection.query(
-    `DELETE FROM cart WHERE userId= ${req.session.userId}`,
-    (error,result)=>{
-      res.redirect('/')
-    }
-  )
-})
+
+
+
 
 
 

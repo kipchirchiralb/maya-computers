@@ -9,12 +9,13 @@
             <form class="signup-user flex" action="signup" method="post">
                 <input class="input-el" type="text"name="firstName" placeholder="First Name *" required>
                 <input class="input-el" type="text"name="lastName" placeholder="Last Name (optional)" >
-                <input class="input-el" type="email" name="email" id="" placeholder="Email *" required>
-                <div class="flex passwords">
-                    <input class="input-el" type="password" name="password" id="" placeholder="Password *" required>
-                    <input class="input-el" type="password" name="confirmPassword" id="" placeholder="Confirm Password *" required>
-                </div>
-                <input class="input-el" type="tel" name="phone" id="" placeholder="Phone Number (optional)" >
+                <input class="input-el" type="email" name="email"  placeholder="Email *" required>
+                <p class="password-checker" style="width:80%; font-size: .8rem; color: grey; ">Password should 6 or more charaacters with at least one numeric digit and a special character</p>
+                <!-- <div class=" "> -->
+                    <input class="input-el password-text" type="password" name="password"  placeholder="Password *" required>
+                    <input class="input-el" type="password" name="confirmPassword" placeholder="Confirm Password *" required>
+                <!-- </div> -->
+                <input class="input-el" type="tel" name="phone"  placeholder="Phone Number (optional)" >
                 <input class="input-el" type="submit" value="Create Account">
             </form>
             <%}else{%>
@@ -26,15 +27,16 @@
                     <%}else{%>
                         <input class="input-el" type="text"name="lastName" placeholder="Last Name (optional)" >
                     <%}%>
-                    <input class="input-el" type="email" name="email" id="" value="<%=userData.email%>" required>
+                    <input class="input-el" type="email" name="email"  value="<%=userData.email%>" required>
+                    <p class="password-checker" style="width:80%; font-size: .8rem; color: grey; ">Password should 6 or more charaacters with at least one numeric digit and a special character</p>
                     <div class="flex passwords">
-                        <input class="input-el" type="password" name="password" id="" value="<%=userData.password%>" required>
-                        <input class="input-el" type="password" name="confirmPassword" id="" value="<%=userData.confirmPassword%>" required>
+                        <input class="input-el password-text" type="password" name="password"  value="<%=userData.password%>" required>
+                        <input class="input-el" type="password" name="confirmPassword"  value="<%=userData.confirmPassword%>" required>
                     </div>
                     <%if(userData.phone.length>0){%>
-                        <input class="input-el" type="tel" name="phone" id="" value="<%=userData.phone%>">
+                        <input class="input-el" type="tel" name="phone"  value="<%=userData.phone%>">
                     <%}else{%>
-                        <input class="input-el" type="tel" name="phone" id="" placeholder="Phone Number (optional)" >
+                        <input class="input-el" type="tel" name="phone"  placeholder="Phone Number (optional)" >
                     <%}%>
                     <input class="input-el" type="submit" value="Create Account">
                 </form>
@@ -45,6 +47,22 @@
        
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.password-text').forEach(passInput=>{
+        passInput.addEventListener('keyup',(e)=>{
+            console.log(e.target.value)
+            // if(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(e.target.value)){
+            if(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(e.target.value)){
+                console.log('a match')
+                document.querySelector('.password-checker').style.color = "green"
+            }else{
+                console.log('no match')
+                document.querySelector('.password-checker').style.color = "red"
+            }
+        })
+    })
+</script>
 
 
 <%- include('./partials/footer')%>
