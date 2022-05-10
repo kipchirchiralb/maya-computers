@@ -350,7 +350,7 @@
   padding: .7rem;
   gap: 1.3rem;
   flex-direction: row !important; 
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap:wrap ;
 
   /* under con */
@@ -427,18 +427,27 @@
   flex-direction: row;
 
 }
-.products .view-more-btn a,
-.products .load-more-btn a{
+.products .view-more-btn a{
   text-decoration: none;
   text-align: center;
   color: var(--primary-color);
   transition: all .4s ease-in-out;
 }
-.products .view-more-btn a:hover,
-.products .load-more-btn a:hover{
+.products .view-more-btn a:hover{
   transform: scale(1.15);
   color: var(--green-color);
   /* background-color: var(--secondary-color); */
+}
+.products .load-more-btn{
+  border: none;
+  background-color: var(--primary-color);
+  width: 100%;
+  color: var(--pri-text-color);
+  padding: 10px 0;
+  font-size: 1.3rem;
+}
+.products .load-more-btn:hover{
+  background-color: var(--green-color);
 }
 
 

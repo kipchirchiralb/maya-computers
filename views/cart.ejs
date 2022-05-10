@@ -1,5 +1,6 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
+<%- include('./functions/formatMoney')%>
 <div class="main-container customer-page">
     
     <div class="customer-nav customer-grid-item">
@@ -58,16 +59,8 @@
                                 <button class="pri-btn">+</button>
                             </form>
                             <%}%>
-                            
                         </div>
-
-                        <%let n= itemPrice.toString().length%>
-                        <%total = total+ itemPrice%>
-                        <%if(n>3){%>
-                            <p >KSH. <%=itemPrice.toString().slice(0,n-3) + ',' + itemPrice.toString().slice(n-3)%></p>
-                        <%}else{%>
-                            <p>KSH. <%=itemPrice%></p>
-                        <%}%>
+                        <p >KSH. <%=formartMoney(itemPrice)%></p>
                     </div>
                 </div>
 
@@ -84,27 +77,10 @@
                 </div>
                 <div class="card-body">
                     <p>You have <%=Object.keys(cart).length%> items in your cart</p>
-                    <%let n =total.toString().length%>
-                    <%if(n>6){%>
-                        <p >TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-6)+','+ total.toString().slice(n-6,n-3) + ',' + total.toString().slice(n-3)%></span></p>
-                        
-                    <%}else if(n>3){%>
-                        <p >TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-3) + ',' + total.toString().slice(n-3)%></span></p>
-                    <%}else{%>
-                        <p>TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=total%></span></p>
-                    <%}%>
+                    <p >TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=formartMoney(total)%></span></p>
                     <p><input type="text" class="coupon-input"><button class="pri-btn">APPLY COUPON</button></p>
                     <!-- apply coupon here -->
-                    <%total = total - 1000%>
-                    <%n =total.toString().length%>
-                    <%if(n>6){%>
-                        <p class="price">TOTAL AMOUNT TO PAY ON CHECKOUT <br><span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-6)+','+ total.toString().slice(n-6,n-3) + ',' + total.toString().slice(n-3)%></span></p>
-                        
-                    <%}else if(n>3){%>
-                        <p>TOTAL AMOUNT TO PAY ON CHECKOUT <br> <span class="checkout-amount" > KSH. <%=total.toString().slice(0,n-3) + ',' + total.toString().slice(n-3)%></span></p>
-                    <%}else{%>
-                        <p >TOTAL AMOUNT TO PAY ON CHECKOUT <br> <span class="checkout-amount" > KSH. <%=total%></span></p>
-                    <%}%>
+                    <p class="price">TOTAL AMOUNT TO PAY ON CHECKOUT <br><span class="checkout-amount" > KSH. <%=formartMoney(total)%></span></p>
                     <div class="proceed-to-chekout" >
                         <a href="/customer/checkout/<%=locals.userId%>/<%=total%>" class="pri-btn">PROCEED TO CHECKOUT</a>
                     </div>

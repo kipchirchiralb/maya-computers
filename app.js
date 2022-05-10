@@ -68,6 +68,7 @@ const upload = multer({ storage: storage })
 
 
 let user = []
+
 let cleanUserData = { 
   firstName: '',
   lastName: '',
@@ -83,34 +84,45 @@ let cleanUserData = {
   success: false,
   isAdmin: false
 }
-let cart = []
-app.use((req,res, next)=>{
-  if(res.locals.isLoggedIn){
-  connection.query(
-    `SELECT * FROM cart WHERE userId= ${req.session.userId}`,
-    (error, cartRes)=>{
-      connection.query(
-        `SELECT * FROM users WHERE id = ${res.locals.userId}`,
-        (error, userRes)=>{
-          user = userRes
-          cart = cartRes
-        }
-      )
-    }
-  )
-  }else{
-    cart=[]
+let cart
+console.log(cart)
+// app.use( async (req,res, next)=>{
+//   if(res.locals.isLoggedIn){
+//   await connection.query(
+//     `SELECT * FROM cart WHERE userId= ${req.session.userId}`,
+//     (error, cartRes)=>{
+//       connection.query(
+//         `SELECT * FROM users WHERE id = ${res.locals.userId}`,
+//         (error, userRes)=>{
+//           user = userRes
+//           cart = cartRes
+//         }
+//       )
+//     }
+//   )
+//   }else{
+//     cart=[]
     
-  }
-  next();
+//   }
+//   next();
 
-})
+// })
 let cartItemId = 0
 app.get("/", (req, res)=> {
+  console.log(cart)
   connection.query(
     "SELECT * FROM products ORDER BY price DESC",
     (error,products)=>{
+        if(res.locals.isLoggedIn){
+          connection.query(
+            `SELECT * FROM cart WHERE userId =${req.session.userId}`,
+            (error,cartData)=>{
+              res.render("index.ejs", {products: products, cart: cartData});
+            }
+          )
+        }else{
           res.render("index.ejs", {products: products, cart: cart});
+        }
         }
   )
 });
@@ -158,7 +170,13 @@ app.post("/signin", (req, res) => {
                         // if USER isAdmin-provide more data
                         user = results[0]
                         if(!userData.isAdmin){
-                          res.redirect('/')
+                          connection.query(
+                            `SELECT * FROM cart WHERE userId = ${req.session.userId}`,
+                            (error,cartResults)=>{
+                              cart = cartResults
+                              res.redirect('/')
+                            }
+                          )
                         }else{
                           res.redirect('/admin-panel')
                         }
@@ -251,7 +269,14 @@ app.get('/customer/cart/:userId', (req,res)=>{
       connection.query(
         `SELECT * FROM products`,
         (error,products)=>{
-          res.render('cart.ejs', {cart:cart, products: products})
+          connection.query(
+            `SELECT * FROM cart WHERE userId= ${req.session.userId}`,
+            (error, results)=>{
+              cart= results
+              // console.log(error)
+              res.render('cart.ejs', {cart:results, products: products})
+            }
+          )
         }
       )
     }else{
@@ -266,7 +291,7 @@ app.post('/customer/cart/remove-one/:id', (req,res)=>{
   connection.query(
     `UPDATE cart SET quantity= quantity-1 WHERE id= ${parseInt(req.params.id)}`,
     (error,results)=>{
-          res.redirect(`/customer/cart/${req.session.userId}`)
+      res.redirect(`/customer/cart/${req.session.userId}`)
     }
   )
 })
@@ -274,7 +299,7 @@ app.post('/customer/cart/add-one/:id', (req,res)=>{
   connection.query(
     `UPDATE cart SET quantity= quantity+1 WHERE id= ${parseInt(req.params.id)}`,
     (error,results)=>{
-          res.redirect(`/customer/cart/${req.session.userId}`)
+      res.redirect(`/customer/cart/${req.session.userId}`)
     }
   )
 })
@@ -294,9 +319,17 @@ app.post('/customer/cart/remove-all', (req,res)=>{
     }
   )
 })
+
+
 app.get('/customer/checkout/:id/:amount', (req,res)=>{
   if(res.locals.isLoggedIn){
-    res.render('checkout.ejs', {cart: cart, user: user, amount: req.params.amount})
+    connection.query(
+      `SELECT * FROM users WHERE id= ${req.session.userId}`,
+      (error, userResult)=>{
+        user = userResult[0]
+        res.render('checkout.ejs', {cart: cart, user: userResult[0], amount: req.params.amount})
+      }
+    )
   }else{
     res.redirect('/signin')
   }

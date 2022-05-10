@@ -60,25 +60,18 @@
             </div>
         </div>
         <div class="flex cart-container">
-            <%if(!locals.isAdmin){%>
-            <img src="/images/icons/cart.svg" alt="" id="cart-icon">
+            <%if(!locals.isAdmin && locals.isLoggedIn){%>
+                <a href="/customer/cart/<%=locals.userId%>">
+                    <img src="/images/icons/cart.svg" alt="" id="cart-icon">
+                </a>
             <%}%>
             
-            <%if(locals.isLoggedIn){%>
+            <%if(locals.isLoggedIn && cart){%>
                 <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
                 <%if(!locals.isAdmin){%>
                 <p class="cart-count"><%=userCart.length%></p>
                 <%}%>
-                <div class="cart hide" id="cart">
-                    <p style="text-align: center;">YOUR CART PREVIEW</p> 
-                    <%userCart.forEach(cartItem=>{%>
-                        <a href="/product/<%=cartItem.productId%>" class="cart-item-name">
-                           <%=cartItem.quantity%>&nbsp;<%=cartItem.productName%>
-                        </a>
-                        <br>
-                    <%})%>
-                    <a href="/customer/cart/<%=locals.userId%>"> <div class="checkout-btn">VIEW CART</div> </a>
-                </div>
+               
             <%}%>
             
         </div>
@@ -86,9 +79,7 @@
 </nav>
 
 <script>
-    document.getElementById('cart-icon').addEventListener('click',()=>{
-        document.getElementById('cart').classList.toggle('hide')
-    })
+  
     
     // account dropdown
     document.querySelector('#account-btn').addEventListener('click', ()=>{

@@ -48,14 +48,16 @@
 
             <div class="delivery-option checkout-option">
                 <input type="radio" name="delivery-method" id="deliver" value="deliver">
-                <label for="deliver"> <span class="title">Delivery</span> <br> We deliver to any part of the Country. <br>Our agent will call you through <%=user[0].phone%>( 
-                    <%if(user[0].phone){%>
-                        <a href="">Change</a>
+                <label for="deliver"> <span class="title">Delivery</span> <br> We deliver to any part of the Country. <br>Our agent will call you through <%=user.phone%> 
+                    <%if(user.phone){%>
+                        <a href="" style="color: green;">_Update_</a>
                     <%}else{%>
-                        <a href="" style="color: red;">Add Phone Number</a>
-                    <%}%>)
+                        <a href="" style="color: red;">_Add Phone Number_</a>
+                    <%}%>
 
-                <br> once your order is ready for delivery</label>
+                <br> once your order is ready for delivery</label><br>
+                <button class="sec-btn">Pay Now</button>
+                <button class="sec-btn">Pay on Delivery</button>
             </div>
 
         </div>

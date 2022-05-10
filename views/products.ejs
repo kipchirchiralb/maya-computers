@@ -6,7 +6,7 @@
         
         <% for(let i=0; i< products.length; i++){ %>
      
-        <div class="product flex">
+        <div class="product flex load-counter hide">
             <a href="/product/<%=products[i].id%>">
             <div class="product-img">
                 <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
@@ -36,11 +36,9 @@
         </div> 
        
         <%}%>
-        <div class="load-more-btn flex">
-            <a href="/products?category=<%=category%>">
-                << &nbsp;&nbsp; < 1 2 3 4 5 6 7 > &nbsp;&nbsp; >>
-            </a>
-        </div>
+        <button onclick="showMoreProducts()" class="load-more-btn flex">
+            LOAD MORE PRODUCTS
+        </button>
     </div>
     
 
@@ -52,6 +50,36 @@
         <a href="/reg"><button class="login-link-btn">LOGIN</button></a>
     </div>
 </div>
+
+<script>
+    let visibleProducts = 12
+    let allProducts= document.querySelectorAll('.load-counter')
+    let allProductsCount = Object.keys(allProducts).length
+    console.log(allProductsCount)
+    let count
+    const showProducts=(visibleProducts)=>{
+        count=0
+        allProducts.forEach(product=>{
+            count++
+            if(count<=visibleProducts){
+                product.classList.remove('hide')
+                console.log(count)
+                if(count===allProductsCount){
+                    document.querySelector('.load-more-btn').style.display='none'
+                }
+            }
+            
+            
+        })
+    }
+    showProducts(visibleProducts)
+    const showMoreProducts = ()=>{
+        visibleProducts=visibleProducts+12
+        showProducts(visibleProducts)
+    }
+    
+
+</script>
 
 <script>
      document.addEventListener("DOMContentLoaded", function (event) {
