@@ -26,44 +26,65 @@
     </div>
     <div class="customer-checkout customer-grid-item">
         <div class="heading">
-            DELIVERY METHODS AND PAYMENT
+            DELIVERY AND PAYMENT METHODS
         </div>
         <div class="checkout-body">
-        <div class="checkout-title">Pay KSH.<%=formartMoney(amount)%></div>
-        <div>
-            <div class="pickup-option checkout-option">
-                <input type="radio" name="delivery-method" id="pickup" value="pickup">
-                <label for="pickup"> <span class="title">Pickup Station</span> <br> Pick Up from one of our stations across the Country. <br>Choose a station below</label><br>
-                <select name="pickup-stations" id="pickup-stations">
-                    <option value="">-- Choose Station --</option>
-                    <option value="eldoret-main">Eldoret Main Shop, Saito Center, Ground Floor</option>
-                    <option value="kisumu-naivas">Kisumu Naivas - Ronald Ngala Street, 4th Floor</option>
-                    <option value="kapsabet-naivas">Kapsabet Naivas - Ronald Ngala Street, 4th Floor</option>
-                    <option value="kakamega-naivas">Kakamega Naivas - Ronald Ngala Street, 4th Floor</option>
-                    <option value="kitale-naivas">kitale Naivas - Ronald Ngala Street, 4th Floor</option>
-                </select><br><br>
-                <button class="sec-btn">Pay Now</button>
-                <button class="sec-btn">Pay on Pickup</button>
+            <div class="checkout-title">How do you want your Order delivered?</div>
+            <div class="delivery-options">
+                <div class="pickup-option checkout-option">
+                    <input type="radio" name="delivery-method" id="pickup" value="pickup">
+                    <label for="pickup"> <span class="title">To a Pickup Station</span> <br> Pick Up from one of our stations across the Country. <br>Choose a station below</label><br>
+                    <select name="pickup-stations" id="pickup-stations">
+                        <option value="eldoret-main" selected>Eldoret Main Shop, Saito Center, Ground Floor</option>
+                        <option value="kisumu-naivas">Kisumu Naivas - Ronald Ngala Street, 4th Floor</option>
+                        <option value="kapsabet-naivas">Kapsabet Naivas - Ronald Ngala Street, 4th Floor</option>
+                        <option value="kakamega-naivas">Kakamega Naivas - Ronald Ngala Street, 4th Floor</option>
+                        <option value="kitale-naivas">kitale Naivas - Ronald Ngala Street, 4th Floor</option>
+                    </select>
+                </div>
+
+                <div class="delivery-option checkout-option">
+                    <input type="radio" name="delivery-method" id="deliver" value="delivered" checked="checked" />
+                    <label for="deliver"> <span class="title">Delivery to your home or office</span> <br> We deliver to any part of the Country. <br>Our agent will call you through <span id="phone-number" ><%=user.phone%></span>
+                        <%if(user.phone){%>
+                            <a href="" style="color: green;">_Update_</a>
+                        <%}else{%>
+                            <a href="" style="color: red;">_Add Phone Number_</a>
+                        <%}%>
+
+                    once your order is ready for delivery</label><br> <br>
+                </div>
             </div>
+            <div class="checkout-title">How do you want to pay for your order?</div>
+            <p>Pay KSH.<%=formartMoney(amount)%></p>
+            <div class="payment-options">
+                <div class="pay-now payment-option">
+                    <div>
+                        <label for="payment-method">Choose a payment method</label>
+                        <select name="pay-method-selector" id="pay-method-selector">
+                            <option value="mpesa" selected>M-PESA</option>
+                            <option value="cash">CASH</option>
+                            <option value="master">MASTER CARD</option>
+                            <option value="paypal" >PayPal</option>
+                        </select>
+                    </div>
 
-            <div class="delivery-option checkout-option">
-                <input type="radio" name="delivery-method" id="deliver" value="deliver">
-                <label for="deliver"> <span class="title">Delivery</span> <br> We deliver to any part of the Country. <br>Our agent will call you through <%=user.phone%> 
-                    <%if(user.phone){%>
-                        <a href="" style="color: green;">_Update_</a>
-                    <%}else{%>
-                        <a href="" style="color: red;">_Add Phone Number_</a>
-                    <%}%>
+                </div>
+                <div class="pay-on-delivery payment-option">
 
-                <br> once your order is ready for delivery</label><br>
-                <button class="sec-btn">Pay Now</button>
-                <button class="sec-btn">Pay on Delivery</button>
+                </div>
+                <div class="pay-on-pickup payment-option">
+
+                </div>
             </div>
-
-        </div>
         </div>
     </div>
     
 </div>
+
+<script>
+  
+    
+</script>
 
 <%- include('./partials/footer')%>

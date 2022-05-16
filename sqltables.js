@@ -33,8 +33,7 @@ connection.query(
         }
     }
 )
-const truth = 'hello truth'
-const lie = 'hello lie'
-const hell = 'hello hell'
 
-module.exports = {truth, lie, hell}
+connection.query(
+    "CREATE TABLE if not exists orders(id INT NOT NULL AUTO_INCREMENT, productId INT,userId INT, quantity INT(3),price INT(10),paymentStatus VARCHAR(30), orderStatus VARCHAR(30) DEFAULT 'RECIEVED',PRIMARY KEY (id), FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (productId) REFERENCES products(id))"
+)

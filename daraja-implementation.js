@@ -1,6 +1,7 @@
 const prettyjson = require('prettyjson');
 const express = require('express');
 const bodyParser = require('body-parser')
+const donenv = require('dotenv').config()
 const options = {
 noColor: true
 };

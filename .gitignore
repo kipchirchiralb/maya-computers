@@ -4,3 +4,4 @@ back1.js
 back2.js
 credentials.js
 /public/images
+.env

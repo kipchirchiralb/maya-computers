@@ -85,31 +85,9 @@ let cleanUserData = {
   isAdmin: false
 }
 let cart
-console.log(cart)
-// app.use( async (req,res, next)=>{
-//   if(res.locals.isLoggedIn){
-//   await connection.query(
-//     `SELECT * FROM cart WHERE userId= ${req.session.userId}`,
-//     (error, cartRes)=>{
-//       connection.query(
-//         `SELECT * FROM users WHERE id = ${res.locals.userId}`,
-//         (error, userRes)=>{
-//           user = userRes
-//           cart = cartRes
-//         }
-//       )
-//     }
-//   )
-//   }else{
-//     cart=[]
-    
-//   }
-//   next();
 
-// })
 let cartItemId = 0
 app.get("/", (req, res)=> {
-  console.log(cart)
   connection.query(
     "SELECT * FROM products ORDER BY price DESC",
     (error,products)=>{
@@ -123,7 +101,7 @@ app.get("/", (req, res)=> {
         }else{
           res.render("index.ejs", {products: products, cart: cart});
         }
-        }
+      }
   )
 });
 app.get('/signin', (req,res)=>{
@@ -264,6 +242,7 @@ app.get('/customer/account/:userId', (req,res)=>{
   }
 })
 app.get('/customer/cart/:userId', (req,res)=>{
+  let coupons = {}
   if(res.locals.isLoggedIn){
     if(req.session.userId==req.params.userId){
       connection.query(

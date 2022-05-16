@@ -25,49 +25,51 @@
 
     </div>
     <div class="customer-cart customer-grid-item">
-        <div class="heading">Account Details</div>
+        <div class="heading">Cart Details</div>
         <div class="content-grid">
             <%if(cart.length>0){%>
                 <%let total = 0%>
                 <%cart.forEach(cartItem=>{%>
                 <%let product= products.find(product=>product.id===cartItem.productId)%>
-                <%let itemPrice = product.price %>
-                <%total = total + itemPrice*cartItem.quantity%>
+                <%let itemPrice = product.price * cartItem.quantity  %>
+                <%total = total + itemPrice%>
                 <div class="content-card">
-                    <div class="heading"><span><%=cartItem.productName%></span> <span>
-                        <form action="/customer/cart/remove-item/<%=cartItem.id%>" method="post">
-                            <button type="submit"> <img src="/images/icons/delete.svg" alt=""></button>
-                        </form>
-                    </span> </div>
-                    <div class="card-body">
-                       
+                    <div class="flex card-body">
                         <div class="cart-img">
                             <img src="/images/productImages/<%=product.images.split(',')[0]%>" alt="">
                         </div>
-                    
-                        <p>Available units : <%=product.quantity%></p>
-                        <div class="flex">
-                            <p>Quantity:</p>
-                            <%if(cartItem.quantity>=2){%>
-                            <form action="/customer/cart/remove-one/<%=cartItem.id%>" method="post"> 
-                                <button class="pri-btn">-</button>
-                            </form>
-                            <%}%>
-                            <input type="text" value="<%=cartItem.quantity%>" readonly>
-                            <%if(cartItem.quantity < product.quantity){%>
-                            <form action="/customer/cart/add-one/<%=cartItem.id%>" method="post">
-                                <button class="pri-btn">+</button>
-                            </form>
-                            <%}%>
+                        <div>
+                        <p><%=cartItem.productName%></p>
+                        <div class="content-center">
+                            <div class="flex">
+                                <p>Quantity:</p>
+                                <%if(cartItem.quantity>=2){%>
+                                <form action="/customer/cart/remove-one/<%=cartItem.id%>" method="post"> 
+                                    <button class="pri-btn">-</button>
+                                </form>
+                                <%}%>
+                                <input type="text" value="<%=cartItem.quantity%>" readonly>
+                                <%if(cartItem.quantity < product.quantity){%>
+                                <form action="/customer/cart/add-one/<%=cartItem.id%>" method="post">
+                                    <button class="pri-btn">+</button>
+                                </form>
+                                <%}%>
+                            </div>
+                            <p>Price:  KSH.<%=formartMoney(itemPrice)%></p>
                         </div>
-                        <p >KSH. <%=formartMoney(itemPrice)%></p>
+                        </div>
+                        <div class="remove-cart-item">
+                            <form action="/customer/cart/remove-item/<%=cartItem.id%>" method="post">
+                                <button type="submit"> <img src="/images/icons/delete.svg" alt=""></button>
+                            </form>
+                        </div> 
                     </div>
                 </div>
 
                 <%})%>
           
-            <div class="content-card">
-                <div class="heading" style="color: white;background-color: green;" >
+            <div class="content-card cart-summary">
+                <div class="heading">
                     <span>CART SUMMARY</span> 
                     <span>
                         <form action="/customer/cart/remove-all" method="post">
@@ -77,12 +79,12 @@
                 </div>
                 <div class="card-body">
                     <p>You have <%=Object.keys(cart).length%> items in your cart</p>
-                    <p >TOTAL AMOUNT PAYABLE<br><span class="checkout-amount" > KSH. <%=formartMoney(total)%></span></p>
-                    <p><input type="text" class="coupon-input"><button class="pri-btn">APPLY COUPON</button></p>
+                    <p>TOTAL<span class="checkout-amount" > KSH. <%=formartMoney(total)%></span></p>
+                    <p><input type="text" class="coupon-input" id="coupon-input"  placeholder="e.g. NOAH"><button id="coupon-btn" class="pri-btn">APPLY COUPON</button></p>
                     <!-- apply coupon here -->
-                    <p class="price">TOTAL AMOUNT TO PAY ON CHECKOUT <br><span class="checkout-amount" > KSH. <%=formartMoney(total)%></span></p>
+                    <p class="price">CHECKOUT KSH. <span class="checkout-amount" > <%=formartMoney(total)%></span></p>
                     <div class="proceed-to-chekout" >
-                        <a href="/customer/checkout/<%=locals.userId%>/<%=total%>" class="pri-btn">PROCEED TO CHECKOUT</a>
+                        <a href="/customer/checkout/<%=locals.userId%>/<%=total%>" class="sec-btn">PROCEED TO CHECKOUT</a>
                     </div>
                 </div>
             </div>
@@ -99,14 +101,11 @@
     
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function (event) {
-       let scrollpos = localStorage.getItem("scrollposCart");
-       if (scrollpos) window.scrollTo(0, scrollpos);
-   });
+ //daraja
+</script>
 
-   window.onscroll = function (e) {
-       localStorage.setItem("scrollposCart", window.scrollY);
-   };
+<script>
+    document.getElementById('coupon-btn')
 </script>
 
 <%- include('./partials/footer')%>

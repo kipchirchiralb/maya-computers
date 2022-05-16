@@ -24,6 +24,7 @@
                     <div class="flex" id="account-btn" style="cursor: pointer;"> 
                         <img src="/images/icons/account.svg" alt="">
                         <span class="nav-item"><%=locals.username%></span>
+                        <img id="nav-caret" src="/images/icons/caret.svg" alt="">
                     </div>
                 <%}else{%>
                     <div class="flex" style="cursor: pointer;">
@@ -84,6 +85,7 @@
     // account dropdown
     document.querySelector('#account-btn').addEventListener('click', ()=>{
         document.querySelector('.account-dropdown').classList.toggle('hide-a-d')
+        document.querySelector('#nav-caret').classList.toggle('rotate')
    
     })
     
