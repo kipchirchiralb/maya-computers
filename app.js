@@ -5,6 +5,8 @@ const session = require("express-session");
 const path = require('path')
 const app = express();
 
+const tryMpesa = require('./daraja-implementation.js')
+
 const PORT = process.env.PORT || 3000;
 const connection = mysql.createConnection({
   host: "localhost",
@@ -106,7 +108,7 @@ app.get("/", (req, res)=> {
 });
 app.get('/signin', (req,res)=>{
   if(res.locals.isLoggedIn){
-    res.redirect("/profile")
+    res.redirect(`/customer/account/${req.session.userId}`)
   }else{
     let userData=cleanUserData
     res.render('signin.ejs', {userData: userData, cart:cart})
@@ -114,13 +116,14 @@ app.get('/signin', (req,res)=>{
 })
 app.get('/signup', (req,res)=>{
   if(res.locals.isLoggedIn){
-    res.redirect("/profile")
+    res.redirect(`/customer/account/${req.session.userId}`)
   }else{
     let userData=cleanUserData
     res.render('signup.ejs', {userData: userData, cart:cart})
   }  
 })
 app.post("/signin", (req, res) => {
+  discount=0
     let userData = { 
         loginEmail: req.body.email,
         loginPassword: req.body.password,
@@ -221,16 +224,88 @@ app.post("/signup", (req, res) => {
         res.render("signup.ejs", {userData: userData, cart:cart});
     }
 });
+app.get('/adress/form',(req,res)=>{
+  if(res.locals.isLoggedIn){
+    connection.query(
+      `SELECT * FROM addresses WHERE userId=${req.session.userId}`,
+      (error,userAddress)=>{
+        if(userAddress.length > 0){
+          res.render('addressupdate.ejs', {userAddress: userAddress[0], cart: cart})
+        }else{
+          res.render('address.ejs', {cart:cart})
+        }
+      }
+    )
+    
+  }else(
+    res.redirect('/signin')
+  )
+})
+
+app.post('/adress/form', (req,res)=>{
+  connection.query(
+    `INSERT INTO addresses (userId, county, town, additional) VALUES(${req.session.userId},'${req.body.county}','${req.body.town}','${req.body.additional}')`,
+    (error,result)=>{
+      if(!error){
+        res.redirect(`/customer/account/${req.session.userId}`)
+      }else{
+        console.log(error)
+      }
+    }
+  )
+})
+app.post('/address/update', (req,res)=>{
+  connection.query(
+    `UPDATE addresses SET county='${req.body.county}', town='${req.body.town}', additional='${req.body.additional}' WHERE userId=${req.session.userId}`,
+    (error, result)=>{
+      if(!error) {
+        res.redirect(`/customer/account/${req.session.userId}`)
+      }else{
+        console.log(error)
+      }
+    }
+  )
+})
+app.get('/contact/update', (req, res) => {
+  connection.query(
+    `SELECT * FROM users WHERE id=${req.session.userId}`,
+    (err, user) => {
+      res.render('contactupdate.ejs', {cart: cart, user: user[0]})
+    }
+  )
+})
+app.post('/contact/update', (req, res) => {
+  if(res.locals.isLoggedIn){
+    connection.query(
+      `UPDATE users SET email= '${req.body.email}', phone=${req.body.phone} WHERE id=${req.session.userId}`,
+      (error, results) => {
+        if(error){
+          console.log(error)
+        }
+        res.redirect(`/customer/account/${req.session.userId}`)
+      }
+    )
+  }else{
+    res.redirect('/signin')
+  }
+})
 
 // ******** CUSTOMER ROUTEs
 app.get('/customer/account/:userId', (req,res)=>{
+  discount=0
   if(res.locals.isLoggedIn){
     if(req.session.userId==req.params.userId){
       connection.query(
         `SELECT * FROM users WHERE id = ${Number(req.params.userId)}`,
         (error,userD)=>{
-          user = userD
-          res.render('account.ejs', {cart:cart, user: userD[0]})
+          connection.query(
+            `SELECT * FROM addresses WHERE userId = ${Number(req.params.userId)}`,
+            (error,address)=>{
+              user = userD
+              res.render('account.ejs', {cart:cart, user: userD[0], address: address})
+            }
+          )
+
         }
       )
     }else{
@@ -241,8 +316,10 @@ app.get('/customer/account/:userId', (req,res)=>{
     res.redirect('/signin')
   }
 })
+
+let discount=0
+let couponIsValid
 app.get('/customer/cart/:userId', (req,res)=>{
-  let coupons = {}
   if(res.locals.isLoggedIn){
     if(req.session.userId==req.params.userId){
       connection.query(
@@ -253,7 +330,7 @@ app.get('/customer/cart/:userId', (req,res)=>{
             (error, results)=>{
               cart= results
               // console.log(error)
-              res.render('cart.ejs', {cart:results, products: products})
+              res.render('cart.ejs', {cart:results, products: products, discount: discount, couponIsValid: couponIsValid})
             }
           )
         }
@@ -264,6 +341,33 @@ app.get('/customer/cart/:userId', (req,res)=>{
     } 
   }else{
     res.redirect('/signin')
+  }
+})
+let coupons = {
+  NOAH: 300,
+  ALB: 500,
+  ROBIN: 200,
+  ALPHA: 2000,
+}
+app.post('/customer/cart/:userId/coupon', (req, res)=>{
+  let customerCoupon = req.body.coupon
+  if(customerCoupon==='ALB'){
+    discount =500
+    couponIsValid = true
+  }else if(customerCoupon==='ROBIN'){
+    discount =200
+    couponIsValid = true
+  }else if(customerCoupon==='NOAH'){
+    discount =1000
+    couponIsValid = true
+  }else{
+    couponIsValid = false
+    discount =10
+  }
+  if(couponIsValid){
+    res.redirect(`/customer/cart/${req.params.userId}`)
+  }else{
+    res.redirect(`/customer/cart/${req.params.userId}`)
   }
 })
 app.post('/customer/cart/remove-one/:id', (req,res)=>{
@@ -301,17 +405,28 @@ app.post('/customer/cart/remove-all', (req,res)=>{
 
 
 app.get('/customer/checkout/:id/:amount', (req,res)=>{
+  discount=0
   if(res.locals.isLoggedIn){
     connection.query(
       `SELECT * FROM users WHERE id= ${req.session.userId}`,
       (error, userResult)=>{
         user = userResult[0]
-        res.render('checkout.ejs', {cart: cart, user: userResult[0], amount: req.params.amount})
+        connection.query(
+          `SELECT * FROM addresses WHERE userId = ${req.session.userId}`,
+          (error, address)=>{
+            res.render('checkout.ejs', {cart: cart, user: userResult[0], amount: req.params.amount, address: address})
+          }
+        )
       }
     )
   }else{
     res.redirect('/signin')
   }
+})
+
+// *************MPESA INTERGRATION
+app.get('/customer/payment/validate', (req,res)=>{
+  res.render('paymentvalidation.ejs')
 })
 app.get('/customer/orders/:userId', (req,res)=>{
   if(res.locals.isLoggedIn){
@@ -519,10 +634,6 @@ app.post('/add-to-cart', (req,res)=>{
     res.redirect('/signin')
   }
 })
-
-
-
-
 
 
 app.get("/about", (req, res) => {

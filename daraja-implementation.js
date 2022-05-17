@@ -1,31 +1,38 @@
-const prettyjson = require('prettyjson');
-const express = require('express');
-const bodyParser = require('body-parser')
-const donenv = require('dotenv').config()
-const options = {
-noColor: true
-};
-// create an express app and configure it with boadyParser middleware
-const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-// create our webhook endpoint to recive webhooks from Safaricom
-app.post('/hooks/mpesa', (req, res) => {
-console.log('-----------Received M-Pesa webhook-----------');
-// format and dump the request payload recieved from safaricom in the terminal
-console.log(prettyjson.render(req.body, options));
-console.log('-----------------------');
-let message = {
-"ResponseCode": "00000000",
-"ResponseDesc": "success"
-};
-// respond to safaricom servers with a success message
-res.json(message);
-});
+module.exports = ()=>{
 
-const server = app.listen(5000, () => {
-let host = server.address().address;
-let port = server.address().port;
-// console.log(host)
-console.log(`server listening on port ${port}` );
-});
+let headers = new Headers();
+headers.append("Content-Type", "application/json");
+headers.append("Authorization", "Bearer 4cU3iDtJF4OiNB59jArDSglj8sga");
+
+fetch("https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest", {
+    method: 'POST',headers,
+    body: JSON.stringify({
+        "BusinessShortCode": 174379,
+        "Password": "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjIwNTE3MDc1MDA4",
+        "Timestamp": "20220517075008",
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": 1,
+        "PartyA": 254717481718,
+        "PartyB": 174379,
+        "PhoneNumber": 254717481718,
+        "CallBackURL": "https://mydomain.com/path",
+        "AccountReference": "CompanyXLTD",
+        "TransactionDesc": "Payment of X" 
+    })
+})
+
+  .then(response => response.text())
+
+  .then(result => {
+      console.log(result)
+      return result
+    
+    })
+
+  .catch(error =>{ 
+      console.log(error)
+
+    });
+
+}
+

@@ -612,6 +612,14 @@
   grid-template-columns: 1fr 3fr;
   align-content: start;
   gap: 20px;
+  line-height: 1.8;
+}
+.customer-page select{
+  font: inherit;
+  padding: 5px 10px;
+}
+.customer-page option{
+  font: inherit;
 }
 .customer-grid-item{
   background-color: white;
@@ -754,6 +762,10 @@
   padding: 20px 0;
   font-size: 25px;
 }
+.customer-account .content-grid .content-card .card-body{
+  flex-direction: column;
+}
+
 
 /* **********ADMIN PANEL********* */
 .admin-nav{

@@ -1,0 +1,39 @@
+<%- include('./partials/header')%>
+<%- include('./partials/nav')%>
+<div class="main-container customer-page">
+    
+    <div class="customer-nav customer-grid-item">
+        <a  href="/customer/account/<%=locals.userId%>">
+            Account
+        </a>
+        <a  href="/customer/cart/<%=locals.userId%>">
+            Cart
+        </a>
+        <a class="active" href="/customer/orders/<%=locals.userId%>">
+            Orders
+        </a>
+        <a href="/customer/history/<%=locals.userId%>">
+            Purchase History
+        </a>
+        <a href="/customer/messages/<%=locals.userId%>">
+            Messages
+        </a>
+        <a href="/customer/reviews/<%=locals.userId%>">
+            Reviews
+        </a>
+
+    </div>
+    <div class="customer-orders customer-grid-item">
+        <div class="heading">Confirm Payment</div>
+        <div>
+            <form action="/confirm/transaction" method="post">
+                <label for="transaction"></label>
+                <input type="text" name="transaction" id="transaction" placeholder="transaction ref" required="required"><br>
+                <input type="submit" value="CONFIRM" class="sec-btn">
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+<%- include('./partials/footer')%>

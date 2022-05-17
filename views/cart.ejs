@@ -80,7 +80,15 @@
                 <div class="card-body">
                     <p>You have <%=Object.keys(cart).length%> items in your cart</p>
                     <p>TOTAL<span class="checkout-amount" > KSH. <%=formartMoney(total)%></span></p>
-                    <p><input type="text" class="coupon-input" id="coupon-input"  placeholder="e.g. NOAH"><button id="coupon-btn" class="pri-btn">APPLY COUPON</button></p>
+                    <form action="/customer/cart/<%=locals.userId%>/coupon" method="post"><input type="text" class="coupon-input" id="coupon-input" name="coupon" placeholder="e.g. NOAH"><button type="submit" id="coupon-btn" class="pri-btn">APPLY COUPON</button></form>
+                    <%if(discount>0){%>
+                    <%if(couponIsValid){%>
+                        <%total=total-discount%>
+                        <p class="error-message">Coupon Applied Succesfully</p>
+                    <%}else{%>
+                        <p class="error-message">Coupon Invalid</p>
+                    <%}%>
+                    <%}%>
                     <!-- apply coupon here -->
                     <p class="price">CHECKOUT KSH. <span class="checkout-amount" > <%=formartMoney(total)%></span></p>
                     <div class="proceed-to-chekout" >

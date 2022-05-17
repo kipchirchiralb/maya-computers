@@ -1,0 +1,18 @@
+<%- include('./partials/header')%>
+<%- include('./partials/nav')%>
+<div class="main-container">
+    <div class="reg-page flex">
+        <div class="reg-form">
+            <h2 style="text-align: center;">Address Information</h2>
+                <form class="login-user flex" action="/adress/form" method="post">
+                    <input class="input-el" type="text" name="county" id="county" placeholder="County">
+                    <input class="input-el" type="text" name="town" id="" placeholder="Town">
+                    <textarea class="input-el" name="additional" id="" cols="30" rows="5"placeholder="Additional information"></textarea>
+                    <input class="input-el" type="submit" value="SAVE" >
+                </form>   
+        </div>
+    </div>
+</div>
+
+
+<%- include('./partials/footer')%>

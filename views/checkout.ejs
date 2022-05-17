@@ -29,61 +29,171 @@
             DELIVERY AND PAYMENT METHODS
         </div>
         <div class="checkout-body">
+            <!-- delivery method -->
             <div class="checkout-title">How do you want your Order delivered?</div>
             <div class="delivery-options">
                 <div class="pickup-option checkout-option">
-                    <input type="radio" name="delivery-method" id="pickup" value="pickup">
+                    <input type="radio" name="delivery-method" id="pickup" value="pickup" checked>
                     <label for="pickup"> <span class="title">To a Pickup Station</span> <br> Pick Up from one of our stations across the Country. <br>Choose a station below</label><br>
                     <select name="pickup-stations" id="pickup-stations">
-                        <option value="eldoret-main" selected>Eldoret Main Shop, Saito Center, Ground Floor</option>
-                        <option value="kisumu-naivas">Kisumu Naivas - Ronald Ngala Street, 4th Floor</option>
-                        <option value="kapsabet-naivas">Kapsabet Naivas - Ronald Ngala Street, 4th Floor</option>
-                        <option value="kakamega-naivas">Kakamega Naivas - Ronald Ngala Street, 4th Floor</option>
-                        <option value="kitale-naivas">kitale Naivas - Ronald Ngala Street, 4th Floor</option>
+                        <option value="eldoret">Eldoret Main Shop, Saito Center, Ground Floor</option>
+                        <option value="mombasa">Mombasa Naivas - Ronald Ngala Street, 4th Floor</option>
+                        <option value="kapsabet">Kapsabet Naivas - Ronald Ngala Street, 4th Floor</option>
+                        <option value="kakamega">Kakamega Naivas - Ronald Ngala Street, 4th Floor</option>
+                        <option value="kitale">kitale Naivas -  MAsinde Muliro Street,HighMax, 2nd Floor</option>
+                        <option value="nairobi">Nairobi Naivas -   Moi Avenue, Imenti house, 4th Floor</option>
                     </select>
+                    <div class="pickup-times">
+                        <p id="eldoret" class="eta hide">All pickups from Eldoret are ready for pickup within an hour.</p>
+                        <p id="kitale"  class="eta hide">Your order to Kitale will be ready for pickup within 24hrs. Visit our shop tomorrow <span class="dateTommorow"></span>at 10:00AM</p>
+                        <p id="kakamega" class="eta hide">Your order to Kakamega will be ready for pickup within 24hrs. Visit our shop tomorrow <span class="dateTommorow"></span>at 10:00AM</p>
+                        <p id="kapsabet" class="eta hide">Your order to Kapsabet will be ready for pickup within 24hrs. Visit our shop tomorrow <span class="dateTommorow"></span>at 10:00AM</p>
+                        <p id="mombasa" class="eta hide">Your order to Mombasa will be ready for pickup within 72hrs. Visit our shop tomorrow <span class="dateAfterTommorow"></span>at 10:00AM</p>
+                        <p id="nairobi" class="eta hide">Your order to Nariobi will be ready for pickup within 72hrs. Visit our shop tomorrow <span class="dateAfterTommorow"></span>at 10:00AM</p>
+                    </div>
                 </div>
 
                 <div class="delivery-option checkout-option">
-                    <input type="radio" name="delivery-method" id="deliver" value="delivered" checked="checked" />
+                    <input type="radio" name="delivery-method" id="deliver" value="delivered"/>
                     <label for="deliver"> <span class="title">Delivery to your home or office</span> <br> We deliver to any part of the Country. <br>Our agent will call you through <span id="phone-number" ><%=user.phone%></span>
                         <%if(user.phone){%>
-                            <a href="" style="color: green;">_Update_</a>
+                            <a href="/contact/update" style="color: red;">_Update_</a>
                         <%}else{%>
-                            <a href="" style="color: red;">_Add Phone Number_</a>
+                            <a href="/contact/update" style="color: red;">_Add Phone Number_</a>
                         <%}%>
 
-                    once your order is ready for delivery</label><br> <br>
-                </div>
-            </div>
-            <div class="checkout-title">How do you want to pay for your order?</div>
-            <p>Pay KSH.<%=formartMoney(amount)%></p>
-            <div class="payment-options">
-                <div class="pay-now payment-option">
-                    <div>
-                        <label for="payment-method">Choose a payment method</label>
-                        <select name="pay-method-selector" id="pay-method-selector">
-                            <option value="mpesa" selected>M-PESA</option>
-                            <option value="cash">CASH</option>
-                            <option value="master">MASTER CARD</option>
-                            <option value="paypal" >PayPal</option>
-                        </select>
+                    once your order is ready for delivery</label>
+                    <div class="customer-address">
+                        <h4>Your Address <a href="/adress/form"> <img src="/images/icons/edit.svg" alt=""></a></h4>
+                        <p>County/Region: <%=address[0].county%> </p>
+                        <p>Town: <%=address[0].town%></p>
+                        <p>Phone: <%=user.phone%></p>
+                        <p><%=address[0].additional%></p>
                     </div>
-
-                </div>
-                <div class="pay-on-delivery payment-option">
-
-                </div>
-                <div class="pay-on-pickup payment-option">
-
                 </div>
             </div>
+            <!-- payment methods -->
+            <div class="checkout-title">How do you want to pay for your order?</div>
+            <p>Pay KSH.<%=formartMoney(amount)%> &nbsp;&nbsp;
+                <input type="radio" name="pay-how" id="1" value="pay-now" checked>
+                <label for="1">Pay Now</label>
+                <input type="radio" name="pay-how" id="2" value="pay-on-delivery">
+                <label for="2">Pay on delivery</label>
+                <input type="radio" name="pay-how" id="3" value="pay-at-station">
+                <label for="3">Pay at station</label>
+            </p>
+            <div class="payment-options">
+
+                <div class="pay-now payment-option hide">
+                    <label for="payment-method">Choose a payment method</label>
+                    <select name="payment-method" id="payment-method">
+                        <option value="mpesa-now" selected>M-PESA</option>
+                        <option value="master-now">MASTER CARD</option>
+                        <option value="paypal-now" >PayPal</option>
+                    </select>
+                    <div id="mpesa-now" class="now-payment">
+                        Go to Mpesa PayBill <br>
+                        Business number: 247247 <br>
+                        Account number: 23738399 <br>
+                        Enter Amount: <%=formartMoney(amount)%> <br>
+                        or simply click <a href="/customer/payment/mpesa" class="sec-btn">HERE</a>
+                    </div>
+                    <div id="master-now" class="now-payment hide">
+                        Master Card payment Coming soon ...
+                    </div>
+                    <div id="paypal-now" class="now-payment hide">
+                        PayPal Coming soon ...
+                    </div>
+                </div>
+                <div class="pay-on-delivery payment-option hide">
+                    On delivery, Payment methods accepted are Cash and Mpesa only. <br>
+                    Go to Mpesa PayBill <br>
+                    Business number: 247247 <br>
+                    Account number: 23738399 <br>
+                    Enter Amount: <%=formartMoney(amount)%>
+                </div>
+                <div class="pay-at-station payment-option hide">
+                    At our stations, Payment methods accepted are Cash, Bank Card and Mpesa. <br>
+                    Go to Mpesa PayBill <br>
+                    Business number: 247247 <br>
+                    Account number: 23738399 <br>
+                    Enter Amount: <%=formartMoney(amount)%> <br>
+                    Master Card, Equity, KCB and Cooperative cards are accepted. <br>
+                    You will be directed appropriately at the station.
+                </div>
+            </div> 
+        </div>
+        <div class="checkout-body confirmation-box" style="padding: 20px;">
+            <div class="checkout-title">Confirm Your Order</div>
+            <div>
+                <p>Delivery Option: <span class="delivery-choice">Select above</span> </p>
+                <p>Payment Option: <span class="payment-choice">Select above</span> </p>
+            </div>
+            <form action="/customer/orders/<%=locals.userId%>">
+                <input type="number" class="" name="amount" id="amount-to-pay" value="<%=amount%>">
+                <input type="text" class="" name="delivery-way" id="delivery-way">
+                <input type="text" class="" name="payment-way" id="payment-way">
+                <input type="submit" value="CONFIRM ORDER" class="sec-btn">
+            </form>
         </div>
     </div>
     
 </div>
 
 <script>
-  
+    const payOptions = document.querySelectorAll('input[name="pay-how"]')
+    const pickupStations = document.getElementById('pickup-stations')
+    const etas = document.querySelectorAll('.eta')
+    payOptions.forEach(option=>{
+        if(option.checked){
+            document.querySelector(`.${option.value}`).classList.remove('hide')
+            document.querySelector('.payment-choice').textContent=option.value
+            document.querySelector('#payment-way').value=option.value
+        }
+    })
+    payOptions.forEach(option=>{
+        option.addEventListener('change', ()=>{
+            if(option.checked) {
+            document.querySelectorAll('.payment-option').forEach(divOpt=>divOpt.classList.add('hide'))
+            document.querySelector(`.${option.value}`).classList.remove('hide')
+            document.querySelector('.payment-choice').textContent=option.value
+            document.querySelector('#payment-way').value=option.value
+
+        }
+        })
+    })
+    let devMethod = document.querySelectorAll("input[name='delivery-method']")
+    document.querySelector('#delivery-way').value = devMethod.checked?"Deliver":"Pick up" + pickupStations.value
+
+    devMethod.forEach(option => {
+        option.addEventListener('click',()=> {
+            if(option.value==='delivered'){
+                document.querySelector('.delivery-choice').textContent="Delivered to your address"
+                document.querySelector('#delivery-way').value = 'Deliver to' + pickupStations.value
+
+            }else{
+                document.querySelector('.delivery-choice').textContent="Pickup from "+document.getElementById('pickup-stations').value +" station"
+            }
+        })
+       
+    })
+
+   
+    document.getElementById(pickupStations.value).classList.remove('hide')
+
+    pickupStations.addEventListener('change',()=>{
+        etas.forEach(eta=>{
+            eta.classList.add('hide')
+            document.getElementById(pickupStations.value).classList.remove('hide')
+            document.querySelector('.delivery-choice').textContent="Pickup from "+document.getElementById('pickup-stations').value +" station"
+        })
+    })
+
+    const payNowOptions = document.querySelector('#payment-method')
+    payNowOptions.addEventListener('change',()=>{
+        document.querySelectorAll('.now-payment').forEach(now =>now.classList.add('hide'))
+        document.querySelector(`#${payNowOptions.value}`).classList.remove('hide')
+    })
     
 </script>
 
