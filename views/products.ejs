@@ -3,7 +3,7 @@
 <div class="products-category main-container">
     <h2><%=category.toUpperCase()%></h2>
     <div class="products flex">
-        
+        <%products=products.filter(product =>product.quantity>0)%>
         <% for(let i=0; i< products.length; i++){ %>
      
         <div class="product flex load-counter hide">

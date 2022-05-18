@@ -51,6 +51,7 @@ app.use((req, res, next) => {
 
 
 
+
 // *******multer setup
 
 const multer = require('multer');
@@ -434,7 +435,12 @@ app.get('/customer/orders/:userId', (req,res)=>{
       connection.query(
         `SELECT * FROM products`,
         (error,products)=>{
-          res.render('orders.ejs', {cart:cart, products: products})
+          connection.query(
+            `SELECT * FROM orders WHERE userId = ${req.session.userId}`,
+            (error, orders)=>{
+              res.render('orders.ejs', {cart:cart, products: products,orders: orders});
+            }
+          )
         }
       )
     }else{
@@ -444,6 +450,36 @@ app.get('/customer/orders/:userId', (req,res)=>{
   }else{
     res.redirect('/signin')
   }
+})
+app.post('/customer/order/:id', (req,res)=>{
+  if(res.locals.isLoggedIn){
+    connection.query(
+      `SELECT * FROM cart WHERE userId = ${req.session.userId} `,
+      (error,uCart)=>{
+        uCart.forEach(cartItem=>{
+          connection.query(
+              `INSERT INTO orders (productId, userId, quantity, price, paymentOption, deliveryMethod) VALUES (${cartItem.productId},${req.session.userId},${cartItem.quantity}, ${Number(req.body.amount)}, '${req.body.payment}', '${req.body.delivery}')`,
+              (error, result)=>{
+                if(!error){
+                 console.log('success')
+                }else{
+                  console.log(error)
+                }
+              }
+            )
+        })
+        connection.query(
+          `DELETE FROM cart WHERE userId = ${req.session.userId}`,
+         (err, result)=>{
+            res.redirect(`/customer/orders/${req.session.userId}`)
+         }
+        )
+      }
+    )
+  }else{
+    res.redirect('/signin')
+  }
+ 
 })
 app.get('/customer/history/:userId', (req,res)=>{
   if(res.locals.isLoggedIn){
@@ -497,18 +533,95 @@ app.get('/customer/reviews/:userId', (req,res)=>{
   }
 })
 
-// ********* Admin Panel
+// ********* Admin Panel & roles
 app.get('/admin-panel', (req,res)=>{
   if(req.session.isAdmin){
     connection.query(
       'SELECT * FROM products',
       (error, products)=>{
-        res.render('admin-panel.ejs', {products: products})
+        connection.query(
+          'SELECT * FROM orders ORDER BY orderDate DESC',
+          (error, orders)=>{
+            res.render('admin-panel.ejs', {products: products, orders: orders})
+          }
+        )
       }
     )
   }else{
     res.redirect('/signin')
   }
+})
+app.get('/admin/update/product/:pId', (req,res)=>{
+  connection.query(
+    `SELECT * FROM products WHERE id= ${Number(req.params.pId)}`,
+    (error, product)=>{
+      res.render('update-product.ejs', {product: product[0]})
+    }
+  )
+})
+app.post('/admin/mark/soldout/:pId', (req,res)=>{
+  if(req.session.isAdmin){
+    connection.query(
+      `UPDATE products SET status="SOLD-OUT", quantity = 0 WHERE id=${req.params.pId} `,
+      (error, results)=>{
+        res.redirect('/admin-panel')
+      }
+    )
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.post('/admin/sell/single/:pId', (req,res)=>{
+  if(req.session.isAdmin){
+    connection.query(
+      `UPDATE products SET quantity=quantity-1 WHERE id=${req.params.pId} `,
+      (error, results)=>{
+        connection.query(
+          `SELECT quantity FROM products WHERE id=${req.params.pId}`,
+          (error, product)=>{
+            if(product[0].quantity==0){
+              connection.query(
+                `UPDATE products SET status = "SOLD-OUT" WHERE id=${req.params.pId}`,
+                (error, result)=>{
+                  res.redirect('/admin-panel')
+                }
+              )
+            }else{
+              res.redirect('/admin-panel')
+            }
+          }
+        )
+      }
+    )
+  }else{
+    res.redirect('/signin')
+  }
+})
+
+
+app.post('/admin/mark/paid/:oId', (req,res)=>{
+  connection.query(
+    `UPDATE orders SET paymentStatus = "SETTLED" WHERE id = ${Number(req.params.oId)} `,
+    (error,results)=>{
+      res.redirect('/admin-panel')
+    }
+  )
+})
+app.post('/admin/mark/delivered/:oId', (req,res)=>{
+  connection.query(
+    `UPDATE orders SET orderStatus = "DELIVERED" WHERE id = ${Number(req.params.oId)} `,
+    (error,results)=>{
+      res.redirect('/admin-panel')
+    }
+  )
+})
+app.post('/admin/mark/ready/:oId', (req,res)=>{
+  connection.query(
+    `UPDATE orders SET orderStatus = "READY" WHERE id = ${Number(req.params.oId)} `,
+    (error,results)=>{
+      res.redirect('/admin-panel')
+    }
+  )
 })
 
 // ******** PRODUCTS ROUTES

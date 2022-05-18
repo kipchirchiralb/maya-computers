@@ -1,0 +1,37 @@
+<%- include('./partials/header')%>
+<style>
+    body{
+        padding: 0;
+    }
+</style>
+<nav class="admin-nav flex">
+    <a href="/">App</a>
+    <p>Maya Computers Administrator Panel</p>
+    <a href="/logout">Sign Out</a>
+</nav>
+<div class="main-container">
+    <div class="new-product-page flex">
+        <div class="reg-form">
+        
+        <form class="new-product-form" action="/products/new-product" enctype="multipart/form-data" method="post" >
+            <select class="input-el" name="category" id="category" required>
+                <option value="">---Choose Category---</option>
+                <option value="laptop">Laptop Computer</option>
+                <option value="printer">Printer</option>
+                <option value="desktop">Desktop Computer</option>
+                <option value="accessories">Computer accesories</option>
+                <option value="supplies">Office Supplies</option>
+            </select>
+            <input class="input-el" type="text" placeholder="Product Name" name="name" value="<%=product.name%>" required>
+            <input class="input-el" type="text" placeholder="Product Specifications" name="specifications" value="<%=product.specifications%>" required>
+            <label for="images" style="display: block; color: grey; font-size: .8rem;">Images - Max 6 - Preferebly squared png images</label>
+            <input class="input-el" type="file" name="images" id="images" multiple required>
+            <input class="input-el" type="number" value="<%=product.price%>" placeholder="Price" name="price" required>
+            <input class="input-el" type="number" value="<%=product.quantity%>" placeholder="Quantity" name="quantity" required>
+            <input class="input-el" type="submit" value="Update Product">
+        </form>
+        </div>
+    </div>
+</div>
+
+<%- include('./partials/footer')%>

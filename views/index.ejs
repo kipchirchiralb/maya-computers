@@ -1,7 +1,7 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
 <div class="main-container">
-    <div class="show-case">
+    <div class="show-case hide-for-tablet">
         <nav class="show-item show-case-nav flex">
             <a href="/products?category=laptop">
                 <li id="nav-item1" class="nav-item">Laptops</li>
@@ -30,7 +30,7 @@
                 <img src="/images/add5.png" alt="">
                 <img src="/images/addmain.jpg" alt="">
             </div>
-            <div class="slide fade">
+            <div class="slide fade ">
                 <img src="/images/add6.png" alt="">
                 <img src="/images/add7.png" alt="">
                 <img src="/images/addmain.jpg" alt="">
@@ -58,6 +58,7 @@
     <div class="products flex">
         <%if(true){%>
         <%let count = 0 %>
+        <%products=products.filter(product =>product.quantity>0)%>
         <% for(let i=0; i< products.length; i++){ %>
         <%if(count===5){break;} %>
         <%count++%>

@@ -1,15 +1,16 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
+<%- include('./functions/formatMoney')%>
 <div class="main-container customer-page">
     
     <div class="customer-nav customer-grid-item">
-        <a  href="/customer/account/<%=locals.userId%>">
+        <a href="/customer/account/<%=locals.userId%>">
             Account
         </a>
         <a  href="/customer/cart/<%=locals.userId%>">
             Cart
         </a>
-        <a class="active" href="/customer/orders/<%=locals.userId%>">
+        <a  class="active" href="/customer/orders/<%=locals.userId%>">
             Orders
         </a>
         <a href="/customer/history/<%=locals.userId%>">
@@ -23,10 +24,58 @@
         </a>
 
     </div>
-    <div class="customer-orders customer-grid-item">
-        <div class="heading">Your Orders and order status</div>
+    <div class="customer-cart customer-grid-item">
+        <div class="heading">Your Orders</div>
+        <div class="content-grid">
+            <%if(orders.length>0){%>
+                <%let total = 0%>
+                <%orders.forEach(orderItem=>{%>
+                <%let product= products.find(product=>product.id===orderItem.productId)%>
+                <%let itemPrice = product.price * orderItem.quantity  %>
+                <div class="content-card">
+                    <div class="flex card-body">
+                        <div class="cart-img">
+                            <img src="/images/productImages/<%=product.images.split(',')[0]%>" alt="">
+                        </div>
+                        <div>
+                        <p><%=product.name%></p>
+                        <div class="content-center">
+                            <div class="flex">
+                                <p></p>
+                            </div>
+                            <p>Price:  KSH.<%=formartMoney(itemPrice)%></p>
+                        </div>
+                        
+                        </div>
+                        <div>
+                            <p>Payment: <%=orderItem.paymentStatus%></p>
+                            <p>Delivery: <%=orderItem.orderStatus%></p>
+                        </div>
+                         
+                    </div>
+                </div>
+
+                <%})%>
+          
+           
+            <%}else{%>
+            <div class="content-card">
+                <div class="heading">
+                    Your Cart is Empty
+                </div>
+                <p style="font-size:1.2rem; padding: 30px;">Go <a href="/" style="color:green ;">Shopping</a></p>
+            </div>
+            <%}%>
+        </div>
     </div>
     
 </div>
+<script>
+ //daraja
+</script>
+
+<script>
+    document.getElementById('coupon-btn')
+</script>
 
 <%- include('./partials/footer')%>

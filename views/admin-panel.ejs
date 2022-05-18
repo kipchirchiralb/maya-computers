@@ -24,7 +24,7 @@
         </div>
         <div>
             <a class="pri-btn" href="/products/new-product">+New Product</a>
-        </div>    
+        </div>
     </div>
     <table id="stock-manager">
         <thead class="stock-man-head">
@@ -44,30 +44,55 @@
                 <td><%=product.quantity%></td>
                 <td style="color:green;"><%=product.status%></td>
                 <td>
-                    <button>Edit</button>
-                    <button>Sell</button>
-                    <button>Delete</button>
+                  <form action="/admin/update/product/<%=product.id%>" method="get">
+                    <button type="submit" class="adm-btn">UPDATE PRODUCT</button>
+                  </form>
+                  <%if(product.quantity>0){%>
+                  <form action="/admin/sell/single/<%=product.id%>" method="post">
+                    <button class="adm-btn">SELL SINGLE PRODUCT</button>
+                  </form>
+                  <form action="/admin/mark/soldout/<%=product.id%>" method="post">
+                    <button type="submit" class="adm-btn">MARK AS SOLD OUT</button>
+                  </form>
+                  <%}%>
                 </td>
             </tr>
           <%})%>
         </tbody>
-          
+
     </table>
     <table id="orders-manager" class="hide-table">
         <tr>
             <th>Order Id</th>
-            <th>Product</th>
+            <th>Product Id</th>
             <th>Quantity</th>
+            <th>Payment Option</th>
+            <th>Payment Status</th>
             <th>Order Status</th>
-            <th>Action</th>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Hp 840</td>
-            <td>1</td>
-            <td>On-Transit</td>
-            <td>Update</td>
-          </tr>   
+            <th>Actions</th>
+        </tr>
+        <%orders.forEach(order=>{%>
+        <tr>
+          <td><%=order.id%></td>
+          <td><%=order.productId%></td>
+          <td><%=order.quantity%></td>
+          <td><%=order.paymentOption%></td>
+          <td><%=order.paymentStatus%></td>
+          <td><%=order.orderStatus%></td>
+          
+          <td>
+            <form action="/admin/mark/delivered/<%=order.id%>" method="post">
+              <button type="submit" name=""class="adm-btn">MARK AS DELIVERED</button>
+            </form>
+            <form action="/admin/mark/ready/<%=order.id%>" method="post">
+              <button type="submit" name=""class="adm-btn">MARK AS READY</button>
+            </form>
+            <form action="/admin/mark/paid/<%=order.id%>" method="post">
+              <button type="submit" name=""class="adm-btn">MARK AS PAID</button>
+            </form>
+          </td>
+        </tr>
+        <%})%>
     </table>
 
 </div>
@@ -184,7 +209,7 @@ function numericallySortTable(n) {
 </script>
 
 <script>
-    // toggle tables 
+    // toggle tables
     document.querySelector('.orders-manager').addEventListener('click', ()=>{
         document.querySelector('#orders-manager').classList.remove('hide-table')
         document.querySelector('#stock-manager').classList.add('hide-table')

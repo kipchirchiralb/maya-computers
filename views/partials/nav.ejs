@@ -1,23 +1,22 @@
 
 <div class="cta-running-add">
-    <p>Get our latest offers today</p>
+    <p class="hide-for-tablet">Get our latest offers today</p>
     <p>Call: &nbsp;<a href="tel:+254717481718">+254717481718</a> </p>
-    <p>Email: &nbsp;<a href="mailto:maya@mayacomputers.co.ke">maya@mayacomputers.co.ke</a> </p>
+    <p class="hide-for-mobile">Email: &nbsp;<a href="mailto:maya@mayacomputers.co.ke">maya@mayacomputers.co.ke</a> </p>
 
 </div>
 <nav class="main-nav">
-
     <div class="main-logo">
         <a href="/"><img src="/images/logo.svg" alt=""></a>
     </div> 
     <div class="search-product">
         <form class="flex" action="/search" method="post">
             <input type="text" placeholder="Search" name="searchterm" id="search-term" class="search-term"/>
-            <button type="submit"><img src="/images/icons/search.svg" alt=""></button> 
+            <button class="hide-for-mobile" type="submit"><img src="/images/icons/search.svg" alt=""></button> 
         </form>   
     </div>
     <div class="flex nav-group">
-        <a href="/" class="nav-item">Home</a>
+        <a href="/" class="nav-item hide-for-mobile">Home</a>
         <div class="account">
             <%if(!locals.isAdmin){%>
                 <%if(locals.isLoggedIn){%>

@@ -128,11 +128,12 @@
             <div>
                 <p>Delivery Option: <span class="delivery-choice">Select above</span> </p>
                 <p>Payment Option: <span class="payment-choice">Select above</span> </p>
+                <p>Amount: <%=formartMoney(amount)%> </p>
             </div>
-            <form action="/customer/orders/<%=locals.userId%>">
-                <input type="number" class="" name="amount" id="amount-to-pay" value="<%=amount%>">
-                <input type="text" class="" name="delivery-way" id="delivery-way">
-                <input type="text" class="" name="payment-way" id="payment-way">
+            <form action="/customer/order/<%=locals.userId%>" method="post">
+                <input type="number" class="hide" name="amount" id="amount-to-pay" value="<%=amount%>">
+                <input type="text" class="hide" name="delivery" id="delivery-way">
+                <input type="text" class="hide" name="payment" id="payment-way">
                 <input type="submit" value="CONFIRM ORDER" class="sec-btn">
             </form>
         </div>
@@ -163,16 +164,17 @@
         })
     })
     let devMethod = document.querySelectorAll("input[name='delivery-method']")
-    document.querySelector('#delivery-way').value = devMethod.checked?"Deliver":"Pick up" + pickupStations.value
+    document.querySelector('#delivery-way').value = devMethod.checked?"Deliver":"Pick up " + pickupStations.value
 
     devMethod.forEach(option => {
         option.addEventListener('click',()=> {
             if(option.value==='delivered'){
                 document.querySelector('.delivery-choice').textContent="Delivered to your address"
-                document.querySelector('#delivery-way').value = 'Deliver to' + pickupStations.value
+                document.querySelector('#delivery-way').value = 'Deliver to your Address'
 
             }else{
                 document.querySelector('.delivery-choice').textContent="Pickup from "+document.getElementById('pickup-stations').value +" station"
+                document.querySelector('#delivery-way').value = 'Deliver to '+ document.getElementById('pickup-stations').value
             }
         })
        
@@ -186,6 +188,7 @@
             eta.classList.add('hide')
             document.getElementById(pickupStations.value).classList.remove('hide')
             document.querySelector('.delivery-choice').textContent="Pickup from "+document.getElementById('pickup-stations').value +" station"
+            document.querySelector('#delivery-choice').value="Pickup from "+document.getElementById('pickup-stations').value +" station"
         })
     })
 

@@ -35,7 +35,7 @@ connection.query(
 )
 
 connection.query(
-    "CREATE TABLE if not exists orders(id INT NOT NULL AUTO_INCREMENT, productId INT,userId INT, quantity INT(3),price INT(10),paymentStatus VARCHAR(30),deliveryMethod VARCHAR(40),deliveryAddress VARCHAR(250), orderStatus VARCHAR(30) DEFAULT 'PROCESSING',orderDate DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id), FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (productId) REFERENCES products(id))"
+    "CREATE TABLE if not exists orders(id INT NOT NULL AUTO_INCREMENT, productId INT,userId INT, quantity INT(3),price INT(10),paymentOption VARCHAR(40),paymentStatus VARCHAR(30) DEFAULT 'PENDING',deliveryMethod VARCHAR(40),orderStatus VARCHAR(30) DEFAULT 'PROCESSING',orderDate DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id), FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (productId) REFERENCES products(id))"
 )
 
 connection.query(
