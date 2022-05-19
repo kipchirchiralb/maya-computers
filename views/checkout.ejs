@@ -65,10 +65,10 @@
                     once your order is ready for delivery</label>
                     <div class="customer-address">
                         <h4>Your Address <a href="/adress/form"> <img src="/images/icons/edit.svg" alt=""></a></h4>
-                        <p>County/Region: <%=address[0].county%> </p>
-                        <p>Town: <%=address[0].town%></p>
+                        <p>County/Region: <%=address[0]?.county%> </p>
+                        <p>Town: <%=address[0]?.town%></p>
                         <p>Phone: <%=user.phone%></p>
-                        <p><%=address[0].additional%></p>
+                        <p><%=address[0]?.additional%></p>
                     </div>
                 </div>
             </div>

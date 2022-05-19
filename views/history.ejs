@@ -25,6 +25,53 @@
     </div>
     <div class="customer-history customer-grid-item">
         <div class="heading">Your Purchases History</div>
+        <div class="content-grid">
+            <%if(orders.length>0){%>
+                <%let total = 0%>
+                <%orders.forEach(orderItem=>{%>
+                <%let product= products.find(product=>product.id===orderItem.productId)%>
+                <%let itemPrice = product.price * orderItem.quantity  %>
+                <%if(orderItem.paymentStatus=='SETTLED' && orderItem.orderStatus=='DELIVERED'){%>
+                <div class="content-card">
+                    <div class="flex card-body">
+                        <div class="cart-img">
+                            <img src="/images/productImages/<%=product.images.split(',')[0]%>" alt="">
+                        </div>
+                        <div>
+                        <p><%=product.name%></p>
+                        <div class="content-center">
+                            <div class="flex">
+                                <p></p>
+                            </div>
+                            <p>Price:  KSH.<%=formartMoney(itemPrice)%></p>
+                        </div>
+                        
+                        </div>
+                        <div>
+                            <p>Payment: <%=orderItem.paymentStatus%></p>
+                            <p>Delivery: <%=orderItem.orderStatus%></p>
+                        </div>
+                         
+                    </div>
+                </div>
+                <%}%>
+
+                <%})%>
+          
+           
+            <%}else{%>
+            <div class="content-card">
+                <div class="heading">
+                    You have not made any orders yet.   
+                </div>
+                <%if(cart.length = 0 ){%>
+                <p style="font-size:1.2rem; padding: 30px;">Go <a href="/" style="color:green ;">Shopping</a></p>
+                <%}else{%>
+                <p style="font-size:1.2rem; padding: 30px;">Go <a href="/customer/cart/<%=locals.userId%>" style="color:green ;">Checkout your Cart items</a></p>
+                <%}%>
+            </div>
+            <%}%>
+        </div>
     </div>
     
 </div>

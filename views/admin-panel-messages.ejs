@@ -1,0 +1,32 @@
+<%- include('./partials/header')%>
+<style>
+    body{
+        padding: 0;
+    }
+</style>
+<nav class="admin-nav flex">
+    <a href="/">App</a>
+    <p>Maya Computers Administrator Panel</p>
+    <a href="/logout">Sign Out</a>
+</nav>
+<div class="main-container admin-main">
+    <div class="admin-main-nav">
+        <a href="/admin-panel/stock" style="text-align:center;" class="stock-manager admin-nav-btn">Stock Manager</a>
+        <a href="/admin-panel/orders" style="text-align:center;" class="orders-manager admin-nav-btn ">Orders Manager</a>
+        <a href="/admin-panel/messages" style="text-align:center;" class="orders-manager admin-nav-btn active">Messages Manager</a>
+    </div>
+    <div class="admin-search-bar flex">
+        <div class="search-product-admin">
+            <input type="text" id="admin-search"  placeholder="Search by message content or user...">
+        </div>
+       
+        
+    </div>
+    <div class="messages-box">
+        Messages here
+    </div>
+
+</div>
+
+
+<%- include('./partials/footer')%>

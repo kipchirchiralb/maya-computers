@@ -9,9 +9,9 @@
     font-family: NetflixFont;
   }
   :root{
-      /* --primary-color: #d66c27; */
+      --primary-color: #d66c27;
       /* --primary-color: #3824e9; */
-      --primary-color: #e92424;
+      /* --primary-color: #e92424; */
       --secondary-color: #e00810;
       --pri-text-color: #f7f7f7;
       --sec-text-color: #000;

@@ -1,10 +1,13 @@
 <%- include('./partials/header')%>
 <%- include('./partials/nav')%>
 <div class="main-container">
-    <div class="show-case hide-for-tablet">
+    <div class="show-case ">
         <nav class="show-item show-case-nav flex">
             <a href="/products?category=laptop">
                 <li id="nav-item1" class="nav-item">Laptops</li>
+                <div class="nav-dropdown">
+                    <a href="">Hp</a>
+                </div>
             </a>
             <a href="/products?category=desktop">
                 <li id="nav-item2" class="nav-item">Desktop Computers</li>
@@ -19,8 +22,8 @@
                 <li id="nav-item5" class="nav-item">Office supplies</li>
             </a>
         </nav>
-        <div class="show-item show-case-content">
-            <div class="slide fade">
+        <div class="show-item show-case-content hide-for-tablet">
+            <div class="slide fade ">
                 <img src="/images/add1.png" alt="">
                 <img src="/images/add2.png" alt="">
                 <img src="/images/addmain.jpg" alt="">
@@ -54,7 +57,7 @@
 </div>
 <!-- top sales -->
 <section class="top-selling-items main-container">
-    <h3>Top selling items</h3>
+    <h3 style="background-color: #d66c27; color: white; font-size:1.5rem; padding: 5px 0;">Top selling items</h3>
     <div class="products flex">
         <%if(true){%>
         <%let count = 0 %>
@@ -103,7 +106,7 @@
 
 <!-- laptops -->
 <section class="laptops main-container">
-    <h3>Laptops</h3>
+    <h3 style="background-color: #d66c27; color: white; font-size:1.5rem; padding: 5px 0;">New Arrivals</h3>
 
         <div class="products flex">
             

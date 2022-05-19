@@ -5,7 +5,6 @@ const session = require("express-session");
 const path = require('path')
 const app = express();
 
-const tryMpesa = require('./daraja-implementation.js')
 
 const PORT = process.env.PORT || 3000;
 const connection = mysql.createConnection({
@@ -70,6 +69,7 @@ const upload = multer({ storage: storage })
 
 
 let user = []
+let address=[]
 
 let cleanUserData = { 
   firstName: '',
@@ -91,7 +91,7 @@ let cart
 let cartItemId = 0
 app.get("/", (req, res)=> {
   connection.query(
-    "SELECT * FROM products ORDER BY price DESC",
+    "SELECT * FROM products ORDER BY datePosted DESC",
     (error,products)=>{
         if(res.locals.isLoggedIn){
           connection.query(
@@ -159,7 +159,7 @@ app.post("/signin", (req, res) => {
                             }
                           )
                         }else{
-                          res.redirect('/admin-panel')
+                          res.redirect('/admin-panel/stock')
                         }
                     } else {
                         userData.errorMessage = "Incorrect Password";
@@ -459,7 +459,7 @@ app.post('/customer/order/:id', (req,res)=>{
           connection.query(
               `INSERT INTO orders (productId, userId, quantity, price, paymentOption, deliveryMethod) VALUES (${cartItem.productId},${req.session.userId},${cartItem.quantity}, ${Number(req.body.amount)}, '${req.body.payment}', '${req.body.delivery}')`,
               (error, result)=>{
-                  console.log(error)
+                  // console.log(error)
               }
             )
         })
@@ -482,11 +482,16 @@ app.get('/customer/history/:userId', (req,res)=>{
       connection.query(
         `SELECT * FROM products`,
         (error,products)=>{
-          res.render('history.ejs', {cart:cart, products: products})
+          connection.query(
+            `SELECT * FROM orders WHERE userId = ${req.session.userId}`,
+            (error, orders)=>{
+              res.render('history.ejs', {cart:cart, products: products,orders: orders});
+            }
+          )
         }
       )
     }else{
-      let errorMessage = "You can not access someone else's purchase history"
+      let errorMessage = "You can not access someone else's history"
       res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
     } 
   }else{
@@ -529,7 +534,7 @@ app.get('/customer/reviews/:userId', (req,res)=>{
 })
 
 // ********* Admin Panel & roles
-app.get('/admin-panel', (req,res)=>{
+app.get('/admin-panel/stock', (req,res)=>{
   if(req.session.isAdmin){
     connection.query(
       'SELECT * FROM products',
@@ -537,7 +542,41 @@ app.get('/admin-panel', (req,res)=>{
         connection.query(
           'SELECT * FROM orders ORDER BY orderDate DESC',
           (error, orders)=>{
-            res.render('admin-panel.ejs', {products: products, orders: orders})
+            res.render('admin-panel-stock.ejs', {products: products, orders: orders})
+          }
+        )
+      }
+    )
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.get('/admin-panel/orders', (req,res)=>{
+  if(req.session.isAdmin){
+    connection.query(
+      'SELECT * FROM products',
+      (error, products)=>{
+        connection.query(
+          'SELECT * FROM orders ORDER BY orderDate DESC',
+          (error, orders)=>{
+            res.render('admin-panel-orders.ejs', {products: products, orders: orders})
+          }
+        )
+      }
+    )
+  }else{
+    res.redirect('/signin')
+  }
+})
+app.get('/admin-panel/messages', (req,res)=>{
+  if(req.session.isAdmin){
+    connection.query(
+      'SELECT * FROM products',
+      (error, products)=>{
+        connection.query(
+          'SELECT * FROM orders ORDER BY orderDate DESC',
+          (error, orders)=>{
+            res.render('admin-panel-messages.ejs', {products: products, orders: orders})
           }
         )
       }
@@ -559,7 +598,7 @@ app.post('/admin/mark/soldout/:pId', (req,res)=>{
     connection.query(
       `UPDATE products SET status="SOLD-OUT", quantity = 0 WHERE id=${req.params.pId} `,
       (error, results)=>{
-        res.redirect('/admin-panel')
+        res.redirect('/admin-panel/stock')
       }
     )
   }else{
@@ -578,11 +617,11 @@ app.post('/admin/sell/single/:pId', (req,res)=>{
               connection.query(
                 `UPDATE products SET status = "SOLD-OUT" WHERE id=${req.params.pId}`,
                 (error, result)=>{
-                  res.redirect('/admin-panel')
+                  res.redirect('/admin-panel/stock')
                 }
               )
             }else{
-              res.redirect('/admin-panel')
+              res.redirect('/admin-panel/stock')
             }
           }
         )
@@ -593,12 +632,11 @@ app.post('/admin/sell/single/:pId', (req,res)=>{
   }
 })
 
-
 app.post('/admin/mark/paid/:oId', (req,res)=>{
   connection.query(
     `UPDATE orders SET paymentStatus = "SETTLED" WHERE id = ${Number(req.params.oId)} `,
     (error,results)=>{
-      res.redirect('/admin-panel')
+      res.redirect('/admin-panel/orders')
     }
   )
 })
@@ -606,15 +644,16 @@ app.post('/admin/mark/delivered/:oId', (req,res)=>{
   connection.query(
     `UPDATE orders SET orderStatus = "DELIVERED" WHERE id = ${Number(req.params.oId)} `,
     (error,results)=>{
-      res.redirect('/admin-panel')
+      res.redirect('/admin-panel/orders')
     }
   )
 })
+
 app.post('/admin/mark/ready/:oId', (req,res)=>{
   connection.query(
     `UPDATE orders SET orderStatus = "READY" WHERE id = ${Number(req.params.oId)} `,
     (error,results)=>{
-      res.redirect('/admin-panel')
+      res.redirect('/admin-panel/orders')
     }
   )
 })

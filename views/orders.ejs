@@ -61,9 +61,13 @@
             <%}else{%>
             <div class="content-card">
                 <div class="heading">
-                    Your Cart is Empty
+                    You have not made any orders yet.   
                 </div>
+                <%if(cart.length = 0 ){%>
                 <p style="font-size:1.2rem; padding: 30px;">Go <a href="/" style="color:green ;">Shopping</a></p>
+                <%}else{%>
+                <p style="font-size:1.2rem; padding: 30px;">Go <a href="/customer/cart/<%=locals.userId%>" style="color:green ;">Checkout your Cart items</a></p>
+                <%}%>
             </div>
             <%}%>
         </div>
