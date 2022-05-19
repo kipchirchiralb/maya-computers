@@ -17,7 +17,6 @@ const connection = mysql.createConnection({
 
 require('./sqltables')
 // process.env.NEW_ENV_VAR= 'new env var'
-
 // console.log(process.env.NEW_ENV_VAR)
 // const env = require('./sqltables')
 // console.log(env.truth)
@@ -460,11 +459,7 @@ app.post('/customer/order/:id', (req,res)=>{
           connection.query(
               `INSERT INTO orders (productId, userId, quantity, price, paymentOption, deliveryMethod) VALUES (${cartItem.productId},${req.session.userId},${cartItem.quantity}, ${Number(req.body.amount)}, '${req.body.payment}', '${req.body.delivery}')`,
               (error, result)=>{
-                if(!error){
-                 console.log('success')
-                }else{
                   console.log(error)
-                }
               }
             )
         })

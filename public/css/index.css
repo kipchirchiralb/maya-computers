@@ -802,6 +802,7 @@
 }
 .adm-btn{
   margin: 3px 0;
+  width: max-content;
 }
 
 .admin-search-bar{
