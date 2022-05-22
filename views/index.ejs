@@ -5,9 +5,7 @@
         <nav class="show-item show-case-nav flex">
             <a href="/products?category=laptop">
                 <li id="nav-item1" class="nav-item">Laptops</li>
-                <div class="nav-dropdown">
-                    <a href="">Hp</a>
-                </div>
+                
             </a>
             <a href="/products?category=desktop">
                 <li id="nav-item2" class="nav-item">Desktop Computers</li>
@@ -80,13 +78,13 @@
                 <p class="price">KSH. <%=products[i].price%></p>
             <%}%>
             <div class="ratings flex">
-                <p>rated: 0</p>
+                <p>rated: <%=products[i].rating%>/5</p>
                 <p>0 reviews</p>
             </div>
             <%if(!locals.isLoggedIn){%>
-                <div class="add-to-cart add-to-cart-btn">
-                    +&nbsp;ADD&nbsp;TO&nbsp;CART
-                </div>
+                <form class="add-to-cart add-to-cart-link user-cart-form"  action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=,"  method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
             <%}else{%>
                 <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
                     <input type="submit" value="+ ADD TO CART">
@@ -104,18 +102,16 @@
     </div>
 </section>
 
-<!-- laptops -->
-<section class="laptops main-container">
-    <h3 style="background-color: #d66c27; color: white; font-size:1.5rem; padding: 5px 0;">New Arrivals</h3>
 
+<section class="new-arrivals main-container">
+    <h3 style="background-color: #d66c27; color: white; font-size:1.5rem; padding: 5px 0;">Hot Deals</h3>
         <div class="products flex">
-            
             <%if(true){%>
             <%let count = 0 %>
             <% for(let i=0; i< products.length; i++){ %>
             <%if(count===5){break;} %>
             <%count++%>
-            <%if(products[i].category === 'laptop'){%>
+            <%if(products[i].rating> 0){%>
             <div class="product flex">
                 <a href="/product/<%=products[i].id%>">
                 <div class="product-img">
@@ -131,13 +127,13 @@
                     <p class="price">KSH. <%=products[i].price%></p>
                 <%}%>
                 <div class="ratings flex">
-                    <p>rated: 0</p>
+                    <p>rated: <%=products[i].rating%>/5</p>
                     <p>0 reviews</p>
                 </div>
                 <%if(!locals.isLoggedIn){%>
-                    <div class="add-to-cart add-to-cart-btn">
-                        +&nbsp;ADD&nbsp;TO&nbsp;CART
-                    </div>
+                   <form class="add-to-cart add-to-cart-link user-cart-form"  action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=,"  method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                    </form>
                 <%}else{%>
                     <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
                         <input type="submit" value="+ ADD TO CART">
@@ -148,7 +144,7 @@
             <%}%>
             <%}%>
             <div class="view-more-btn flex">
-                <a href="/products?category=laptop">
+                <a href="/products?category=topsales">
                     <p>&#8921;</p>
                     <p>VIEW&nbsp;MORE</p>
                 </a>
@@ -156,236 +152,35 @@
         </div>
 </section>
 
-<!-- printers -->
-<section class="printers main-container">
-    <h3>Printers</h3>
-    <div class="products flex">
-        <%if(true){%>
-        <%let count = 0 %>
-        <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===5){break;} %>
-        <%count++%>
-        <%if(products[i].category === 'printer'){%>
-        <div class="product flex">
-            <a href="/product/<%=products[i].id%>">
-            <div class="product-img">
-                <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
-            </div>
-            </a>
-            <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
-            <%let n =products[i].price.toString().length%>
-            <%if(n>3){%>
-                <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
-            <%}else{%>
-                <p class="price">KSH. <%=products[i].price%></p>
-            <%}%>            
-            <div class="ratings flex">
-                <p>rated: 0</p>
-                <p>0 reviews</p>
-            </div>
-            <%if(!locals.isLoggedIn){%>
-                <div class="add-to-cart add-to-cart-btn">
-                    +&nbsp;ADD&nbsp;TO&nbsp;CART
-                </div>
-            <%}else{%>
-                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
-                    <input type="submit" value="+ ADD TO CART">
-                </form>
-            <%}%>
-        </div> 
-        <%}else{count--}%>
-        <%}%>
-        <%}%>
-        <div class="view-more-btn flex">
-            <a href="/products?category=printer">
-                <p>&#8921;</p>
-                <p>VIEW&nbsp;MORE</p>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- desktop computers -->
-<section class="desktops main-container">
-    <h3>Desktop Computers</h3>
-    <div class="products flex">
-        <%if(true){%>
-        <%let count = 0 %>
-        <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===5){break;} %>
-        <%count++%>
-        <%if(products[i].category === 'desktop'){%>
-        <div class="product flex">
-            <a href="/product/<%=products[i].id%>">
-            <div class="product-img">
-                <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
-            </div>
-            </a>
-            <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
-            <%let n =products[i].price.toString().length%>
-            <%if(n>3){%>
-                <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
-            <%}else{%>
-                <p class="price">KSH. <%=products[i].price%></p>
-            <%}%>            
-            <div class="ratings flex">
-                <p>rated: 0</p>
-                <p>0 reviews</p>
-            </div>
-            <%if(!locals.isLoggedIn){%>
-                <div class="add-to-cart add-to-cart-btn">
-                    +&nbsp;ADD&nbsp;TO&nbsp;CART
-                </div>
-            <%}else{%>
-                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
-                    <input type="submit" value="+ ADD TO CART">
-                </form>
-            <%}%>
-        </div> 
-        <%}else{count--}%>
-        <%}%>
-        <%}%>
-        <div class="view-more-btn flex">
-            <a href="/products?category=desktop">
-                <p>&#8921;</p>
-                <p>VIEW&nbsp;MORE</p>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- computer accesories -->
-<section class="computer-accessories main-container">
-    <h3>Computer Accessories</h3>
-    <div class="products flex">
-        <%if(true){%>
-        <%let count = 0 %>
-        <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===5){break;} %>
-        <%count++%>
-        <%if(products[i].category === 'accessories'){%>
-        <div class="product flex">
-            <a href="/product/<%=products[i].id%>">
-            <div class="product-img">
-                <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
-            </div>
-            </a>
-            <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
-            <%let n =products[i].price.toString().length%>
-            <%if(n>3){%>
-                <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
-            <%}else{%>
-                <p class="price">KSH. <%=products[i].price%></p>
-            <%}%>            
-            <div class="ratings flex">
-                <p>rated: 0</p>
-                <p>0 reviews</p>
-            </div>
-            <%if(!locals.isLoggedIn){%>
-                <div class="add-to-cart add-to-cart-btn">
-                    +&nbsp;ADD&nbsp;TO&nbsp;CART
-                </div>
-            <%}else{%>
-                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
-                    <input type="submit" value="+ ADD TO CART">
-                </form>
-            <%}%>
-        </div> 
-        <%}else{count--}%>
-        <%}%>
-        <%}%>
-        <div class="view-more-btn flex">
-            <a href="/products?category=accessories">
-                <p>&#8921;</p>
-                <p>VIEW&nbsp;MORE</p>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- office supplies -->
-<section class="computer-accessories main-container">
-    <h3>Office Supplies</h3>
-    <div class="products flex">
-        <%if(true){%>
-        <%let count = 0 %>
-        <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===5){break;} %>
-        <%count++%>
-        <%if(products[i].category === 'supplies'){%>
-        <div class="product flex">
-            <a href="/product/<%=products[i].id%>">
-            <div class="product-img">
-                <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
-            </div>
-            </a>
-            <p class="name"><%=products[i].name%></p>
-            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
-            <%let n =products[i].price.toString().length%>
-            <%if(n>3){%>
-                <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
-            <%}else{%>
-                <p class="price">KSH. <%=products[i].price%></p>
-            <%}%>
-            <div class="ratings flex">
-                <p>rated: 0</p>
-                <p>0 reviews</p>
-            </div>
-            <%if(!locals.isLoggedIn){%>
-                <div class="add-to-cart add-to-cart-btn">
-                    +&nbsp;ADD&nbsp;TO&nbsp;CART
-                </div>
-            <%}else{%>
-                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
-                    <input type="submit" value="+ ADD TO CART">
-                </form>
-            <%}%>
-        </div> 
-        <%}else{count--}%>
-        <%}%>
-        <%}%>
-        <div class="view-more-btn flex">
-            <a href="/products?category=supplies">
-                <p>&#8921;</p>
-                <p>VIEW&nbsp;MORE</p>
-            </a>
-        </div>
-    </div>
-</section>
-
-<div class="login-modal tm" id="login-modal">
+<!-- <div class="login-modal tm" id="login-modal">
     <div class="login-modal-content">
         <p>Sign in/ Sign up to access your cart</p>
         <button class="close-modal-btn">CLOSE</button>
         <a href="/signin"><button class="login-link-btn">SIGN IN</button></a>
         <a href="/signup"><button class="login-link-btn">SIGN UP</button></a>
     </div>
-</div>
+</div> -->
 
 <script>
-    document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{
-        closeModalBtn.addEventListener('click', (e)=>{
-            console.log('ls')
-            e.target.parentElement.parentElement.style.display='none'
-        })   
-    })
-    document.querySelectorAll('.add-to-cart-btn').forEach(addToCartBtn=>{
-        addToCartBtn.addEventListener('click', ()=>{
-            document.getElementById('login-modal').style.display='block'
-        })   
-    })
+    // document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{
+    //     closeModalBtn.addEventListener('click', (e)=>{
+    //         e.target.parentElement.parentElement.style.display='none'
+    //     })   
+    // })
+    // document.querySelectorAll('.add-to-cart-btn').forEach(addToCartBtn=>{
+    //     addToCartBtn.addEventListener('click', ()=>{
+    //         document.getElementById('login-modal').style.display='block'
+    //     })   
+    // })
     
-    document.getElementById('login-modal').addEventListener('click',(e)=>{
-        // if(e.target.classList.contains('tm')){
-            document.getElementById('login-modal').style.display='none'
-        // }
-    })
-    document.querySelector('.login-modal-content').addEventListener('click',()=>{
-        document.getElementById('login-modal').style.display='block'
-    })
+    // document.getElementById('login-modal').addEventListener('click',(e)=>{
+    //     // if(e.target.classList.contains('tm')){
+    //         document.getElementById('login-modal').style.display='none'
+    //     // }
+    // })
+    // document.querySelector('.login-modal-content').addEventListener('click',()=>{
+    //     document.getElementById('login-modal').style.display='block'
+    // })
     // window.addEventListener('click',()=>{
     //     document.getElementById('login-modal').style.display='none'
     // })
@@ -408,14 +203,20 @@
     setInterval(slide, 8000);
 
     // scroll to prev position
-    document.addEventListener("DOMContentLoaded", function (event) {
-        let scrollpos = localStorage.getItem("scrollposIndex");
-        if (scrollpos) window.scrollTo(0, scrollpos);
-    });
+    // document.addEventListener("DOMContentLoaded", function (event) {
+    //     let scrollpos = localStorage.getItem("scrollposIndex");
+    //     if (scrollpos) window.scrollTo(0, scrollpos);
+    // });
 
-    window.onscroll = function (e) {
-        localStorage.setItem("scrollposIndex", window.scrollY);
+    // window.onscroll = function (e) {
+    //     localStorage.setItem("scrollposIndex", window.scrollY);
         
-    };
+    // };
+</script>
+<script>
+   
+
+
+
 </script>
 <%- include('./partials/footer')%>

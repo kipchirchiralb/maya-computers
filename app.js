@@ -34,9 +34,13 @@ app.use(
 );
 
 //session manager
+let cart
+let tempCart = []
+
 app.use((req, res, next) => {
   if (req.session.userId === undefined) {
     res.locals.isLoggedIn = false;
+    cart = tempCart
   } else {
     res.locals.isLoggedIn = true;
     res.locals.userId = req.session.userId;
@@ -71,22 +75,9 @@ const upload = multer({ storage: storage })
 let user = []
 let address=[]
 
-let cleanUserData = { 
-  firstName: '',
-  lastName: '',
-  email: '',
-  loginEmail: '',
-  password: '',
-  loginPassword: '',
-  confirmPassword: '',
-  phone: '',
-  errorMessage: '',
-  signupError: false,
-  loginError: false,
-  success: false,
-  isAdmin: false
-}
-let cart
+let cleanUserData = { firstName: '', lastName: '', email: '', loginEmail: '', password: '', loginPassword: '', confirmPassword: '',phone: '', errorMessage: '', signupError: false, loginError: false, success: false, isAdmin: false } 
+
+let browserId =""
 
 let cartItemId = 0
 app.get("/", (req, res)=> {
@@ -97,11 +88,22 @@ app.get("/", (req, res)=> {
           connection.query(
             `SELECT * FROM cart WHERE userId =${req.session.userId}`,
             (error,cartData)=>{
-              res.render("index.ejs", {products: products, cart: cartData});
+              connection.query(
+                `DELETE FROM tempCart WHERE userId = '${browserId}'`,
+                (error, result)=>{
+                  res.render("index.ejs", {products: products, cart: cartData});
+                }
+              )
             }
           )
         }else{
-          res.render("index.ejs", {products: products, cart: cart});
+          connection.query(
+            `SELECT * FROM tempCart WHERE userId = '${browserId}'`,
+            (error, UtempCart)=>{
+              tempCart = UtempCart
+              res.render("index.ejs", {products: products, cart: tempCart, browserId: browserId});
+            }
+          )
         }
       }
   )
@@ -111,7 +113,7 @@ app.get('/signin', (req,res)=>{
     res.redirect(`/customer/account/${req.session.userId}`)
   }else{
     let userData=cleanUserData
-    res.render('signin.ejs', {userData: userData, cart:cart})
+    res.render('signin.ejs', {userData: userData, cart:tempCart, browserId: browserId})
   }  
 })
 app.get('/signup', (req,res)=>{
@@ -152,6 +154,26 @@ app.post("/signin", (req, res) => {
                         user = results[0]
                         if(!userData.isAdmin){
                           connection.query(
+                            `SELECT * FROM tempCart WHERE userId = '${req.query.uniqueId}'`,
+                            (error, tempoCart) => {
+                              if(tempoCart.length > 0){
+                                tempoCart.forEach(cartItem=>{
+                                  connection.query(
+                                    `INSERT INTO cart(userId, productId,productName, quantity) VALUES(${req.session.userId}, ${cartItem.productId}, '${cartItem.productName}', ${cartItem.quantity})`,
+                                    (error, ressult)=>{
+                                      console.log(error)
+                                      console.log('successfully updated cart from temp - last')
+                                    }
+                                  )
+                                })
+
+                                console.log("first")
+                              }else{
+                                console.log('tempCart empty')
+                              }
+                            }
+                          )
+                          connection.query(
                             `SELECT * FROM cart WHERE userId = ${req.session.userId}`,
                             (error,cartResults)=>{
                               cart = cartResults
@@ -164,30 +186,19 @@ app.post("/signin", (req, res) => {
                     } else {
                         userData.errorMessage = "Incorrect Password";
                         userData.loginError = true;
-                        res.render("signin.ejs", {userData: userData, cart:cart});
+                        res.render("signin.ejs", {userData: userData, cart:cart, browserId: browserId});
                     }
                 });
             } else {
                 userData.errorMessage = "This email is not registered";
                 userData.loginError = true;
-                res.render("signin.ejs", {userData: userData, cart:cart});
+                res.render("signin.ejs", {userData: userData, cart:cart, browserId: browserId});
             }
         }
     );
 });
 app.post("/signup", (req, res) => {
-  let userData = { 
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: req.body.password,
-      confirmPassword: req.body.confirmPassword,
-      phone: req.body.phone,
-      errorMessage: '',
-      signupError: false,
-      success: false,
-      isAdmin: false
-  }
+  let userData = {firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: req.body.password, confirmPassword: req.body.confirmPassword, phone: req.body.phone, errorMessage: '', signupError: false, success: false, isAdmin: false}
   if(userData.password === userData.confirmPassword) {
     bcrypt.hash(userData.password, 5, (error, hash) => {
       connection.query(
@@ -402,8 +413,6 @@ app.post('/customer/cart/remove-all', (req,res)=>{
     }
   )
 })
-
-
 app.get('/customer/checkout/:id/:amount', (req,res)=>{
   discount=0
   if(res.locals.isLoggedIn){
@@ -631,7 +640,6 @@ app.post('/admin/sell/single/:pId', (req,res)=>{
     res.redirect('/signin')
   }
 })
-
 app.post('/admin/mark/paid/:oId', (req,res)=>{
   connection.query(
     `UPDATE orders SET paymentStatus = "SETTLED" WHERE id = ${Number(req.params.oId)} `,
@@ -697,30 +705,31 @@ app.post('/products/new-product',upload.array('images',6),(req,res)=>{
 })
 // ***********PRODUCT CATEGORIES
 app.get('/products', (req,res)=>{
-
+  if(!res.locals.isLoggedIn){
+    cart = tempCart
+  }
   if(req.query.category!=='topsales'){
     connection.query(
       `SELECT * FROM products WHERE category = '${req.query.category}' `,
       (error, products)=>{
-        res.render('products.ejs', {category: req.query.category, products: products, cart:cart})
+        res.render('products.ejs', {category: req.query.category, products: products, cart:cart, browserId: browserId})
       }
     )
   }else if(req.query.category==='topsales'){
     connection.query(
       `SELECT * FROM products ORDER BY price DESC `,
       (error, products)=>{
-        res.render('products.ejs', {category: req.query.category, products: products, cart:cart})
+        res.render('products.ejs', {category: req.query.category, products: products, cart:cart, browserId: browserId})
       }
     )
   }else{
     let errorMessage = "Page Not Found - contact admin"
-    res.render("404.ejs", { errorMessage: errorMessage, cart:cart});
+    res.render("404.ejs", { errorMessage: errorMessage, cart:cart, browserId: browserId });
   }
 })
 
 //********* SEARCH PRODUCT */
 app.post('/search', (req,res)=>{
-
   connection.query(
     `SELECT * FROM products WHERE name LIKE '%${req.body.searchterm}%' OR specifications LIKE '%${req.body.searchterm}%'`,
     (error, products)=>{
@@ -739,10 +748,19 @@ app.get('/product/:id', (req,res)=>{
     `SELECT * FROM products WHERE id = ${req.params.id}`,
     (error, product)=>{
       if(product.length>0){
-        res.render('product.ejs', {cart:cart, product:product[0]} )
+        if(!res.locals.isLoggedIn){
+          connection.query(
+            `SELECT * FROM tempCart WHERE userId = '${browserId}'`,
+            (error, NtempCart)=>{
+              res.render('product.ejs', {cart:NtempCart, product:product[0], browserId: browserId} )
+            }
+          )
+        }else{
+          res.render('product.ejs', {cart:cart, product:product[0], browserId: browserId} )
+        }
       }else{
         let errorMessage = "product Not Found"
-        res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+        res.render("404.ejs", { errorMessage: errorMessage, cart:cart, browserId: browserId});
       }
     }
   )
@@ -778,7 +796,32 @@ app.post('/add-to-cart', (req,res)=>{
     }
     
   }else{
-    res.redirect('/signin')
+    browserId =req.query.uniqueId
+    connection.query(
+      `SELECT * FROM tempcart WHERE userId='${req.query.uniqueId}'`,
+      (error,tempCartResult)=>{
+        tempCart= tempCartResult
+        if(tempCartResult.length>0 && tempCartResult.some(cartItem=>cartItem.productId==req.query.pId && cartItem.userId==req.query.uniqueId)){ 
+          connection.query(
+            `UPDATE tempcart SET quantity = quantity+1 WHERE productId = ${parseInt(req.query.pId)}`,
+            (error,result)=>{
+              res.redirect(`${req.query.location.replace(',','/')}`)
+            }
+          )
+        }else{
+          connection.query(
+          `INSERT INTO tempcart(userId, productId, productName) VALUES ('${req.query.uniqueId}', ${parseInt(req.query.pId)}, '${req.query.pName}')`,
+          (error,results)=>{
+            if(error){
+              console.log(error)
+            }
+            
+            // find ways to redirect user to original location / or /products
+            res.redirect(`${req.query.location.replace(',','/')}`)
+          })
+        }
+      }
+    )
   }
 })
 

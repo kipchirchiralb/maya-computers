@@ -3,5 +3,8 @@ package-lock.json
 back1.js
 back2.js
 credentials.js
-/public/images
+/public/images/productImages
 .env
+adminRoutes.js
+productsRoutes.js
+customerRoutes.js

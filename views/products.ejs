@@ -25,9 +25,9 @@
                 <p>0 reviews</p>
             </div>
             <%if(!locals.isLoggedIn){%>
-                <div class="add-to-cart add-to-cart-btn">
-                    +&nbsp;ADD&nbsp;TO&nbsp;CART
-                </div>
+                <form class="add-to-cart add-to-cart-link user-cart-form"  action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=,products?category=<%=category%>"  method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
             <%}else{%>
                 <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=,products?category=<%=category%>" method="post">
                     <input type="submit" value="+ ADD TO CART">

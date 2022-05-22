@@ -24,11 +24,11 @@
             <p class="price">KSH. <%=product.price%></p>
         <%}%>
         <%if(!locals.isLoggedIn){%>
-            <div class="add-to-cart add-to-cart-btn">
-                +&nbsp;ADD&nbsp;TO&nbsp;CART
-            </div>
+            <form class="add-to-cart add-to-cart-link user-cart-form"  action="/add-to-cart?pId=<%=product.id%>&pName=<%=product.name%>&location=,product/<%=product.id%>"  method="post">
+                <input type="submit" value="+ ADD TO CART">
+            </form>
         <%}else{%>
-            <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=product.id%>&pName=<%=product.name%>&location=," method="post">
+            <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=product.id%>&pName=<%=product.name%>&location=,product/<%=product.id%>" method="post">
                 <input type="submit" value="+ ADD TO CART">
             </form>
         <%}%>

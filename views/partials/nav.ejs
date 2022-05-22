@@ -60,18 +60,27 @@
             </div>
         </div>
         <div class="flex cart-container">
-            <%if(!locals.isAdmin && locals.isLoggedIn){%>
-                <a href="/customer/cart/<%=locals.userId%>">
-                    <img src="/images/icons/cart.svg" alt="" id="cart-icon">
-                </a>
-            <%}%>
-            
+           
             <%if(locals.isLoggedIn && cart){%>
+                <%if(!locals.isAdmin){%>
+                    <a href="/customer/cart/<%=locals.userId%>">
+                        <img src="/images/icons/cart.svg" alt="" id="cart-icon">
+                    </a>
+                <%}%>
                 <%let userCart = cart.filter(cartItem=>cartItem.userId===locals.userId)%>
                 <%if(!locals.isAdmin){%>
                 <p class="cart-count"><%=userCart.length%></p>
                 <%}%>
-               
+            <%}else{%>
+                <%if(!locals.isAdmin){%>
+                    <a href="/signin">
+                        <img src="/images/icons/cart.svg" alt="" id="cart-icon">
+                    </a>
+                <%}%>
+                <%let userCart = cart.filter(cartItem=>cartItem.userId==browserId)%>
+                <%if(!locals.isAdmin && browserId.length>0){%>
+                <p class="cart-count"><%=userCart.length%></p>
+                <%}%>
             <%}%>
             
         </div>
