@@ -2,9 +2,9 @@
 <%- include('./partials/nav')%>
 <div class="products-category main-container">
     <%if(products.length==0){%>
-        <h2 style="color:#ea2129 ;">We could not find any product that matches your search term "<%=category.toUpperCase()%>". Please try another term.</h2>
+        <h2 style="color:#ea2129 ;">We could not find any <%=brand.toUpperCase()%> product in "<%=category.toUpperCase()%>"S</h2>
     <%}else{%>
-        <h2 style="color: #09a609;">Showing results for "<%=category.toUpperCase()%>"</h2>
+        <h2 style="color: #09a609;">Showing results for <%=brand.toUpperCase()%> in <%=category.toUpperCase()%>S</h2>
     <%}%>
     <div class="products flex">
         
@@ -40,46 +40,17 @@
         </div> 
        
         <%}%>
-        <div class="load-more-btn flex">
-            <a href="/products?category=<%=category%>">
-                << &nbsp;&nbsp; < 1 2 3 4 5 6 7 > &nbsp;&nbsp; >>
-            </a>
-        </div>
+        
     </div>
     
 
 </div>
-<div class="login-modal" id="login-modal">
-    <div class="login-modal-content">
-        <p>Login to use cart</p>
-        <button class="close-modal-btn">CLOSE</button>
-        <a href="/reg"><button class="login-link-btn">LOGIN</button></a>
-    </div>
-</div>
+
 
 <script>
-     document.addEventListener("DOMContentLoaded", function (event) {
-        let scrollpos = localStorage.getItem("scrollposProducts");
-        if (scrollpos) window.scrollTo(0, scrollpos);
-    });
-
-    window.onscroll = function (e) {
-        localStorage.setItem("scrollposProducts", window.scrollY);
-    };
+   
 </script>
 <script>
-    document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{
-       closeModalBtn.addEventListener('click', (e)=>{
-           e.target.parentElement.parentElement.style.display='none'
-       })   
-   })
-   document.querySelectorAll('.add-to-cart-btn').forEach(addToCartBtn=>{
-       addToCartBtn.addEventListener('click', ()=>{
-           document.getElementById('login-modal').style.display='block'
-       })   
-   })
-   document.getElementById('login-modal').addEventListener('click',()=>{
-       document.getElementById('login-modal').style.display='none'
-   })
+   
 </script>
 <%- include('./partials/footer')%>

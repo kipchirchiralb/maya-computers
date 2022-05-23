@@ -166,10 +166,6 @@ app.post("/signin", (req, res) => {
                                     }
                                   )
                                 })
-
-                                console.log("first")
-                              }else{
-                                console.log('tempCart empty')
                               }
                             }
                           )
@@ -444,7 +440,7 @@ app.get('/customer/orders/:userId', (req,res)=>{
         `SELECT * FROM products`,
         (error,products)=>{
           connection.query(
-            `SELECT * FROM orders WHERE userId = ${req.session.userId}`,
+            `SELECT * FROM orders WHERE userId = ${req.session.userId} ORDER BY orderDate DESC`,
             (error, orders)=>{
               res.render('orders.ejs', {cart:cart, products: products,orders: orders});
             }
@@ -485,6 +481,15 @@ app.post('/customer/order/:id', (req,res)=>{
   }
  
 })
+app.get('/customer/order/cancel/:price', (req,res)=>{
+  connection.query(
+    `DELETE FROM orders WHERE price = ${Number(req.params.price)}`,
+    (error, results)=>{
+      res.redirect(`/customer/orders/${req.session.userId}`)
+    }
+  )
+})
+
 app.get('/customer/history/:userId', (req,res)=>{
   if(res.locals.isLoggedIn){
     if(req.session.userId==req.params.userId){
@@ -730,17 +735,38 @@ app.get('/products', (req,res)=>{
 
 //********* SEARCH PRODUCT */
 app.post('/search', (req,res)=>{
+  if(!res.locals.isLoggedIn){
+    cart = tempCart
+  }
   connection.query(
     `SELECT * FROM products WHERE name LIKE '%${req.body.searchterm}%' OR specifications LIKE '%${req.body.searchterm}%'`,
     (error, products)=>{
       if(error){
         console.log(error)
       }else{
-        res.render('search.ejs', {category: req.body.searchterm ,products: products, cart:cart})
+        res.render('search.ejs', {category: req.body.searchterm ,products: products, cart:cart, browserId: browserId})
       }
     }
   )
 })
+app.get('/filter/:category/:brand', (req,res)=>{
+  if(!res.locals.isLoggedIn){
+    cart = tempCart
+  }
+  let category = req.params.category
+  let brand = req.params.brand
+  connection.query(
+    `SELECT * FROM products WHERE category = '${category}' AND brand LIKE '%${brand}%' OR specifications LIKE '%${brand}%'`,
+    (error, products)=>{
+      if(error) {
+        console.error(error)
+      }else{
+        res.render('filter.ejs', {category: category, brand: brand, products: products, cart:cart, browserId: browserId})
+      }
+    }
+  )
+})
+
 
 // ********** SINGLE PRODUCT 
 app.get('/product/:id', (req,res)=>{

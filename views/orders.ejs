@@ -29,32 +29,67 @@
         <div class="content-grid">
             <%if(orders.length>0){%>
                 <%let total = 0%>
-                <%orders.forEach(orderItem=>{%>
-                <%let product= products.find(product=>product.id===orderItem.productId)%>
-                <%let itemPrice = product.price * orderItem.quantity  %>
+                
+                <%
+                const groups = orders.reduce((groups, order) => {
+                    const date = order.orderDate;
+                    if (!groups[date]) {
+                      groups[date] = [];
+                    }
+                    groups[date].push(order);
+                    return groups;
+                  }, {});
+                  
+                  // Edit: to add it in the array format instead
+                  const groupArrays = Object.keys(groups).map((date) => {
+                    return {
+                      date,
+                      orders: groups[date]
+                    };
+                  });
+                
+                %>
+                <%groupArrays.forEach(group=>{%>
+                    
                 <div class="content-card">
-                    <div class="flex card-body">
-                        <div class="cart-img">
-                            <img src="/images/productImages/<%=product.images.split(',')[0]%>" alt="">
-                        </div>
-                        <div>
-                        <p><%=product.name%></p>
-                        <div class="content-center">
-                            <div class="flex">
-                                <p></p>
-                            </div>
-                            <p>Price:  KSH.<%=formartMoney(itemPrice)%></p>
-                        </div>
-                        
-                        </div>
-                        <div>
-                            <p>Payment: <%=orderItem.paymentStatus%></p>
-                            <p>Delivery: <%=orderItem.orderStatus%></p>
-                        </div>
-                         
-                    </div>
-                </div>
 
+                    <div class="heading"><span> <%=group.date.toString().slice(0, 25)%></span> <a class="pri-btn" href="/customer/order/cancel/<%=group.orders[0].price%>">CANCEL ORDER</a> <span class="sec-btn">PRINT</span> </div>
+                    <%group.orders.forEach(orderItem=>{%>
+                    <%let product= products.find(product=>product.id===orderItem.productId)%>
+                    <%let itemPrice = product.price * orderItem.quantity  %>
+                        <div class="content-card">
+                            <div class="flex card-body">
+                                <div class="cart-img">
+                                    <img src="/images/productImages/<%=product.images.split(',')[0]%>" alt="">
+                                </div>
+                                <div>
+                                    <p><%=product.name.slice(0,20)%></p>
+                                    <div class="content-center">
+                                        <p>Price:  KSH.<%=formartMoney(itemPrice)%></p>
+                                    </div>
+                                
+                                </div>
+                                <div>
+                                    <%if(orderItem.paymentStatus =='SETTLED'){%>
+                                        <p >Payment: <span style="color: green"> <%=orderItem.paymentStatus%></span></p>
+
+                                    <%}else{%>
+                                        <p >Payment: <span style="color: #486fed"> <%=orderItem.paymentStatus%></span></p>
+                                    <%}%>
+                                    <%if(orderItem.orderStatus == 'PROCESSING'){%>
+                                        <p >Delivery: <span style="color: #486fed"> <%=orderItem.orderStatus%></span></p>
+                                    <%}else if(orderItem.orderStatus == 'READY'){%>
+                                        <p >Delivery: <span style="color: #d66c27"> <%=orderItem.orderStatus%></span></p>
+                                    <%}else{%>
+                                        <p >Delivery: <span style="color: green"> <%=orderItem.orderStatus%></span></p>
+                                    <%}%>
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                    <%})%>
+                </div>
                 <%})%>
           
            

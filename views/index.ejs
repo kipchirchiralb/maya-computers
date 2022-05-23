@@ -3,22 +3,129 @@
 <div class="main-container">
     <div class="show-case ">
         <nav class="show-item show-case-nav flex">
-            <a href="/products?category=laptop">
-                <li id="nav-item1" class="nav-item">Laptops</li>
-                
-            </a>
-            <a href="/products?category=desktop">
-                <li id="nav-item2" class="nav-item">Desktop Computers</li>
-            </a>
-            <a href="/products?category=printer">
-                <li id="nav-item3" class="nav-item">Printers</li>
-            </a>
-            <a href="/products?category=accessories">
-                <li id="nav-item4" class="nav-item">Computer Accessories</li>
-            </a>
-            <a href="/products?category=supplies">
-                <li id="nav-item5" class="nav-item">Office supplies</li>
-            </a>
+            <div id="nav-item1"  class="nav-item">
+                <a href="/products?category=laptop">
+                   Laptop Computers
+                </a>
+                <div class="nav-dropdown ">
+                    <div class="nav-dropdown-group">
+                        <h4>Brand</h4>
+                        <div class="group-items">
+                            <a href="/filter/laptop/hp">Hp</a>
+                            <a href="/filter/laptop/mac">Macbook</a>
+                            <a href="/filter/laptop/dell">Dell</a>
+                            <a href="/filter/laptop/lenovo">Lenovo</a>
+                            <a href="/filter/laptop/asus">Asus</a>
+                            <a href="/filter/laptop/chrome">Chromebook</a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown-group">
+                        <h4>Memory</h4>
+                        <div class="group-items">
+                            <a href="/filter/laptop/ 4gb ram">4GB RAM</a>
+                            <a href="/filter/laptop/ 8gb ram">8GB RAM</a>
+                            <a href="/filter/laptop/ 16gb ram">16GB RAM</a>
+                            
+                        </div>
+                    </div>
+                    <div class="nav-dropdown-group">
+                        <h4>Storage</h4>
+                        <div class="group-items">
+                            <a href="/filter/laptop/ 256 ssd">256 SSD</a>
+                            <a href="/filter/laptop/ 500gb hdd">500GB HDD</a>
+                            <a href="/filter/laptop/ 1TB hdd">1TB HDD</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="nav-item2"  class="nav-item">
+                <a href="/products?category=desktop">
+                    Desktop Computers
+                </a>
+                <div class="nav-dropdown ">
+                    <div class="nav-dropdown-group">
+                        <h4>Brand</h4>
+                        <div class="group-items">
+                            <a href="/filter/desktop/hp">Hp</a>
+                            <a href="/filter/desktop/dell">Dell</a>
+                            <a href="/filter/desktop/lenovo">Lenovo</a>
+                            <a href="/filter/desktop/mac">Mac</a>
+                            <a href="/filter/desktop/mac">Compaq</a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown-group">
+                        <h4>Memory</h4>
+                        <div class="group-items">
+                            <a href="">4GB 256SSD</a>
+                            <a href="">8GB 256SSD</a>
+                            <a href="">4GB 500HDD</a>
+                            <a href="">8GB 500HDD</a>
+                            <a href="">16GB 1TB-SSD</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="nav-item3"  class="nav-item">
+                <a href="/products?category=accessories">
+                    Computer Accessories
+                </a>
+                <div class="nav-dropdown ">
+                    <div class="nav-dropdown-group">
+                        <h4>Brand</h4>
+                        <div class="group-items">
+                            <a href="/filter/laptop/hp">Hp</a>
+                            <a href="/filter/laptop/hp">Dell</a>
+                            <a href="/filter/laptop/hp">Lenovo</a>
+                            <a href="/filter/laptop/hp">Mac</a>
+                            <a href="/filter/laptop/hp">SanDisk</a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown-group">
+                        <h4>Categories</h4>
+                        <div class="group-items">
+                            <a href="">Flash Disks</a>
+                            <a href="">Laptop Chargers</a>
+                            <a href="">Mice</a>
+                            <a href="">Keyboards</a>
+                            <a href="">Cables</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="nav-item4"  class="nav-item">
+                <a href="/products?category=printers">
+                    Printers
+                </a>
+                <div class="nav-dropdown ">
+                    <div class="nav-dropdown-group">
+                        <h4>Brand</h4>
+                        <div class="group-items">
+                            <a href="">Hp</a>
+                            <a href="">Dell</a>
+                            <a href="">Lenovo</a>
+                            <a href="">Mac</a>
+                            <a href="">Compaq</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="nav-item5"  class="nav-item">
+                <a href="/products?category=supplies">
+                    Office supplies
+                </a>
+                <div class="nav-dropdown ">
+                    <div class="nav-dropdown-group">
+                        <h4>Category</h4>
+                        <div class="group-items">
+                            <a href="">Electronics</a>
+                            <a href="">Writing Materials</a>
+                            <a href="">Furniture</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
         </nav>
         <div class="show-item show-case-content hide-for-tablet">
             <div class="slide fade ">
@@ -152,38 +259,8 @@
         </div>
 </section>
 
-<!-- <div class="login-modal tm" id="login-modal">
-    <div class="login-modal-content">
-        <p>Sign in/ Sign up to access your cart</p>
-        <button class="close-modal-btn">CLOSE</button>
-        <a href="/signin"><button class="login-link-btn">SIGN IN</button></a>
-        <a href="/signup"><button class="login-link-btn">SIGN UP</button></a>
-    </div>
-</div> -->
 
 <script>
-    // document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{
-    //     closeModalBtn.addEventListener('click', (e)=>{
-    //         e.target.parentElement.parentElement.style.display='none'
-    //     })   
-    // })
-    // document.querySelectorAll('.add-to-cart-btn').forEach(addToCartBtn=>{
-    //     addToCartBtn.addEventListener('click', ()=>{
-    //         document.getElementById('login-modal').style.display='block'
-    //     })   
-    // })
-    
-    // document.getElementById('login-modal').addEventListener('click',(e)=>{
-    //     // if(e.target.classList.contains('tm')){
-    //         document.getElementById('login-modal').style.display='none'
-    //     // }
-    // })
-    // document.querySelector('.login-modal-content').addEventListener('click',()=>{
-    //     document.getElementById('login-modal').style.display='block'
-    // })
-    // window.addEventListener('click',()=>{
-    //     document.getElementById('login-modal').style.display='none'
-    // })
     const first = document.querySelector('.slide');
     const slide = () => {
         const before = document.querySelector('.showing');
@@ -202,19 +279,25 @@
     slide();
     setInterval(slide, 8000);
 
-    // scroll to prev position
-    // document.addEventListener("DOMContentLoaded", function (event) {
-    //     let scrollpos = localStorage.getItem("scrollposIndex");
-    //     if (scrollpos) window.scrollTo(0, scrollpos);
-    // });
+    document.addEventListener("DOMContentLoaded", function (event) {
+        let scrollpos = localStorage.getItem("scrollposIndex");
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
 
-    // window.onscroll = function (e) {
-    //     localStorage.setItem("scrollposIndex", window.scrollY);
+    window.onscroll = function (e) {
+        localStorage.setItem("scrollposIndex", window.scrollY);
         
-    // };
+    };
 </script>
 <script>
-   
+//     let navItems = document.querySelectorAll('.nav-item')
+//    navItems.forEach(navItem=>{
+//        navItem.addEventListener('mouseover', (e)=>{
+ 
+//            e.target.querySelector('.nav-dropdown').classList.remove('hide');
+//        })
+//    })
+  
 
 
 

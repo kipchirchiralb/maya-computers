@@ -57,6 +57,8 @@
     width: fit-content;
     border: none;
     cursor: pointer;
+    transition: all 300ms ease-in-out
+
   }
   .sec-btn{
     background-color: var(--green-color);
@@ -71,6 +73,9 @@
   }
   .rotate{
     transform: rotate(180deg);
+  }
+  .pri-btn:hover{
+    transform: scale(1.05)
   }
   .sec-btn:hover{
     transform: scale(1.05)
@@ -258,13 +263,42 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
+  padding: 10px;
 }
-.show-case .show-case-nav li{
-  list-style: none;
-  padding-left: 2rem;
+.show-case .show-case-nav .nav-item{
+  padding: 5px;
+  width:80%;
+  position: relative;
 }
-.show-case .show-case-nav li:hover{
-  color: var(--primary-color);
+.show-case .show-case-nav .nav-item a:hover{
+  text-decoration:underline;
+}
+
+.show-case .show-case-nav .nav-item:hover{
+  color:var(--pri-text-color);
+  background-color:var(--primary-color)
+
+}
+.show-case .show-case-nav .nav-item .nav-dropdown{
+  display: none;
+  gap: 10px;
+  padding: 10px;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  z-index: 2000;
+  background-color: white;
+  color: black;
+  width:max-content;
+}
+
+.show-case .show-case-nav .nav-item:hover .nav-dropdown{
+  display:flex;
+}
+.show-case .show-case-nav .nav-item .nav-dropdown .group-items{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 .show-case-content{
   position: relative;
