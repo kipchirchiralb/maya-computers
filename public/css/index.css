@@ -136,6 +136,7 @@
 }
 .main-nav .search-product{
   height: 100%;
+  
 }
 .main-nav .search-product form{
   height: 100%;
@@ -989,11 +990,31 @@ footer .copyright a{
   .hide-for-mobile {
     display: none;
   }
+  .main-container{
+    padding: 0 20px;
+    margin-bottom: 1rem;
+  }
   .main-nav .search-product input{
     min-width: 40px;
   }
   .products .product{
     max-width:none;
     /* width:30vw; */
+  }
+
+  .main-nav .search-product{
+    height:fit-content;
+    margin-top:4px;
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    padding: 0 10px;
+    background-color: var(--pri-text-color);
+  }
+  .reg-form{
+    width: 100%;
+  }
+  .customer-page{
+    display: block;
   }
 }

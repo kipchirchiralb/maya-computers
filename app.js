@@ -121,7 +121,7 @@ app.get('/signup', (req,res)=>{
     res.redirect(`/customer/account/${req.session.userId}`)
   }else{
     let userData=cleanUserData
-    res.render('signup.ejs', {userData: userData, cart:cart})
+    res.render('signup.ejs', {userData: userData, cart:cart, browserId: browserId})
   }  
 })
 app.post("/signin", (req, res) => {
@@ -161,8 +161,6 @@ app.post("/signin", (req, res) => {
                                   connection.query(
                                     `INSERT INTO cart(userId, productId,productName, quantity) VALUES(${req.session.userId}, ${cartItem.productId}, '${cartItem.productName}', ${cartItem.quantity})`,
                                     (error, ressult)=>{
-                                      console.log(error)
-                                      console.log('successfully updated cart from temp - last')
                                     }
                                   )
                                 })

@@ -58,14 +58,14 @@
 </div>
 
 <script>
-     document.addEventListener("DOMContentLoaded", function (event) {
-        let scrollpos = localStorage.getItem("scrollposProducts");
-        if (scrollpos) window.scrollTo(0, scrollpos);
-    });
+    //  document.addEventListener("DOMContentLoaded", function (event) {
+    //     let scrollpos = localStorage.getItem("scrollposProducts");
+    //     if (scrollpos) window.scrollTo(0, scrollpos);
+    // });
 
-    window.onscroll = function (e) {
-        localStorage.setItem("scrollposProducts", window.scrollY);
-    };
+    // window.onscroll = function (e) {
+    //     localStorage.setItem("scrollposProducts", window.scrollY);
+    // };
 </script>
 <script>
     document.querySelectorAll('.close-modal-btn').forEach(closeModalBtn=>{

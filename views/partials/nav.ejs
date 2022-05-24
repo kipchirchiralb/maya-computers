@@ -12,7 +12,7 @@
     <div class="search-product">
         <form class="flex" action="/search" method="post">
             <input type="text" placeholder="Search" name="searchterm" id="search-term" class="search-term"/>
-            <button class="hide-for-mobile" type="submit"><img src="/images/icons/search.svg" alt=""></button> 
+            <button class="" type="submit"><img src="/images/icons/search.svg" alt=""></button> 
         </form>   
     </div>
     <div class="flex nav-group">
@@ -78,7 +78,7 @@
                     </a>
                 <%}%>
                 <%let userCart = cart.filter(cartItem=>cartItem.userId==browserId)%>
-                <%if(!locals.isAdmin && browserId.length>0){%>
+                <%if(!locals.isAdmin && browserId?.length>0){%>
                 <p class="cart-count"><%=userCart.length%></p>
                 <%}%>
             <%}%>
