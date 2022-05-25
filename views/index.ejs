@@ -2,9 +2,9 @@
 <%- include('./partials/nav')%>
 <div class="main-container">
     <div class="show-case ">
-        <nav class="show-item show-case-nav flex">
+        <nav class="show-item show-case-nav flex hide-for-mobile">
             <div id="nav-item1"  class="nav-item">
-                <a href="/products?category=laptop">
+                <a class="nav-main-link" href="/products?category=laptop">
                    Laptop Computers
                 </a>
                 <div class="nav-dropdown ">
@@ -144,7 +144,18 @@
                 <img src="/images/addmain.jpg" alt="">
             </div>
         </div>
-        <div class="flex show-item show-case-cta">
+        <div class="show-item show-case-content hide-for-desktop">
+            <div class="slide-two fade ">
+                <img src="/images/add1.png" alt="">
+            </div>
+            <div class="slide-two fade">
+                <img src="/images/add4.png" alt="">
+            </div>
+            <div class="slide-two fade ">
+                <img src="/images/add6.png" alt="">
+            </div>
+        </div>
+        <div class="flex show-item show-case-cta hide-for-mobile">
             <a href="tel:+254717481718">
                 <img src="/images/icons/call.svg" alt="">
                 Call&nbsp;to order
@@ -168,7 +179,7 @@
         <%let count = 0 %>
         <%products=products.filter(product =>product.quantity>0)%>
         <% for(let i=0; i< products.length; i++){ %>
-        <%if(count===5){break;} %>
+        <%if(count===6){break;} %>
         <%count++%>
         <div class="product flex">
             <a href="/product/<%=products[i].id%>">
@@ -200,63 +211,66 @@
         </div> 
         <%}%>
         <%}%>
-        <div class="view-more-btn flex">
-            <a href="/products?category=topsales">
-                <p>&#8921;</p>
-                <p>VIEW&nbsp;MORE</p>
-            </a>
-        </div>
+        
+    </div>
+    <div class="view-more-btn flex">
+        <a href="/products?category=topsales">
+            <p>&#8921;</p>
+            <p>VIEW&nbsp;MORE</p>
+            <p>&#8921;</p>
+        </a>
     </div>
 </section>
 
 
 <section class="new-arrivals main-container">
     <h3 style="background-color: #d66c27; color: white; font-size:1.5rem; padding: 5px 0;">Hot Deals</h3>
-        <div class="products flex">
-            <%if(true){%>
-            <%let count = 0 %>
-            <% for(let i=0; i< products.length; i++){ %>
-            <%if(count===5){break;} %>
-            <%count++%>
-            <%if(products[i].rating> 0){%>
-            <div class="product flex">
-                <a href="/product/<%=products[i].id%>">
-                <div class="product-img">
-                    <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
-                </div>
-                </a>
-                <p class="name"><%=products[i].name%></p>
-                <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
-                <%let n =products[i].price.toString().length%>
-                <%if(n>3){%>
-                    <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
-                <%}else{%>
-                    <p class="price">KSH. <%=products[i].price%></p>
-                <%}%>
-                <div class="ratings flex">
-                    <p>rated: <%=products[i].rating%>/5</p>
-                    <p>0 reviews</p>
-                </div>
-                <%if(!locals.isLoggedIn){%>
-                   <form class="add-to-cart add-to-cart-link user-cart-form"  action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=,"  method="post">
-                    <input type="submit" value="+ ADD TO CART">
-                    </form>
-                <%}else{%>
-                    <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
-                        <input type="submit" value="+ ADD TO CART">
-                    </form>
-                <%}%>
-            </div> 
-            <%}else{count--}%>
-            <%}%>
-            <%}%>
-            <div class="view-more-btn flex">
-                <a href="/products?category=topsales">
-                    <p>&#8921;</p>
-                    <p>VIEW&nbsp;MORE</p>
-                </a>
+    <div class="products flex">
+        <%if(true){%>
+        <%let count = 0 %>
+        <% for(let i=0; i< products.length; i++){ %>
+        <%if(count===6){break;} %>
+        <%count++%>
+        <%if(products[i].rating> 0){%>
+        <div class="product flex">
+            <a href="/product/<%=products[i].id%>">
+            <div class="product-img">
+                <img src="/images/productImages/<%=products[i].images.split(',')[0]%>" alt="">
             </div>
-        </div>
+            </a>
+            <p class="name"><%=products[i].name%></p>
+            <p class="description"><%=products[i].specifications.slice(0,45)%>...</p>
+            <%let n =products[i].price.toString().length%>
+            <%if(n>3){%>
+                <p class="price">KSH. <%=products[i].price.toString().slice(0,n-3) + ',' + products[i].price.toString().slice(n-3)%></p>
+            <%}else{%>
+                <p class="price">KSH. <%=products[i].price%></p>
+            <%}%>
+            <div class="ratings flex">
+                <p>rated: <%=products[i].rating%>/5</p>
+                <p>0 reviews</p>
+            </div>
+            <%if(!locals.isLoggedIn){%>
+                <form class="add-to-cart add-to-cart-link user-cart-form"  action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=,"  method="post">
+                <input type="submit" value="+ ADD TO CART">
+                </form>
+            <%}else{%>
+                <form class="add-to-cart add-to-cart-link" action="/add-to-cart?pId=<%=products[i].id%>&pName=<%=products[i].name%>&location=," method="post">
+                    <input type="submit" value="+ ADD TO CART">
+                </form>
+            <%}%>
+        </div> 
+        <%}else{count--}%>
+        <%}%>
+        <%}%>
+    </div>
+    <div class="view-more-btn flex">
+        <a href="/products?category=topsales">
+            <p>&#8921;</p>
+            <p>VIEW&nbsp;MORE</p>
+            <p>&#8921;</p>
+        </a>
+    </div>
 </section>
 
 
@@ -278,6 +292,23 @@
     }
     slide();
     setInterval(slide, 8000);
+    const first2 = document.querySelector('.slide-two');
+    const slide2 = () => {
+        const before = document.querySelector('.showing-two');
+        if (before) {
+            before.classList.remove('showing-two');
+            const next = before.nextElementSibling;
+            if (next) {
+                next.classList.add('showing-two')
+            } else {
+                first2.classList.add('showing-two');
+            }
+        } else {
+            first2.classList.add('showing-two');
+        }
+    }
+    slide2();
+    setInterval(slide2, 8000);
 
     document.addEventListener("DOMContentLoaded", function (event) {
         let scrollpos = localStorage.getItem("scrollposIndex");

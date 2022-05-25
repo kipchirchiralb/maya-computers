@@ -91,7 +91,7 @@ app.get("/", (req, res)=> {
               connection.query(
                 `DELETE FROM tempCart WHERE userId = '${browserId}'`,
                 (error, result)=>{
-                  res.render("index.ejs", {products: products, cart: cartData});
+                  res.render("index.ejs", {products: products, cart: cartData, browserId: browserId});
                 }
               )
             }
@@ -208,25 +208,25 @@ app.post("/signup", (req, res) => {
                             console.log(error);
                             userData.errorMessage ="Problems encountered when saving your data, Please contact admin";
                             userData.signupError = true
-                            res.render("signin.ejs", {userData: userData});
+                            res.render("signin.ejs", {userData: userData, browserId: browserId});
                         } else {
                             userData = cleanUserData;
                             userData.success = true
-                            res.render('signin.ejs', {userData: userData, cart:cart})
+                            res.render('signin.ejs', {userData: userData, cart:cart, browserId: browserId})
                         }
                     }
                 );
                 } else {
                     userData.errorMessage = "This email is already registered.";
                     userData.signupError = true
-                    res.render("signup.ejs", {userData: userData, cart:cart});
+                    res.render("signup.ejs", {userData: userData, cart:cart, browserId: browserId});
                  }
         });
     });
     } else {
         userData.errorMessage = "Password & Confirm Password  must match.";
         userData.signupError= true
-        res.render("signup.ejs", {userData: userData, cart:cart});
+        res.render("signup.ejs", {userData: userData, cart:cart, browserId: browserId});
     }
 });
 app.get('/adress/form',(req,res)=>{
@@ -235,9 +235,9 @@ app.get('/adress/form',(req,res)=>{
       `SELECT * FROM addresses WHERE userId=${req.session.userId}`,
       (error,userAddress)=>{
         if(userAddress.length > 0){
-          res.render('addressupdate.ejs', {userAddress: userAddress[0], cart: cart})
+          res.render('addressupdate.ejs', {userAddress: userAddress[0], cart: cart, browserId: browserId})
         }else{
-          res.render('address.ejs', {cart:cart})
+          res.render('address.ejs', {cart:cart, browserId: browserId})
         }
       }
     )
@@ -275,7 +275,7 @@ app.get('/contact/update', (req, res) => {
   connection.query(
     `SELECT * FROM users WHERE id=${req.session.userId}`,
     (err, user) => {
-      res.render('contactupdate.ejs', {cart: cart, user: user[0]})
+      res.render('contactupdate.ejs', {cart: cart, user: user[0], browserId: browserId})
     }
   )
 })
@@ -315,7 +315,7 @@ app.get('/customer/account/:userId', (req,res)=>{
       )
     }else{
       let errorMessage = "You can not access someone else's account"
-      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart, browserId: browserId });
     } 
   }else{
     res.redirect('/signin')
@@ -342,7 +342,7 @@ app.get('/customer/cart/:userId', (req,res)=>{
       )
     }else{
       let errorMessage = "You can not access someone else's cart"
-      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart , browserId: browserId});
     } 
   }else{
     res.redirect('/signin')
@@ -417,7 +417,7 @@ app.get('/customer/checkout/:id/:amount', (req,res)=>{
         connection.query(
           `SELECT * FROM addresses WHERE userId = ${req.session.userId}`,
           (error, address)=>{
-            res.render('checkout.ejs', {cart: cart, user: userResult[0], amount: req.params.amount, address: address})
+            res.render('checkout.ejs', {cart: cart, user: userResult[0], amount: req.params.amount, address: address, browserId: browserId})
           }
         )
       }
@@ -440,7 +440,7 @@ app.get('/customer/orders/:userId', (req,res)=>{
           connection.query(
             `SELECT * FROM orders WHERE userId = ${req.session.userId} ORDER BY orderDate DESC`,
             (error, orders)=>{
-              res.render('orders.ejs', {cart:cart, products: products,orders: orders});
+              res.render('orders.ejs', {cart:cart, products: products,orders: orders, browserId: browserId});
             }
           )
         }
@@ -516,12 +516,12 @@ app.get('/customer/messages/:userId', (req,res)=>{
       connection.query(
         `SELECT * FROM products`,
         (error,products)=>{
-          res.render('messages.ejs', {cart:cart, products: products})
+          res.render('messages.ejs', {cart:cart, products: products, browserId: browserId})
         }
       )
     }else{
       let errorMessage = "You can not access someone else's messages"
-      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart, browserId: browserId });
     } 
   }else{
     res.redirect('/signin')
@@ -533,12 +533,12 @@ app.get('/customer/reviews/:userId', (req,res)=>{
       connection.query(
         `SELECT * FROM products`,
         (error,products)=>{
-          res.render('reviews.ejs', {cart:cart, products: products})
+          res.render('reviews.ejs', {cart:cart, products: products, browserId: browserId})
         }
       )
     }else{
       let errorMessage = "You can not access someone else's reviews"
-      res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+      res.render("404.ejs", { errorMessage: errorMessage, cart:cart , browserId: browserId});
     } 
   }else{
     res.redirect('/signin')
@@ -673,10 +673,10 @@ app.post('/admin/mark/ready/:oId', (req,res)=>{
 // *********products/new-product - get and post
 app.get('/products/new-product', (req,res)=>{
   if(req.session.isAdmin){
-    res.render('new-product.ejs', {successMessage: false, cart:cart})
+    res.render('new-product.ejs', {successMessage: false, cart:cart, browserId: browserId})
   }else{
     let errorMessage = "Only Administrators can acess this page"
-    res.render('404.ejs', {errorMessage: errorMessage, cart:cart})
+    res.render('404.ejs', {errorMessage: errorMessage, cart:cart, browserId: browserId})
   }
 })
 app.post('/products/new-product',upload.array('images',6),(req,res)=>{
@@ -703,7 +703,7 @@ app.post('/products/new-product',upload.array('images',6),(req,res)=>{
     )
   }else{
     let errorMessage = "Only Administrators can acess this page"
-    res.render('404.ejs', {errorMessage: errorMessage, cart:cart})
+    res.render('404.ejs', {errorMessage: errorMessage, cart:cart, browserId: browserId})
   }
 })
 // ***********PRODUCT CATEGORIES
@@ -851,7 +851,7 @@ app.post('/add-to-cart', (req,res)=>{
 
 
 app.get("/about", (req, res) => {
-    res.render("about-us.ejs",  {cart:cart});
+    res.render("about-us.ejs",  {cart:cart, browserId: browserId});
   });
 
 app.get("/logout", (req, res) => {
@@ -862,7 +862,7 @@ app.get("/logout", (req, res) => {
 
 app.all("*", (req, res) => {
   let errorMessage = "Page Not Found"
-  res.render("404.ejs", { errorMessage: errorMessage, cart:cart });
+  res.render("404.ejs", { errorMessage: errorMessage, cart:cart , browserId: browserId});
 });
 
 app.listen(PORT, () => {
